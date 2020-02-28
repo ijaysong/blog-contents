@@ -64,3 +64,7 @@
 		뿐만 아니라, Web사이트에서 사용되는 이미지 파일의 수를 줄이거나, 이미지 파일의 용량을 작게함으로써 데이터 로딩시간 자체를 줄일 수 있다.  
 		
 		![데이터로드](https://www.cpi.ad.jp/column/common/img/column01/img_server01b2.jpg)
+
+
+---
+레퍼런스（503에러）: [知らないと損をするサーバーの話](https://www.cpi.ad.jp/column/column01/)
