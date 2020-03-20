@@ -38,11 +38,52 @@ public abstract class Foo {  // 추상 클래스의 선언
 당연하지만, 클래스가 아니므로 new 연산자를 사용해서 인스턴스를 생성할 수 없다.  
 추상메소드를 정의한다.  
 인터페이스의 추상메소드는 항상 public abstract이므로 접근제한자 기입을 생략한다.  
+클래스에 같은 인터페이스를 지정해놓으면 오버라이드한 메소드의 움직임이 다 다르다. 다형성(폴리모피즘)의 한 예이다.
 
 ~~~
 Public interface Version { // Version의 인터페이스
 	String getVersion(); // 버전의 문자열을 리턴하는 추상메소드
 }
 ~~~
+
+클래스 선언에 `implements  인터페이스 명`을 지정해 구현할 수 있다.  
+반드시 public을 붙여서 추상 메소드를 상속할 수 있도록 한다.
+
+~~~
+Public class Member implements Version {
+	public String getVersion() {
+		return “Member Class version 1.0”;
+	}
+}
+~~~
+
+인터페이스를 적용하면서 동시에 상속할 수도 있다.  
+2개의 인터페이스를 지정할 수도 있다.
+
+~~~
+Public class Bar extends Foo implements Version, Visible {
+	…
+}
+~~~
+
+인터페이스를 적용하면 본래 클래스 형 타입과 동시에 인터페이스 형 타입을 가지게 된다.  
+같은 인터페이스를 적용한 클래스들은 해당 인터페이스 형 타입을 모두 가지게 되므로, 공통의 형 타입을 가진다는 이점이 있다.
+
+~~~
+Public class CheckType {
+	public static void main(string[] args) {
+		Member mem = new Member();
+		if(mem instanced Member) {
+			System.out.println(“Member 타입 입니다”);
+		}
+		if(mem instanceof Version) {
+			System.out.println(“Version 타입 입니다”);
+		}
+	}
+}
+~~~
+
+OUTPUT: Member 타입 입니다. 
+        Version 타입 입니다
 
 
