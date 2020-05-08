@@ -114,3 +114,77 @@ BufferedInputStream, BufferedOutputStream, BufferedReader, BufferedWriter
 Buffered란 파일로부터 일정량의 데이터를 먼저 읽어들이거나, 먼저 출력해 메모리에 모아두는 기능을 말한다.   
 매회 기억장치에 액세스하는 것보다 빠른 속도로 입출력할 수 있다.  
 
+## `Buffered Reader의 사용법`
+~~~
+FileReader fr = new FileReader(“readme.txt”);
+BufferedReader br = new BufferedReader(fr);
+~~~
+BufferedReader는 입력 버퍼 기능(입력한 데이터를 버퍼에 올려두고 빠르게 읽어들이는 기능)을 가지지만, 입력 기능을 가지고 있지 않기 때문에 단독으로 사용하지 않는다.   
+반대로, 다른 텍스트 입력 스트림은 버퍼 기능을 가지고 있지 않기 때문에 속도가 느리다.  
+속도를 높이기 위해서 BufferedReader로 Wrapping해 사용하는 것이 최선이다.  
+
+## `Resource가 붙어있는 try-catch문`
+<일반적인 try-catch문>
+~~~
+BufferedReader in = null;
+
+try {
+	in = Files.newBufferedReader(path); // 예외가 발생할 가능성이 있음
+} catch (IOException e) {
+	e.printStackTrace();  // 예외처리
+} finally {
+	if(in == null) {
+		try {
+			in.close();  // 예외가 발생할 가능성이 있음
+		} catch (IOException e) {
+			e.printStackTrace();  // 예외처리
+		}
+	}
+}
+~~~
+I/O 스트림의 특징은, 처리가 끝난 후, 작업용 메모리를 닫아주는 종료처리가 필요하다.  => close() 메소드  
+예외 발생 유무에 상관 없이, 반드시 실행하지 않으면 안되기 때문에 finally에서 실행해주었다.  
+기존의 try-catch문도 좋지만 길이가 길다는 단점이 있고, Java7(2011년)부터 리소스가 붙어있는 try-catch문이 도입되었기 때문에 close() 메소드를 쓸 필요가 없다.  
+
+<리소스가 붙어있는 try-catch문>
+~~~
+try(BufferedReader in = Files.newBufferedReader(path);) { // ()안에서 작성한다
+	...
+} catch (IOException e) {
+	e.printStackTrace();  // 예외처리
+}
+~~~
+
+()가 붙어있는 try 문을 ARM(Automatic Resource Management) 블록이라고도 부른다.  
+() 안에 쓰여져있는 I/O 스트림은 종료시에 자동적으로 close() 메소드가 실행된다. => finall에서 close() 메소드를 실행시킬 필요가 없다.  
+
+## `ObjectInputStream`과 `ObjectOutputStream`
+바이너리 스트림의 하나로서, 오브젝트를 파일에 저장하거나, 파일로부터 읽어들인다.  
+해당 I/O스트림은 오브젝트를 조작하는 기능은 있지만 읽고 쓰는 기능과 버퍼 기능을 가지고 있지 않기 때문에 다른 I/O스트림을 Wrapping해서 사용한다.  
+~~~
+ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(“/readme.txt”)));
+~~~
+
+## `Serializable 인터페이스`
+Serializable를 implements 함으로서 자신이 만든 클래스 Object를 파일로 저장할 수 있다.  
+어떤 값을 읽고 쓰는 클래스는 전부 Serializable이 적용되어 있다.  
+단순히 마크에 지나지 않으므로 마크 인터페이스라고도 한다.  
+
+~~~
+public class MyObject implement Serializable {
+	private static final long serialVersionUID = 10L; // 버전 번호
+
+	private static int counter; // 저장되지 않음(인스턴스에 포함되지 않음)
+	private double value; // primitive 타입은 저장됨
+	private LocalDate date; // Serializable가 적용돼 있으므로 저장됨
+	private YourObject obj; // Serializable가 적용돼 있다면, 저장됨
+	private transient Foo flag; // 저장안됨(저장 대상으로부터 제외됨)
+...
+}
+~~~
+
+static이 붙어있는 필드변수는 인스턴스에 포함되지 않으므로 저장되지 않는다.  
+필드변수에 transient를 붙이면, 저장 대상으로부터 제외한다.  
+필드변수에 오브젝트가 포함되어있는 경우, 해당 오브젝트에 Serializable가 적용돼 있어 있어야 한다.  
+이것처럼 해당 오브젝트 뿐만 아니라 관련된 오브젝트까지 포함해서 하나의 바이너리 데이터로 변환하는 것을 Serialize라고 한다.  
+반대로, 바이너리 데이터로부터 해당 오브젝트와 관련된 오브젝트까지 원래의 형태로 복원시키는 것을  Deserialize라고 한다.  
