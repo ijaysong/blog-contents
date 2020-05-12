@@ -171,3 +171,85 @@ public class sortExample {
 }
 ~~~
 OUTPUT : 김갑돌 김갑순 홍길동	
+
+## `Set 계열 클래스의 특징`
+데이터의 집합으로 같은 요소가 포함될 수 없다.   
+데이터의 정렬이나 대소관계는 없다.  
+Set을 implements한 클래스 중에 HashSet은 집합을 표현하는 클래스, LinkedHashSet은 정렬 기능을 추가한 것, TreeSet은 대소관계를 다루는 기능을 추가한 것이다.
+
+## `HashSet 클래스`
+~~~
+Set<String> ids = new HashSet<>();
+ids.add(“apple”);
+ids.add(“cookie”);
+ids.add(“dragon”);
+ids.add(“banana”); // 중복값 등록
+
+for(String id : ids) {
+	System.out.print(id + “\t”);
+}
+~~~
+OUTPUT : dragon banana cookie apple
+
+중복된 값은 Set에 하나만 등록된다.  
+등록된 순서대로 출력되지 않다. Set 내부적으로 배치를 결정하는 알고리즘이 없기 때문이다.  
+순서대로 출력하고 싶다면, LinkedHashSet을 사용하면 된다.  
+
+## `LinkedHashSet 클래스`
+~~~
+Set<String> ids = new LinkedHashSet<>(); // HashSet에서 LinkedHashSet으로 변경
+ids.add(“apple”);
+ids.add(“cookie”);
+ids.add(“dragon”);
+ids.add(“banana”); // 중복값 등록
+
+for(String id : ids) {
+	System.out.print(id + “\t”);
+}
+~~~
+OUTPUT : apple cookie dragon banana
+
+추가한 순서를 기억하는 Set.  
+HashSet처럼 중복이 존재하지 않는 것은 동일하지만, 등록한 순서대로 출력된다는 점이 다름.  
+
+## `TreeSet 클래스`
+~~~
+Set<String> ids = new TreeSet<>(); // LinkedHashSet에서 TreeSet으로 변경
+ids.add(“apple”);
+ids.add(“cookie”);
+ids.add(“dragon”);
+ids.add(“banana”); // 중복값 등록
+
+for(String id : ids) {
+	System.out.print(id + “\t”);
+}
+~~~
+OUTPUT : apple banana cookie dragon
+
+등록한 요소를 자연스러운 순서로 정렬하는 Set.  
+문자열의 경우, 사전순으로 정렬된다.  
+TreeSet에서도 같은 요소를 등록하는 것이 불가능하지만, 사전순으로 출력하고 있다. 이것이 TreeSet의 특징.  
+정렬이 되려면 Comparable 인터페이스를 Implements했거나, 컨스트럭터로 정렬방법을 지정해줄 필요가 있다.  
+
+## `변하지 않는 Set`
+`of() 메소드`를 사용하면 내용이 변하지 않는 Set을 만들 수 있다.  
+Java9(2017년)부터 사용하기 시작한 기능.  
+of() 메소드의 인수로 등록할 요소를 컴마로 구분하여 입력하거나, 요소의 배열을 지정한다.  
+~~~
+// 요소를 컴마로 구분하여 입력
+Set<String> set = Set.of(“홍길동”, “김갑돌”, “김갑순”);
+
+// 요소의 배열을 지정
+String[] names = {“홍길동”, “김갑돌”, “김갑순”};
+Set<String> set2 = Set.of(names);
+~~~
+
+요소에 null이나 중복된 값은 지정할 수 없음. 실행하면 예외가 발생함.
+~~~
+Set.of(“홍길동”, null, “김갑순”); // null 입력
+Set.of(“홍길동”, “김갑돌”, “김갑순”, “김갑순”); // 중복된 값 입력
+~~~
+OUTPUT : 에러 발생
+
+더불어서, add()메소드나 remove()메소드를 실행할 수 없다. 실행하면 예외가 발생함.  
+of()메소드는 HashSet, LinkedHashSet, TreeSet와 같은 클래스를 지정해서 사용할 수 없다. Set인터페이스의 인스턴스에서만 사용할 수 있다.  
