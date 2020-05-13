@@ -252,4 +252,109 @@ Set.of(“홍길동”, “김갑돌”, “김갑순”, “김갑순”); // �
 OUTPUT : 에러 발생
 
 더불어서, add()메소드나 remove()메소드를 실행할 수 없다. 실행하면 예외가 발생함.  
-of()메소드는 HashSet, LinkedHashSet, TreeSet와 같은 클래스를 지정해서 사용할 수 없다. Set인터페이스의 인스턴스에서만 사용할 수 있다.  
+of()메소드는 HashSet, LinkedHashSet, TreeSet와 같은 클래스를 지정해서 사용할 수 없다.  
+Set인터페이스의 인스턴스에서만 사용할 수 있다.  
+
+## `Map계열 클래스의 특징`
+키와 값을 쌍으로 등록한다.  
+키로 검색하여 값을 추출해낼 수 있다. 해쉬 알고리즘을 통해서 빠르게 검색이 가능하다.  
+일반적으로 HashMap을 사용하지만 Map에서 요소를 하나씩 빼낼 때 등록된 순서로 추출되지 않는다.  
+등록 순서대로 추출하고 싶다면 LinkedHashMap 클래스를 사용한다.  
+자연스러운 순서(ex. 사전순)로 정렬되어 추출되길 원한다면 TreeMap 클래스를 사용한다.  
+
+* HashMap : 키와 값을 쌍으로 등록, 키로 값 검색 가능
+* LinkedHashMap : 검색 가능, 저장한 순서대로 추출
+* TreeMap : 검색 가능, 키로 정렬된 상태에서 추출
+
+## `미등록 키로 검색한 경우 & 중복 키를 등록한 경우`
+미등록 키로 검색한 경우, null이 반환된다.  
+이것을 피하고 싶다면 get()메소드가 아닌 getOrDefault() 메소드를 사용한다.  
+중복 키를 등록한 경우, 나중에 등록된 키 값이 덮어씌워진다.  
+
+~~~
+Map<Integer, String> map = new HashMap<>();
+map.put(115, “홍길동”);
+map.put(120, “김갑돌”);
+map.put(108, “김갑순”);
+map.put(115, “김철수”);
+
+System.out.print(map.get(108) + ”, ”);
+System.out.print(map.get(115) + ”, ”);
+System.out.print(map.getOrDefault(811, “미등록”));
+~~~
+OUTPUT : 김갑순, 김철수, 미등록
+
+## `Map의 모든 요소를 뽑아내기`
+`entrySet() 메소드`는 Map의 모든 엔트리를 모은 Set을 반환한다.  
+다만, 각 엔트리는 키와 값을 세트로 저장한 Map.entry타입의 인스턴스다.  
+따라서 확장 for문에서는 Set으로부터 순서대로 Map.entry타입의 인스턴스를 추출해내는 처리가 된다.  
+Map.entry타입에는 키를 뽑아내는 `getKey() 메소드`와 값을 뽑아내는 `getValue() 메소드`가 있다.  
+
+~~~
+Map<Integer, String> map = new HashMap<>();
+map.put(115, “홍길동”);
+map.put(120, “김갑돌”);
+map.put(108, “김갑순”);
+
+for(Map.Entry<Integer, String> entry : map.entrySet()) {
+	System.out.println(entry.getKey() + “, ” + entry.getValue());
+}
+~~~ 
+OUTPUT : 115 = 홍길동
+108 = 김갑순
+120 = 김갑돌
+
+## `Map.Entry타입`
+Map 인터페이스 내부에 Entry 인터페이스가 정의되어 있다. (특이한 케이스)  
+Map.Entry는 Map과의 관계를 표현하기 위해 Map 인터페이스 내부에 선언되어 있다.  
+인터페이스 안에 인터페이스가 정의된 형태이므로, `내부 인터페이스`라고도 부른다.  
+기능적인 측면에서는 다른 인터페이스들과 동일하지만, 인터페이스를 그룹화해 유지되기 쉽게함과 동시에 Map과의 관계를 강하게 강조하는 이점이 있다.  
+
+## `LinkedHashMap과 TreeMap`
+등록 순서대로 추출하고 싶다면 LinkedHashMap 클래스를 사용한다.
+~~~
+Map<Integer, String> map = new LinkedHashMap<>(); // 등록된 순서대로 출력된다.
+map.put(115, “홍길동”);
+map.put(120, “김갑돌”);
+map.put(108, “김갑순”);
+
+for(Map.Entry<Integer, String> entry : map.entrySet()) {
+	System.out.println(entry.getKey() + “, ” + entry.getValue());
+}
+~~~ 
+OUTPUT : 115 = 홍길동  
+120 = 김갑돌  
+108 = 김갑순
+
+자연스러운 순서(ex. 사전순)로 정렬되어 추출되길 원한다면 TreeMap 클래스를 사용한다.  
+~~~
+Map<Integer, String> map = new TreeMap<>(); // 번호순서대로 출력된다.
+map.put(115, “홍길동”);
+map.put(120, “김갑돌”);
+map.put(108, “김갑순”);
+
+for(Map.Entry<Integer, String> entry : map.entrySet()) {
+	System.out.println(entry.getKey() + “, ” + entry.getValue());
+}
+~~~ 
+OUTPUT : 108 = 김갑순  
+115 = 홍길동  
+120 = 김갑돌
+
+## `불변의 Map을 만드는 of()와 ofEntries()메소드`
+`of()메소드` 혹은 `ofEntries()메소드`를 사용하면 내용이 바뀌지 않는 맵을 만들 수 있다.  
+Java9(2017년) 부터 사용하게 된 기능이다.  
+불변의 맵은 일단 작성하면, 추가, 삭제, 변경이 불가능하다. 또, 키값으로 null을 지정할 수 없다.  
+of()메소드는 키와 값을 번갈아가며 최대 10개까지 지정하여 불변의 맵을 만들 수 있다.  
+ofEntries()메소드는 키와 벨류를 가지는 엔트리를 지정하여 불변의 맵을 만들 수 있으며, 지정할 엔트리의 개수는 제한이 없다.  
+
+~~~
+// 키와 값을 번갈아가며 지정 (최대 10개까지)
+Map<Integer, String> map = Map.of(1, “TEST1”, 2, “TEST2”, 3, “TEST3”); // 3개의 엔트리를 지정함.
+
+// Map.Entry타입의 요소를 나열해서 지정(제한 없음, 배열을 지정해도 가능함)
+Map<Integer, String> map2 = Map.ofEntries(Map.entry(1, “TEST1”)
+, Map.entry(2, “TEST2”)
+, Map.entry(3, “TEST3”));
+~~~
+
