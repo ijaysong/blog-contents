@@ -358,3 +358,25 @@ Map<Integer, String> map2 = Map.ofEntries(Map.entry(1, “TEST1”)
 , Map.entry(3, “TEST3”));
 ~~~
 
+## `제네릭(Generic) 타입 클래스`
+<T> 타입 파라미터로부터 타입을 선언하는 것을 제네릭 클래스라고 한다.  
+클래스나 인터페이스 선언에 <T>를 붙여 제네릭 타입 클래스로 선언할 수도 있다.  
+와일드 카드를 지정한 제네릭 타입 클래스가 있다.  
+* <? extends T> : T타입 혹은 자식 타입
+* <? super T> : T타입 혹은 부모 타입
+* <?> : 모든 타입에 해당된다.
+→ 전부다 <T>이라고 이해하고 사용해도 된다.
+
+## `익명 클래스`
+클래스의 내용만 정의하고, 동시에 인터페이스를 반환하는 형식이다.  
+익명클래스를 사용하면 클래스의 정의와 인스턴스의 생성, 인스턴스의 이용까지 한번에 구현할 수 있다.  
+익명클래스에서 new의 다음에 적는 것은 인터페이스나 부모 클래스 명이다.  
+~~~
+list.sort(new Comparator<Member> () {
+	public int compare(Member o1, Member o2) {
+		String s1 = o1.getName(), s2 = o2.getName();
+		return s1.compareTo(s2);
+	}
+})
+~~~                           
+일반적으로 클래스 안에 정의하는 클래스를 중첩클래스 (Nested Class)라고 한다.
