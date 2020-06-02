@@ -94,35 +94,69 @@ s -> s.length()                // 인수가 하나라면 ()는 생략 가능
 (String code) -> new Book(code)   ===> Book::new
 ~~~
 
-## 람다식의 편리한 사용방법
-인터페이스의 static 메소드를 사용할 때, static 임포트 해두면 작성이 간단해진다.  
+## 람다식의 메소드 체인
+Predicate 인터페이스(`~이다`라는 조건을 기술할 때 사용)는 다음과 같은 default 메소드를 가지고 있다.  
+해당 default 메소드를 사용해 여러 조건을 연결해서 사용할 수 있다.  
+* and : 그리고
+* or : 혹은
+* negate : 부정(~이 아니다)
+
+and, or, negate 메소드를 도트로 연결해서 사용한다.   
+이러한 사용법을 `메소드 체인`이라고도 부른다.  
+맨처음에 지정하는 조건만 인수 없이 사용하고, 나머지 조건은 메소드에 인수를 지정한다.  
 ~~~
-import static java.util.function.Comparator.comparing;
+Predicate<Book> min15000 = (book -> book.getPrice() >= 15000); // 15,000원 이상인 책
+Predicate<Book> korean = (book -> “korean”.equals(book.getLanguage())); // 한국어로 된 책
+Predicate<Book> english = (book -> “english”.equals(book.getLanguage()));  // 영어로 된 책
+
+// 조건은 왼쪽에서부터 차례로 해석된다.
+// (!min15000 && korean) || english
+listup(list, min15000.negate()); // 15,000원이 아닌 책
+listup(list, min15000.and(korean).or(english));
 ~~~
 
-Predicate 인터페이스의 default 메소드를 사용하면, 조건을 맞춰서 사용할 수 있다.  
-조건은 왼쪽에서부터 차례로 해석된다.
+## Comparator 인터페이스의 static 메소드
+람다식에서 static메소드를 사용할 때는 `static 임포트`를 지정해 클래스명도 생략하는 것이 일반적이다.  
+인터페이스의 static 메소드를 사용할 때, static 임포트 해두면 클래스 명 지정이 생략되어 작성이 간단해진다.  
+그렇게 해두면 Comparator.comparing이 아니라 comparing이라는 메소드 명 하나만으로 지정 가능하다.  
+import 문에 static을 붙여서, 패키지 명부터 메소드 명까지 지정할 필요가 있다.  
 ~~~
-listup(list, min5000.negate()); // min5000이 아님
-listup(list, min5000.and(korean).or(english));
+import static java.util.function.Comparator.comparing; // static 임포트
 ~~~
 
-comparing을 사용하면 정렬이 간단해진다.
+`comparing( 람다식 )`
+comparing 메소드를 사용하면 정렬 조건을 간단하게 지정할 수 있다.  
+정렬의 키 항목을 반환하는 람다식을 인수로 지정한다.  
 ~~~
 list.sort(comparing( Book :: getPrice )); // 가격순으로 정렬
 list.sort(comparing( Book :: getLanguage )); // 사용언어순으로 정렬
 ~~~
 
-thenComparing은 sort의 2차 키를 지정할 수 있다.
+## Comparator 인터페이스의 default 메소드
+
+`thenComparing ( 람다식 )`
+thenComparing 메소드는 정렬의 2차 키를 지정할 수 있다.  
+첫번째 정렬에서 같은 순위의 값이 있다면 thenComparing으로 지정한 키로 한번더 정렬하는 것이다.  
+comparing 메소드의 뒤에 메소드체인(도트)으로 연결하여 사용한다.  
 ~~~
 list.sort( comparing( Book :: getPrice ) ) // 가격순으로 정렬
 .thenComparing( Book :: getCode )); // 가격이 같다면 등록번호 순으로 정렬
 ~~~
 
-reversed는 역순으로 정렬한다.
+`reversed ( )`
+reversed 메소드는 역순으로 정렬한다.  
+다른 정렬 조건의 뒤에 메소드체인(도트)으로 연결하여 사용한다.  
 ~~~
 list.sort( comparing( Book :: getPrice ) // 가격순으로 정렬
 .thencomparing( Book :: getCode ) // 가격이 같으면 등록 번호 순으로 정렬
 .reversed() ); // 역순으로 정렬
+~~~
+
+## `forEach 메소드`
+List 인터페이스의 메소드로, 인수에 지정한 람다식을 모든 요소에 순서대로 적용한다.  
+for문으로 출력하는 것과 비교하면 매우 간단하게 지정할 수 있다.  
+~~~
+list.forEach( Book::System.out ); // 모든 요소를 출력
+list.forEach( book -> System.out.println(book.getAuthor()) ); // 저자명만 출력
 ~~~
  
