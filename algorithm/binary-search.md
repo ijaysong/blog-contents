@@ -38,6 +38,9 @@
 * 이진탐색 : O(log n)
 
 이진탐색을 사용하면 실행시간을 절약할 수 있다는 장점이 있다.  
+예를 들어, 특정 유저의 아이디와 패스워드가 일치하는지 확인하는 로그인 기능에서   
+모든 유저의 정보를 확인하는 단순탐색보다, 아이디 순으로 정렬된 유저 정보 리스트를 가지고 이진 탐색을 한다면 훨씬 더 빠르게 수행할 수 있다.  
+유저 정보가 더더더더 많아질수록 유용하다!!  
 
 ## 간단 정리 (Summary)
 * 이진 탐색은 단순 탐색보다 아주 빠르다.
@@ -45,3 +48,37 @@
 * 알고리즘의 속도는 시간으로 측정하지 않는다.
 * 알고리즘의 시간은 어떻게 증가하는가로 측정한다.
 * 알고리즘의 시간은 빅오 표기법으로 나타낸다.
+
+## 이진 탐색 프로그램
+정렬된 리스트가 있다. 해당 리스트에서 특정 숫자가 존재하는 인덱스 값을 반환하는 프로그램을 만들어보아라.  
+
+~~~
+import java.util.List;
+
+public class Algo200604 {
+	public static void main(String[] args) {
+		List<Integer> sorted = List.of(1, 3, 5, 7, 9);
+		System.out.println(getTargetIdx(sorted, 3));
+	}
+	
+	public static int getTargetIdx(List<Integer> sorted, int target) {
+		int start = 0; // 시작 인덱스
+		int end = sorted.size() - 1; // 마지막 인덱스
+		
+		while(start <= end) {
+			int mid = (start + end) / 2; // 중간 인덱스
+			int guess = sorted.get(mid); // 중간값
+			
+			// 타겟보다 작다면
+			if(guess < target) start = start + 1;
+			// 타겟보다 크다면
+			else if(guess > target) end = mid - 1;
+			// 타겟과 일치한다면
+			else return mid;
+		}
+		
+		return 0;
+	}
+}
+~~~
+
