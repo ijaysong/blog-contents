@@ -159,4 +159,40 @@ for문으로 출력하는 것과 비교하면 매우 간단하게 지정할 수 
 list.forEach( Book::System.out ); // 모든 요소를 출력
 list.forEach( book -> System.out.println(book.getAuthor()) ); // 저자명만 출력
 ~~~
- 
+
+## `스트림이란?`
+스트림은 데이터의 흐름을 말한다.  
+오브젝트의 스트림과 Primitive 타입의 스트림이 있다.  
+|종류                | 설            |
+|-------------------|---------------|
+|Stream<T>          |오브젝트의 스트림  |
+|IntStream          |int의 스트림     |
+|LongStream         |long의 스트림    |
+|DoubleStream       |double의 스트림  |
+
+스트림에 대해서 추출이나 정렬등 중간조작을 수행해, forEach등의 종단조작으로 처리를 종료한다.  
+다수의 중간조작과 종단조작이 준비되어 있다.  
+스트림은 다음과 같이 작성할 수 있다.  
+
+|작성방법           | 작성 예                                                                                         |
+|-----------------|-----------------------------------------------------------------------------------------------|
+|List, Set에서 작성 |List<Book> books = ~; <br> Stream<Books> stream = books.stream();                              |
+|배열로부터 작성      |String[] array = { ~ }; <br> Stream<String> stream = Arrays.stream(array);                     | 
+|직접생성           |IntStream istream = Integer.range(1, 100); <br> IntStream istream = IntStream.of(5, 12, 4, 11); |
+
+## 중간조작이란?
+중간 조작은 스트림을 반환하므로, 메소드 체인으로 반환할 수 있다.  
+`books.filter(b -> b.getPrice > 2000).sorted(Book::getName). ...`
+|중간조작                           |기능               |사용 예                           |
+|---------------------------------|-----------------|---------------------------------|
+|filter(Predicate<T>)             |추출              |filter (b -> b.getPrice() < 2000)|
+|map(Function<T>)                 |변환              |map(Book::getTitile)             |
+|distinct()                       |중복을 삭제         |distinct()                       |
+|sorted(Comparator<T>)            |정렬              |sorted(comparing(PC::getName))   |
+|flatMap(Function<T, Stream<R>>)  |평균화             |flatMap(List::stream)            |
+|skip(long n)                     |n개 스킵           |skip(3)                          |
+|limit(long n)                    |n개까지            |limit(3)                         |
+|mapToInt(ToIntFunction<T>)       |IntStream 변환    |mapToInt(Book::getPrice)         |
+|mapToLong(ToLongFunction<T>)     |LongStream 변환   |mapToLong(Obj::getLongValue)     |
+|mapToDouble(ToDoubleFunction<T>) |DoubleStream 변환 |mapToDouble(Obj::getDoubleValue) |
+
