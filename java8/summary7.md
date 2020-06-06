@@ -180,7 +180,7 @@ list.forEach( book -> System.out.println(book.getAuthor()) ); // 저자명만 �
 |배열로부터 작성      |String[] array = { ~ }; <br> Stream<String> stream = Arrays.stream(array);                     | 
 |직접생성           |IntStream istream = Integer.range(1, 100); <br> IntStream istream = IntStream.of(5, 12, 4, 11); |
 
-## 중간조작이란?
+## `중간조작이란?`
 중간 조작은 스트림을 반환하므로, 메소드 체인으로 반환할 수 있다.  
 `books.filter(b -> b.getPrice > 2000).sorted(Book::getName). ...`
 |중간조작                           |기능               |사용 예                           |
@@ -195,4 +195,58 @@ list.forEach( book -> System.out.println(book.getAuthor()) ); // 저자명만 �
 |mapToInt(ToIntFunction<T>)       |IntStream 변환    |mapToInt(Book::getPrice)         |
 |mapToLong(ToLongFunction<T>)     |LongStream 변환   |mapToLong(Obj::getLongValue)     |
 |mapToDouble(ToDoubleFunction<T>) |DoubleStream 변환 |mapToDouble(Obj::getDoubleValue) |
+
+## `기본적인 종단조작`
+|종단조작 |기능|
+|-----------|-----|
+|boolean anyMath(Predicate<T>) <br> boolean noneMatch(Predicate<T>) <br> boolean allMatch(Predicate<T>) | 조건에 일치하는지 안하는지 확인한다. <br> 어떤것도 조건에 일치하는지 안하는지 확인한다. <br> 모든 조건에 일치하는지 안하는지 확인한다. |
+|Optional<T> findAny() <br> Optional<T> findFirst() | 스트림에서 임의로 하나를 반환한다. <br> 스트림의 선두에서 하나를 반환한다. | 
+|Optional<T> reduce(BinaryOperator<T>) | (T, T) -> T가 되도록 변환한다. <br> 누적해서 연산한 결과를 반환한다. |
+|long count() | 데이터 조건을 반환한다. |
+|int sum() |IntStream의 합계를 반환한다. |
+|OptionalDouble average() | 평균값을 반환한다. (평균값은 항상 double 타입) |
+|OptionalXXX max() | 최대값을 반환한다.|
+|OptionalXXX min() | 최소값을 반환한다.|
+|void forEach(Consumer<T>) | 모든 요소의 인수에 람다식을 적용한다. |
+|collect(Collector<T, A, R>) | List, Set, Map 등에 정리해서 반환한다. |
+
+## `collect에 의한 종단조작`
+collect(Collectors.~) 처럼 사용해, 종단조작에 스트림을 집약하기 위해서 사용한다.  
+static 임포트 해서, 클래스 명을 생략해 사용하면 기술이 간단해진다.   
+|집약조작|기능|
+|----------|------|
+|groupingBy(분류기준의 람다식 [, 2차조작]) | 그룹을 나눠 결과를 Map으로 하여 반환한다. |
+|partitioningBy(분류기준의 람다식 [, 2차조작]) |두 부류로 부류 결과를 Map으로 하여 반환한다. |
+|toList() |List로 결과를 반환한다. |
+|toSet() |Set로 결과를 반환한다. |
+|toMap(Key의 람다식, Value의 람다식) |Map로 결과를 반환한다. |
+|joing([seperate 문자]) |하나의 문자열로 연결하여 반환한다. |
+|counting() |long의 건수를 반환한다. |
+|summingXX(집계항목의 람다식) |xxx타입의 합계를 반환한다. |
+|averagingXXX(집계항목의 람다식) |xxx타입의 합계를 반환한다. |
+|maxBy(Comparator의 람다식) |Optional<T>타입으로, 최대 오브젝트를 반환한다. |
+|minBy(Comparator의 람다식) |Optional<T>타입으로, 최소 오브젝트를 반환한다. |
+|summarizingXXX() |XXXSummaryStatistics타입으로 통계값을 반환한다. |
+
+## `Optional`
+값을 넣는 컨테이너 타입  
+Optional 타입에 값을 넣어두고, 값이 존재하는지 아닌지 체크를 생략해서 할 수 있다는 이점이 있다.
+|종류 |설명 |
+|------|------|
+|Optional<T> <br> OptionalInt <br> OptionalLong <br> OptionalDouble | 오브젝트 <T>의 컨테이너 <br> int의 컨테이너 <br> long의 컨테이너 <br> double의 컨테이너 |
+
+호출하는 메소드에 의해서 값을 꺼낸다.
+|값을 호출하는 메소드 | 값이 없을 때 | 값이 있을 때 |
+|--------------------------|----------------|-----------------|
+|get() <br> getAsXXX() | get()을 사용하면 예외가 발생한다. <br> primitive 타입의 Optional의 경우 |저장하고 있는 값을 반환한다. |
+|orElse(값) | 인수의 값을 이미 정해진 값으로서 반환한다. |저장하고 있는 값을 반환한다. |
+|orElseGet(람다식) |인수의 람다식으로 생성한 값을 반환한다. |저장하고 있는 값을 반환한다. |
+|orElseThrow(람다식) |인수의 람다식으로 생성한 예외를 날린다. |저장하고 있는 값을 반환한다. |
+
+값을 꺼내는 것이 아니라, if문 처럼 2개의 처리를 선택적으로 실행하는 것도 가능하다.
+|ifPresentOrElse 메소드의 API |
+|---------------------------------------|
+|ifPresentOrElse(Consumer<T> c, Runnable r) <br>
+값이 있는 경우 ---- 값을 받아서 처리를 실행한다. 처리는 Consumer 타입으로, T -> void의 형식이다. <br>
+값이 없는 경우 ---- 값 없이 무언가 처리를 실행한다. 처리는 Runnable 타입으로, () -> void의 형식이다. |
 
