@@ -162,39 +162,103 @@ list.forEach( book -> System.out.println(book.getAuthor()) ); // 저자명만 �
 
 ## `스트림이란?`
 스트림은 데이터의 흐름을 말한다.  
+람다식으로 간단한 지시를 적엇, 리스트로부터 추출하거나 정렬하는 것이 가능하다.  
 오브젝트의 스트림과 Primitive 타입의 스트림이 있다.  
-|종류                | 설            |
-|-------------------|---------------|
-|Stream<T>          |오브젝트의 스트림  |
-|IntStream          |int의 스트림     |
-|LongStream         |long의 스트림    |
-|DoubleStream       |double의 스트림  |
+|종류                | 설명                   |
+|------------------|-----------------------|
+|Stream<T>    |오브젝트의 스트림 |
+|IntStream       |int의 스트림         |
+|LongStream   |long의 스트림      |
+|DoubleStream|double의 스트림  |
 
+stream() 메소드는 Collection 인터페이스의 디폴트 메소드이기 때문에, 모든 List나 Set에서 사용할 수 있다.  
+스트림의 가장 큰 특징은 	`스트림에 대해서 다양한 처리를 수행하는 메소드가 준비되어 있다`는 점이다.  
+처음부터 메소드가 지정되어 있기 때문에, 사용할 때 람다식으로 조건이나 동작을 지정하는 것만으로 가능하다.  
+
+예를 들어, filter를 사용해 70,000원 이상의 상품을 추출한다고 해보자.  
+첫번째 인덱스부터 차례대로 스트림에 리스트의 요소가 스트림의 형태로 filter() 메소드에 흘러들어오는 이미지이다.  
+filter는 `중간조작`이라는 종류의 메소드로, 점점 아래로 흘려보낸다.  
+중간조작의 모든 메소드는 Stream을 리턴값으로 반환한다.  
+최종적으로 흐름을 멈추게 하는 처리를 `종단조작`이라고 부른다.	 
+여기서 종단 조작은 forEach() 메소드로, 콘솔에 값을 출력한다.  
+~~~
+public static main(String[] args) {
+   List<Product> list = Arrays.asList() {
+      new Product(“PRODUCT_A01”, “상품 A”, 50000, “A_01”);
+      new Product(“PRODUCT_B01”, “상품 B”, 110000, “B_01”);
+      new Product(“PRODUCT_C01”, “상품 C”, 75000, “C_01”);
+      new Product(“PRODUCT_D01”, “상품 D”, 80000, “D_01”);
+      new Product(“PRODUCT_E01”, “상품 E”, 30000, “E_01”);
+   };
+
+   // filter를 사용해, 70,000원 이상의 상품을 추출해 콘솔에 출력한다.
+   list.stream().filter(product -> product.getPrice() >= 70000).forEach(System.out::println);
+}
+~~~
 스트림에 대해서 추출이나 정렬등 중간조작을 수행해, forEach등의 종단조작으로 처리를 종료한다.  
 다수의 중간조작과 종단조작이 준비되어 있다.  
 스트림은 다음과 같이 작성할 수 있다.  
 
-|작성방법           | 작성 예                                                                                         |
-|-----------------|-----------------------------------------------------------------------------------------------|
-|List, Set에서 작성 |List<Book> books = ~; <br> Stream<Books> stream = books.stream();                              |
-|배열로부터 작성      |String[] array = { ~ }; <br> Stream<String> stream = Arrays.stream(array);                     | 
+|작성방법           | 작성 예                                                                                          |
+|-----------------|------------------------------------------------------------------------------------------------|
+|List, Set에서 작성 |List<Book> books = ~; <br> Stream<Books> stream = books.stream();                               |
+|배열로부터 작성      |String[] array = { ~ }; <br> Stream<String> stream = Arrays.stream(array);                      | 
 |직접생성           |IntStream istream = Integer.range(1, 100); <br> IntStream istream = IntStream.of(5, 12, 4, 11); |
 
 ## `중간조작이란?`
 중간 조작은 스트림을 반환하므로, 메소드 체인으로 반환할 수 있다.  
 `books.filter(b -> b.getPrice > 2000).sorted(Book::getName). ...`
-|중간조작                           |기능               |사용 예                           |
+|중간조작                           |기능              |사용 예                            |
 |---------------------------------|-----------------|---------------------------------|
 |filter(Predicate<T>)             |추출              |filter (b -> b.getPrice() < 2000)|
 |map(Function<T>)                 |변환              |map(Book::getTitile)             |
 |distinct()                       |중복을 삭제         |distinct()                       |
 |sorted(Comparator<T>)            |정렬              |sorted(comparing(PC::getName))   |
-|flatMap(Function<T, Stream<R>>)  |평균화             |flatMap(List::stream)            |
-|skip(long n)                     |n개 스킵           |skip(3)                          |
-|limit(long n)                    |n개까지            |limit(3)                         |
+|flatMap(Function<T, Stream<R>>)  |평균화            |flatMap(List::stream)             |
+|skip(long n)                     |n개 스킵          |skip(3)                           |
+|limit(long n)                    |n개까지           |limit(3)                          |
 |mapToInt(ToIntFunction<T>)       |IntStream 변환    |mapToInt(Book::getPrice)         |
 |mapToLong(ToLongFunction<T>)     |LongStream 변환   |mapToLong(Obj::getLongValue)     |
 |mapToDouble(ToDoubleFunction<T>) |DoubleStream 변환 |mapToDouble(Obj::getDoubleValue) |
+
+### ‘추출 (filter)’
+filter는 중간조작 메소드로, 인수는 Predicate<T> 타입이다.  
+인수의 람다식으로 조건을 지정해, 추출하는 메소드이다.  
+조건과 일치하는 것만 스트림으로 출력한다.  
+~~~
+public static void main(String[] args) {
+	List<PC> list = PC.getList(); // 테스트용 리스트
+
+   // Apple에서 만든 PC만 추출한다.
+   list.stream()
+      .filter(pc -> “Apple”.equals(pc.getMakker())) // Apple사의 PC만
+      .forEach(System.out::println);
+}
+~~~
+
+forEach로 콘솔에 출력하는 것말고도, Apple사의 PC만 포함하는 새로운 리스트를 작성하는 것도 가능하다.  
+`collect 메소드`를 사용해 새로운 리스트를 만들 수 있다.  
+collect 메소드는 인수로 부터 결과를 다양한 타입으로 새로 저장하는 것이 가능하다.  
+collect 메소드로 toList() 메소드를 인수로 사용해, 추출 결과를 List를 만드는 것이 가능하다.  
+static 메소드를 임포트해서, 클래스명인 Collectors를 생략할 수 있다.  
+~~~
+import static java.util.stream.Collectors.toList; // static 임포트
+   public class FileterExample {
+      public static void main(String[] args) {
+      List<PC> list = PC.getList();
+
+      List<PC> maker_apple = list.stream()
+         .filter(pc -> “Apple”.equals(pc.getMaker())) 
+         .collect(toList()); // Collectors.toList()이지만, Collectors를 생략하고 있다
+   }
+}
+~~~
+
+### `변환 (map)`
+### `중복 삭제 (distinct)`
+### `정렬 (sorted)`
+### `처리의 스킵과 제한 (skip, limit)`
+### `평균화 (flatMap)`
 
 ## `기본적인 종단조작`
 |종단조작 |기능|
