@@ -221,7 +221,7 @@ public static main(String[] args) {
 |mapToLong(ToLongFunction<T>)     |LongStream 변환   |mapToLong(Obj::getLongValue)     |
 |mapToDouble(ToDoubleFunction<T>) |DoubleStream 변환 |mapToDouble(Obj::getDoubleValue) |
 
-### ‘추출 (filter)’
+### `추출 (filter)`
 filter는 중간조작 메소드로, 인수는 Predicate<T> 타입이다.  
 인수의 람다식으로 조건을 지정해, 추출하는 메소드이다.  
 조건과 일치하는 것만 스트림으로 출력한다.  
@@ -255,10 +255,108 @@ import static java.util.stream.Collectors.toList; // static 임포트
 ~~~
 
 ### `변환 (map)`
+람다식에서 지정한 처리를 각 요소에 적용하고, 새로운 요소로 변환하는 메소드이다.  
+map의 인수는 Function<T, R> 타입이다.   
+T타입의 인수를 무언가 연산을 해서 R타입으로 반환한다는 연산이 된다.  
+~~~
+public static void main(String[] args) {
+	List<PC> list = PC.getList(); // 테스트용 리스트
+
+	// PC타입에서 String 타입의 리스트로 변환된다.
+	List<String> pcMakers = list.stream()
+					.map(PC::getMaker)
+					.collect(toList()); 	
+	pcMakers.forEach(name -> System.out.print(name + “ ”));
+}
+~~~
+
 ### `중복 삭제 (distinct)`
+스트림으로부터 중복된 요소를 제거하는 메소드이다.  
+같은 내용의 요소가 하나만 되도록 한다.  
+해당 메소드에 인수는 없다.  
+~~~
+public static void main(String[] args) {
+	List<PC> list = PC.getList(); // 테스트용 리스트
+
+	// map에서 제조사명 스트림을 만든 후, distinct로부터 중복된 제조사를 삭제한다.
+	List<String> makers = list.stream()
+				.map(PC::getMaker)
+				.distinct()
+				.collect(toList()); 	
+	makers.forEach(name -> System.out.print(name + “ ”));
+}
+~~~
+
 ### `정렬 (sorted)`
+List의 sort 메소드와 같이 스트림에 대해서 정렬을 수행하는 메소드이다.  
+Comparator<T> 타입을 인수로 받는다.  
+Comparator 인터페이스의 static 메소드인 comparing 메소드를 사용해, 오브젝트의 특정 항목을 기준으로 정렬을 수행한다.  
+sorted에 특정 인수를 지정하지 않아도 자연스러운 순서(숫자순, 사전순 등등)로 정렬한다.  
+~~~
+public static void main(String[] args) {
+	List<PC> list = PC.getList(); // 테스트용 리스트
+
+	// 가격 순으로 정렬한다.
+	List<String> sortedPCs = list.stream()
+					.sorted(comparing(PC::getPrice))
+					.collect(toList()); 	
+	sortedPCs.forEach(System.out::println);
+}
+~~~
+
 ### `처리의 스킵과 제한 (skip, limit)`
+skip은 n개의 요소를 무시하고, 스트림으로 부터 버린다.  
+limit은 요소가 많이 있어도 n개까지만 스트림으로 흘러갈 수 있도록 한다.  
+skip과 limit은 long 타입의 정수 n개를 인수로 한다.  
+~~~
+public static void main(String[] args) {
+	List<PC> list = PC.getList(); // 테스트용 리스트
+
+	// 정렬 후, 3개를 스킵, 마지막 3개까지 스트림으로 흘러가도록 한다.
+	List<String> limitedPCs = list.stream()
+					.sorted(comparing(PC::getPrice))
+					.skip(3) // 3개 스킵
+					.limit(3) // 3개까지만 스트림으로 흘러가도록 함
+					.collect(toList()); 	
+	limitedPCs.forEach(System.out::println);
+}
+~~~
+
 ### `평균화 (flatMap)`
+map메소드와 비슷하지만, 각각의 변환 결과가 단일의 값이 아니라, 배열이나 리스트가 되는 경우에 사용한다.  
+flatMap<T, Stream<R>>의 형태로, T 타입의 오브젝트를 입력해서 R타입의 스트림을 출력하는 조작이다.  
+~~~
+public class Department {
+	private String name; // 부서명
+	private String manager; // 관리자명
+	private List<String> employees; // 직원명의 리스트
+
+	public static void main(String[] args) {
+		List<Department> list = Department.getList(); // 테스트용 리스트
+		
+		List<String> employees = list.stream()
+						.map(Department::getEmployees) // List의 스트림을
+						.flatMap(List::stream) // String 스트림으로 변환
+						.collect(toList());
+		employees.forEach(e -> System.out.print(e + “”));
+	}
+
+	public static List<Department> getList() {
+		List<Department> list = Arrays.asList(
+			new Department(“경영지원”, “김철수”, Arrays.asList(“김XX”, “이XX”, “박XX”)),
+			new Department(“영업”, “김영희”, Arrays.asList(“최XX”, “정XX”, “윤XX”)),
+			new Department(“IT개발”, “홍길동”, Arrays.asList(“조XX”, “강XX”, 송XX”))
+		);
+	}
+}
+~~~
+map으로 List를 요소로 스트림을 만들어 놓고, flatMap으로 각 List를 String의 스트림으로 변환해 출력한다.  
+List::stream은 (List<String> ls) -> ls.stream()의 의미이다.  
+flatMap으로부터 출력된 부분 스트림은 어떤 것도 모두 String 타입의 스트림으로 전체가 하나의 String 스트림이 된다.  
+즉, 문자열 스트림이 평균화 된다는 의미이다. collect에 의해서 모든 것을 한데 모아 String타입의 List로 하는 것이 가능하다.  
+* Arrays.stream(배열) : 배열로부터 스트림을 만든다.  
+* (String[] array) -> Arrays.stream(array)라는 의미이다.  
+
 
 ## `기본적인 종단조작`
 |종단조작 |기능|
