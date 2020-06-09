@@ -221,7 +221,7 @@ public static main(String[] args) {
 |mapToLong(ToLongFunction<T>)     |LongStream 변환   |mapToLong(Obj::getLongValue)     |
 |mapToDouble(ToDoubleFunction<T>) |DoubleStream 변환 |mapToDouble(Obj::getDoubleValue) |
 
-### `추출 (filter)`
+#### `추출 (filter)`
 filter는 중간조작 메소드로, 인수는 Predicate<T> 타입이다.  
 인수의 람다식으로 조건을 지정해, 추출하는 메소드이다.  
 조건과 일치하는 것만 스트림으로 출력한다.  
@@ -254,7 +254,7 @@ import static java.util.stream.Collectors.toList; // static 임포트
 }
 ~~~
 
-### `변환 (map)`
+#### `변환 (map)`
 람다식에서 지정한 처리를 각 요소에 적용하고, 새로운 요소로 변환하는 메소드이다.  
 map의 인수는 Function<T, R> 타입이다.   
 T타입의 인수를 무언가 연산을 해서 R타입으로 반환한다는 연산이 된다.  
@@ -270,7 +270,7 @@ public static void main(String[] args) {
 }
 ~~~
 
-### `중복 삭제 (distinct)`
+#### `중복 삭제 (distinct)`
 스트림으로부터 중복된 요소를 제거하는 메소드이다.  
 같은 내용의 요소가 하나만 되도록 한다.  
 해당 메소드에 인수는 없다.  
@@ -287,7 +287,7 @@ public static void main(String[] args) {
 }
 ~~~
 
-### `정렬 (sorted)`
+#### `정렬 (sorted)`
 List의 sort 메소드와 같이 스트림에 대해서 정렬을 수행하는 메소드이다.  
 Comparator<T> 타입을 인수로 받는다.  
 Comparator 인터페이스의 static 메소드인 comparing 메소드를 사용해, 오브젝트의 특정 항목을 기준으로 정렬을 수행한다.  
@@ -304,7 +304,7 @@ public static void main(String[] args) {
 }
 ~~~
 
-### `처리의 스킵과 제한 (skip, limit)`
+#### `처리의 스킵과 제한 (skip, limit)`
 skip은 n개의 요소를 무시하고, 스트림으로 부터 버린다.  
 limit은 요소가 많이 있어도 n개까지만 스트림으로 흘러갈 수 있도록 한다.  
 skip과 limit은 long 타입의 정수 n개를 인수로 한다.  
@@ -322,7 +322,7 @@ public static void main(String[] args) {
 }
 ~~~
 
-### `평균화 (flatMap)`
+#### `평균화 (flatMap)`
 map메소드와 비슷하지만, 각각의 변환 결과가 단일의 값이 아니라, 배열이나 리스트가 되는 경우에 사용한다.  
 flatMap<T, Stream<R>>의 형태로, T 타입의 오브젝트를 입력해서 R타입의 스트림을 출력하는 조작이다.  
 ~~~
@@ -372,6 +372,134 @@ flatMap으로부터 출력된 부분 스트림은 어떤 것도 모두 String �
 |void forEach(Consumer<T>) | 모든 요소의 인수에 람다식을 적용한다. |
 |collect(Collector<T, A, R>) | List, Set, Map 등에 정리해서 반환한다. |
 
+#### `조건에 매치하는지 조사하는 종단조작`
+`anyMatch, noneMatch, allMatch`는 인수 람다식으로 조건을 표현하고, 조건에 해당하는 요소가 스트림 상에 있는지 없는지 조사해, 결과를 true 혹은 false로 반환한다.
+* anyMatch : 하나라도 해당하는 경우, true 반환
+* noneMatch : 하나도 해당하지 않는 경우, true 반환
+* allMatch : 모든것이 해당하는 경우, true 반환
+
+~~~
+public static void main(String[] args) {
+	List<PC> pcList = PC.getList(); // 테스트용 리스트
+
+	// Macbook이라는 컴퓨터가 하나라도 있는지 조사
+	if (pcList.stream().anyMatch(pc -> “Macbook”.equals(pc.getName()))) {
+
+	// Macbook이라는 컴퓨터가 전혀 없는지 조사
+	// if (pcList.stream().noneMatch(pc -> “Macbook”.equals(pc.getName()))) {
+	// 모든요소가 Macbook이라는 컴퓨터인지 조사
+	// if (pcList.stream().anyMatch(pc -> “Macbook”.equals(pc.getName()))) {
+	System.out.println(“Macbook이라는 컴퓨터가 있습니다.”);
+	} else {
+		System.out.println(“Macbook이라는 컴퓨터가 없습니다.”);
+	}
+}
+~~~
+
+#### `존재 유무를 조사해 결과를 반환하는 종단조작`
+filter 메소드로 특정 조건에 맞는 결과 값을 추출하고 싶을 때, 의도치 않게 결과가 0건이 반환되는 경우가 있다.  
+ex) Apple사의 컴퓨터를 추출하고 싶지만, Applee이라고 조건을 잘못 지정한 경우 등등…  
+그럴 때, filter에 `findAny, findFirst`를 활용하면 스트림에 해당 요소가 존재하는지 아닌지 체크할 수 있다.  
+
+* findAny : 조건에 맞는 요소가 존재한다면, 해당 요소 중 임의의 1건을 반환
+* findFirst : 조건에 맞는 요소가 존재한다면, 해당 요소 중 맨 처음에 있는 1건을 반환
+* findAny, findFirst 모두 Optional 타입의 값을 반환한다.
+
+~~~
+public static void main(String[] args) {
+	List<PC> pcList = PC.getList(); // 테스트용 리스트
+
+	// 존재하지 않을 때 사용할 Dummy 인스턴스를 만들어둔다
+ 	PC nonePC = new PC();
+	nonePC.setName(“No-exist”);
+
+	// Apple을 Applee이라고 잘못 지정
+	Optional<PC> anyPc = pcList.stream()
+				.filter(pc -> “Applee”.equals(pc.getMaker()))
+				.findAny();
+	// 취득한 컴퓨터 명을 표시한다
+	System.out.println(anyPc.orElse(nonePC).getName());
+}
+~~~
+OUTPUT : No-exist
+
+findAny()에서 취득한 값은 Optional 클래스의 인스턴스에 넣어서 반환한다.  
+Optional 클래스는 컨테이너 클래스로, 제네릭 타입이다.  
+제네릭 타입이므로 해당 예제에서 Optional<PC> 타입으로 값을 반환한다.  
+Optional 클래스는 데이터가 없는 경우를 대비하여, 값을 어떻게 추출할 것인지 지정하는 메소드가 있다.  
+
+###### `Optional 클래스`
+값을 넣는 컨테이너 타입의 클래스.   
+Optional 타입에 값을 넣어두고, 값이 존재하는지 아닌지 체크를 생략해서 할 수 있다는 이점이 있다.
+|종류 |설명 |
+|------|------|
+|Optional<T> <br> OptionalInt <br> OptionalLong <br> OptionalDouble | 오브젝트 <T>의 컨테이너 <br> int의 컨테이너 <br> long의 컨테이너 <br> double의 컨테이너 |
+
+호출하는 메소드에 의해서 값을 꺼낸다.
+|메소드                |값이 없는 경우                                  |값이 있는 경우     |
+|--------------------|---------------------------------------------|----------------|
+|get()<br> getAsXXX()|예외가 발생한다<br> primitive 타입의 Optional의 경우 |해당 값을 반환한다. |
+|orElse(값)           |파라미터로 지정한 값이 반환된다.                     |                |
+|orElseGet(람다식)     |파라미터로 지정한 람다식에서 생성한 값이 반환된다.        |                |
+|orElseThrow(람다식)   |파라미터로 지정한 람다식에서 생성한 예외가 발생한다.      |               |
+
+* get : 값이 존재하는 것을 알 때 사용한다. 값이 없을 때 실행하면 예외가 발생한다.
+* orElse : 값이 존재하는지 애매 할 때 사용한다. 지정한 값을 반환한다.
+* orElseThrow : 값이 존재하는지 애매 할 때 사용한다. 람다식에서 작성한 예외를 발생시키는 것이 가능하다.
+
+~~~
+public static void main(String args[]) {
+	List<PC> pcList = PC.getList(); // 테스트용 리스트
+
+	// 존재하지 않을 때 사용할 Dummy 인스턴스를 만들어둔다
+	PC nonePC = new PC();
+	nonePC.setName(“No-exist”);
+
+	// Apple을 Applee이라고 잘못 지정
+	Optional<PC> anyPc = pcList.stream()
+				.filter(pc -> “Applee”.equals(pc.getMaker()))
+				.findAny();
+
+	// 값을 취득한다
+	PC pc = anyPc.get();
+	// 값을 취득하지만, 취득값이 없는 경우, nonePC를 반환한다
+	PC pc = anyPc.orElse(nonePC);
+	// 값을 취득하지만, 취득값이 없는 경우, PC인스턴스를 만들어서 반환한다
+	PC pc = anyPc.orElseGet(PC::new);
+	// 값을 취득하지만, 취득값이 없는 경우, RuntimeException을 발생시킨다.
+	PC pc = anyPc.orElseThrow(() -> new RuntimeException(“해당하는 값이 없습니다.”));
+}
+~~~
+
+값을 꺼내는 것이 아니라, if문 처럼 2개의 처리를 선택적으로 실행하는 것도 가능하다.  
+`ifPresentOrElse()`메소드는 Optional 타입의 값을 반환하지 않지만, 값의 유무에 따라서 처리를 달리하고 싶을 때 사용한다.  
+Java9(2017년)부터 사용한 기능으로, if문과 비슷하게 움직이는 메소드이다.  
+
+|ifPresentOrElse 메소드의 API                                                         |
+|-----------------------------------------------------------------------------------|
+|ifPresentOrElse(Consumer<T> c, Runnable r) <br>
+값이 있는 경우 ---- 값을 받아서 처리를 실행한다. 처리는 Consumer 타입으로, T -> void의 형식이다. <br>
+값이 없는 경우 ---- 값 없이 무언가 처리를 실행한다. 처리는 Runnable 타입으로, () -> void의 형식이다. |
+
+~~~
+public static void main(String args[]) {
+	List<PC> pcList = PC.getList(); // 테스트용 리스트
+
+	// 존재하지 않을 때 사용할 Dummy 인스턴스를 만들어둔다
+ 	PC nonePC = new PC();
+	nonePC.setName(“No-exist”);
+
+	// Apple을 Applee이라고 잘못 지정
+	Optional<PC> anyPc = pcList.stream()
+				.filter(pc -> “Applee”.equals(pc.getMaker()))
+				.findAny();
+				
+	anyPc.ifPresentOrElse(
+	PC -> System.out.println(pc.getName()),            // 해당하는 값이 있을 때
+	() -> System.out.println(“해당하는 값이 없습니다.”));   // 해당하는 값이 없을 때
+}
+~~~
+
 ## `collect에 의한 종단조작`
 collect(Collectors.~) 처럼 사용해, 종단조작에 스트림을 집약하기 위해서 사용한다.  
 static 임포트 해서, 클래스 명을 생략해 사용하면 기술이 간단해진다.   
@@ -389,26 +517,4 @@ static 임포트 해서, 클래스 명을 생략해 사용하면 기술이 간�
 |maxBy(Comparator의 람다식) |Optional<T>타입으로, 최대 오브젝트를 반환한다. |
 |minBy(Comparator의 람다식) |Optional<T>타입으로, 최소 오브젝트를 반환한다. |
 |summarizingXXX() |XXXSummaryStatistics타입으로 통계값을 반환한다. |
-
-## `Optional`
-값을 넣는 컨테이너 타입  
-Optional 타입에 값을 넣어두고, 값이 존재하는지 아닌지 체크를 생략해서 할 수 있다는 이점이 있다.
-|종류 |설명 |
-|------|------|
-|Optional<T> <br> OptionalInt <br> OptionalLong <br> OptionalDouble | 오브젝트 <T>의 컨테이너 <br> int의 컨테이너 <br> long의 컨테이너 <br> double의 컨테이너 |
-
-호출하는 메소드에 의해서 값을 꺼낸다.
-|값을 호출하는 메소드 | 값이 없을 때 | 값이 있을 때 |
-|--------------------------|----------------|-----------------|
-|get() <br> getAsXXX() | get()을 사용하면 예외가 발생한다. <br> primitive 타입의 Optional의 경우 |저장하고 있는 값을 반환한다. |
-|orElse(값) | 인수의 값을 이미 정해진 값으로서 반환한다. |저장하고 있는 값을 반환한다. |
-|orElseGet(람다식) |인수의 람다식으로 생성한 값을 반환한다. |저장하고 있는 값을 반환한다. |
-|orElseThrow(람다식) |인수의 람다식으로 생성한 예외를 날린다. |저장하고 있는 값을 반환한다. |
-
-값을 꺼내는 것이 아니라, if문 처럼 2개의 처리를 선택적으로 실행하는 것도 가능하다.
-|ifPresentOrElse 메소드의 API |
-|---------------------------------------|
-|ifPresentOrElse(Consumer<T> c, Runnable r) <br>
-값이 있는 경우 ---- 값을 받아서 처리를 실행한다. 처리는 Consumer 타입으로, T -> void의 형식이다. <br>
-값이 없는 경우 ---- 값 없이 무언가 처리를 실행한다. 처리는 Runnable 타입으로, () -> void의 형식이다. |
 
