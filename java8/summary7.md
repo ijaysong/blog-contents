@@ -500,6 +500,111 @@ public static void main(String args[]) {
 }
 ~~~
 
+###### `하나의 값으로 한다 (reduce)`
+reduce는 스트림을 하나의 값으로 변환해서 반환하는 범용 메소드 이다.  
+스트림의 선두 2개의 요소에 연산(op)을 적용하고, 그 결과와 3번째 요소에 연산을 적용한다.  
+그 결과와 4번째 요소에 연산 적용… 스트림의 마지막 요소까지 반복 적용한다.  
+파라미터에 (T, T) -> T 의 람다식을 지정해서 스트림 처리를 지정한다.  
+예를 들어, 숫자라면 합계의 최대값이나 최소값을 구할 수가 있고, 문자라면 하나로 연결하는 것도 가능하다.  
+Optional 타입의 결과를 반환한다.  
+
+~~~
+public static void main(String args[]) {
+	List<PC> pcList = PC.getList(); // 테스트용 리스트
+
+	Optional<String> names = list.stream()
+					.map(PC::getName) // 컴퓨터 모델명을 추출
+					.reduce((a, b) -> a + “, ” + b); // 문자열을 연결
+	System.out.println(names.get());
+}
+~~~
+OUTPUT : Macbook, Gram, Surface Go, FLEX 
+
+a는 스트림의 첫번째 요소로, b는 2번째 요소이다.   
+연산이 반복되고 난 후에 a는 연산의 중간결과 값이고, b는 스트림으로부터 추출한 다음 요소이다.  
+위의 예에서 a는 문자열 연결의 중간결과 값이고, 그것에 연결할 다음 문자열이 b이다.   
+
+Optional 이외의 값을 반환하고 싶을 때 초기값을 지정하여 reduce를 실행하면 결과는 String 타입으로 반환된다.  
+~~~
+String names = list.stream()
+			.map(PC::getName) // 컴퓨터 모델명 추출
+			.reduce(“”, (a, b) -> a + “, ” + b); // 문자열 연결
+~~~
+
+###### `기본적인 계산(count, sum, average, max, min)`
+
+`Primitive 타입의 스트림`
+| Primitive 타입의 스트림 | 작성예                                                                                                | 
+|----------------------|-----------------------------------------------------------------------------------------------------|
+| IntStream            |IntStream is = IntStream.of(10, 15, 3); <br> IntStream is = IntStream.range(1, 100); <br> IntStream is = PC.getList.stream().mapToInt(PC::getPrice); <br><br> ※LongStream, DoubleStream에 대해서도 of, rang, mapToLong, mapToDouble을 사용해 작성할 수 있다. |
+| LongStream           |                                                                                                     |
+| DoubleStream         |                                                                                                     |
+
+스트림은 of, range 와 같은 메소드로 직접 작성할 수 없지만, 보통은 스트림으로부터 mapToInt등 메소드로 요소를 추출해내 primitive 타입의 스트림으로 하는 것이 일반적이다.  
+Integer 등의 Wrapper 클래스로 감싸여인채로 사용하는 것보다 계산 시 효율이 좋기 때문이다.  
+스트림으로부터 primitive 타입의 요소를 추출하여 primitve 타입의 스트림으로 작성하는 메소드는 다음과 같다.  
+
+* mapToInt
+* mapToLong
+* mapToDouble
+
+~~~
+public static void main(String args[]) {
+	List<PC> pcList = PC.getList(); // 테스트용 리스트
+	
+	// 건수
+	long count = list.stream().count(); 
+	// 합계
+	int sum = list.stream()
+	.mapToInt(PC::getPrice) // IntStream이 된다.
+	.sum(); 
+
+	// 평균
+	OptionalDouble ave = list.stream()
+				.mapToInt(PC::getPrice)  // IntStream이 된다.
+				.average();
+
+	// 최대
+	OptionalInt max = list.stream()
+				.mapToInt(PC::getPrice)
+				.max();   // IntStream이 된다.
+
+	// 최소
+	OptionalInt max = list.stream()
+				.mapToInt(PC::getPrice)
+				.min();   // IntStream이 된다.
+
+	System.out.println(“건  수=” + count);
+	System.out.println(“합  계=” + sum);
+	System.out.println(“평  균=” + ave.getAsDouble());
+	System.out.println(“최대값=” + max.getAsInt());
+	System.out.println(“최소값=” + min.getAsInt());
+}
+~~~
+OUTPUT : 건  수=11  
+합  계=685000  
+평  균=62272.727272  
+최대값=98000  
+최소값=12000  
+
+최대, 최소와 아래와 같은 방법으로도 추출할 수 있다.  
+* sorted 메소드로 정렬 후 findFirst메소드로 첫번째 요소를 추출 -> 최소값  
+* Comparator 파라미터를 받는 max 메소드를 이용해 Optional타입의 값을 취득 -> 최대값  
+* Comparator 파라미터를 받는 min 메소드를 이용해 Optional타입의 값을 취득 -> 최소값
+
+~~~
+Optional<PC> mmin = list.stream()
+				.sorted(comparing(PC::getPrice))
+				.findFirst();
+
+Optional<PC> min = list.stream().min(comparing(PC::getPrice));
+Optional<PC> max = list.stream().max(comparing(PC::getPrice));
+
+System.out.println(“최소=” + min.get());
+System.out.println(“최대=” + max.get());
+~~~
+
+
 ## `collect에 의한 종단조작`
 collect(Collectors.~) 처럼 사용해, 종단조작에 스트림을 집약하기 위해서 사용한다.  
 static 임포트 해서, 클래스 명을 생략해 사용하면 기술이 간단해진다.   
