@@ -623,3 +623,32 @@ static 임포트 해서, 클래스 명을 생략해 사용하면 기술이 간�
 |minBy(Comparator의 람다식) |Optional<T>타입으로, 최소 오브젝트를 반환한다. |
 |summarizingXXX() |XXXSummaryStatistics타입으로 통계값을 반환한다. |
 
+
+## `Date and Time API`
+다음과 같은 클래스가 있다. 보통은 1번을 사용한다.  
+1. 로컬 시간을 사용한다. (LocalDate, LocalTime, LocalDateTIme)  
+2. UTC와의 시차를 포함해서 다루는 클래스이다. (OffsetTime, OffsetDateTime)  
+3. 타임존을 포함해서 다루는 클래스이다. (ZonedDateTime)  
+
+## `주요 API`
+LocalDate, LocalTime, LocalDateTime 클래스의 주요 메소드는 이름과 사용법이 닮아있다.
+
+`인스턴스의 작성`
+|메소드                | 처리 내용                                                  |
+|--------------------|----------------------------------------------------------|
+|now()               |현재의 인스턴스를 작성한다.                                      |
+|of(n1, n2, n3, ...) |년, 월, 일, 시, 분, 초, 나노초 등의 필드를 지정해서 작성한다.          |
+|parse( str )        |문자열표현으로부터 작성한다.(1자리 값은 01처럼 0을 붙여서 2자리로 만든다.) |
+|from( temporal )    |다른 인스턴스로부터 작성한다.                                     |
+|with( adjuster )    |주요 날짜의 달력 처리를 수행한다.                                  |
+
+`인스턴스의 조작`
+|메소드               | 처리 내용                               |
+|-------------------|---------------------------------------|
+|getXxx()           |Xxx가 나타내는 필드 값을 얻는다.              |
+|plusXxxs(n)        |Xxx가 나타내는 필드에 n을 더한다.             |
+|minusXxxs(n)       |Xxx가 나타내는 팔드로부터 n을 추출한다.         |
+|isAfter(temporal)  |다른 인스턴스보다 이전이라면 true를 반환한다.     |
+|isBefore(temporal) |다른 인스턴스보다 이후라면 true를 반환한다,      |
+|isEqual(temporal)  |다른 인스턴스와 동일하다면 true를 반환한다.      |
+|isLeapYear()       |윤년을 판정한다. <LocalDate만 사용할 수 있다.>  |
