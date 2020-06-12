@@ -652,3 +652,27 @@ LocalDate, LocalTime, LocalDateTime 클래스의 주요 메소드는 이름과 �
 |isBefore(temporal) |다른 인스턴스보다 이후라면 true를 반환한다,      |
 |isEqual(temporal)  |다른 인스턴스와 동일하다면 true를 반환한다.      |
 |isLeapYear()       |윤년을 판정한다. <LocalDate만 사용할 수 있다.>  |
+
+## `Date and TIme 관련 클래스`
+|클래스 명          | 내용                                                                                               |
+|-----------------|---------------------------------------------------------------------------------------------------|
+|DateTimeFormatter|날짜, 시간의 서식을 나타내는 클래스 이다. <br> DateTimeFormatter fmt = DateTimeFormatter.ofPatter(서식문자열); |
+|Period           |날짜의 기간을 나타내는 클래스 이다.<br> Period p = Period.between(date1, date2);                           |
+|Duration         |시간의 기간을 나타내는 클래스이다. <br> Duration d = Duration.between(time1, time2);                       |
+|ChronoUnit       |날짜, 시간의 간격을 나타내는 클래스이다. <br> long days = ChronoUnit.DAYS.between(time1, time2);            |
+|DayOfWeek        |요일을 나타낸다. <br> DayOfWeek.SUNDAY ~ DayOfWeek.SATURDAY                                           |
+
+## `패턴 문자`
+문자열을 편집할 때 아래와 같은 패턴 문자를 사용한다.
+|문자 | 뜻              | 내용                                                         |
+|------|--------------|-------------------------------------------------------------|
+|y     |년             |yy로 년도를 2자리 수로 표현한다.                                   |
+|M     |월             |MM은 월을 2자리 수로 표현한다.                                    |
+|d     |일             |dd는 일을 2자리 수로 표현한다.                                    |
+|a     |오전, 오후의 구별 |                                                            |
+|h     |시 (12시간제)   |hh는 시간을 2자리 수로 표현한다.                                   |
+|H     |시 (24시간제)   |HH는 시간을 2자리 수로 표현한다.                                   |
+|e     |요일           |e, ee는 요일 번호, eee는 요일을 짧게 표시, eeee는 요일을 길게 표시 한다. |
+|m     |분            |mm은 분을 2자리 수로 표현한다.                                     |
+|s     |초            |ss는 초를 2자리 수로 표현한다.                                     |
+|S     |1초이하의 부분   |최대 9자리수까지 S를 표현하는 것이 가능하다.                           |
