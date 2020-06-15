@@ -1,4 +1,4 @@
-# IT 기술면접 준비7
+# 자바 내용 정리7
 
 ## `람다식이란?`
 람다식이란 익명 클래스에서 불필요한 정보를 삭제해 놓은 것과 같은 것이다.  
@@ -710,19 +710,95 @@ y, m, d, e와 같은 것을 `패턴 문자`라고 한다.
 |S     |1초이하의 부분   |최대 9자리수까지 S를 표현하는 것이 가능하다.                           |
 
 
-## `주요 API`
-LocalDate, LocalTime, LocalDateTime 클래스의 주요 메소드는 이름과 사용법이 닮아있다.
+## `날짜 조작`
+#### `날짜로부터 값 추출`
+날짜로부터 년, 월, 일의 값을 각각 추출해내는 것이 가능하다.
 
-`인스턴스의 조작`
-|메소드               | 처리 내용                               |
-|-------------------|---------------------------------------|
-|getXxx()           |Xxx가 나타내는 필드 값을 얻는다.              |
-|plusXxxs(n)        |Xxx가 나타내는 필드에 n을 더한다.             |
-|minusXxxs(n)       |Xxx가 나타내는 팔드로부터 n을 추출한다.         |
-|isAfter(temporal)  |다른 인스턴스보다 이전이라면 true를 반환한다.     |
-|isBefore(temporal) |다른 인스턴스보다 이후라면 true를 반환한다,      |
-|isEqual(temporal)  |다른 인스턴스와 동일하다면 true를 반환한다.      |
-|isLeapYear()       |윤년을 판정한다. <LocalDate만 사용할 수 있다.>  |
+~~~
+public class GetValue {
+	LocalDate date = LocalDate.of(2022, 07, 30);
+	System.out.println(date);
+	System.out.println(date.getYear()); // 연도를 추출
+	System.out.println(date.getMonthValue()); // 월을 추출
+	System.out.println(date.getDayOfMonth()); // 일을 추출
+}
+~~~
+OUTPUT : 2022-07-30  
+2022  
+7  
+30  
+
+getXxx() 라는 메소드로 값을 추출해내는 것이 가능하지만, getYear()이외에 나머지 것들은 메소드 명이 조금 복잡하다.
+
+`LocalDate 클래스 : 날짜 요소를 취득하는 인스턴스 메소드`
+|메소드                     | 기능                             |
+|-------------------------|---------------------------------|
+|int getYear()            | 연도 값을 반환한다.                  |
+|int getMonthValue()      | 월(Month) 값을 반환한다.            |
+|int getDayOfMonth()      | 일(Day) 값을 반환한다.              |
+|DayOfWeek getDayOfWeek() | 요일의 값(DayOfWeek 타입)을 반환한다. |
+
+#### `날짜 계산`
+LocalDate 클래스에는 년, 월, 일 각각에 대해서 값을 더하거나 빼는 메소드가 있다.  
+예를 들어, 오늘로부터 150일 후는 몇월 몇일인지 등을 단순하게 계산할 수 있다.
+
+~~~
+public class Calculation {
+	public static void main(String[] args) {
+		LocalDate today = LocalDate.now(); // 오늘의 날짜
+		LocalDate newDay = today.plusDay(150); // 150일 후 날짜
+		System.out.println(today);
+		System.out.println(newDay); 
+	}
+}
+~~~
+OUTPUT : 2017-12-10  
+2018-05-09
+
+혹은 `3년 8개월 10일 후`의 날짜를 구하고 싶다면 단순하게 계산 할 수 있다.  
+plusXxxs(n) 의 메소드는 LocalDate 타입의 인스턴스를 반환하므로, 다음과 같이 연결해서 메소드를 적용할 수 있다.
+
+~~~
+LocalDate newdate = today.plusYears(3).plusMonths(8).plusDays(10);
+~~~
+
+`LocalDate 클래스 : 날짜 계산을 하는 인스턴스 메소드`
+|메소드 | 기능 |
+|------|----|
+|LocalDate plusYears(Long n) <br> LocalDate plusMonths(Long n) <br> LocalDate plusDays(Long n) | n년 후의 날짜를 반환 <br> n월 후 <br> n일 후 |
+|LocalDate minusYears(Long n) <br> LocalDate minusMonths(Long n) <br> LocalDate minusDays(Long n) | n년 전의 날짜를 반환 <br> n월 전 <br> n일 전 |
+
+#### `날짜 비교`
+특정 날짜가 어떤 날보다 전인지 후인지, 혹은 같은지 비교해서 true/false를 반환하는 메소드이다.  
+윤년도 조사하는 것이 가능하다.  
+
+~~~
+public class CompareExample {
+	public static void main(String[] args) {
+		LocalDate date1 = LocalDate.of(2020, 1, 10); // 2020-01-10
+		LocalDate date2 = LocalDate.of(2019, 12, 6); // 2019-12-06
+		System.out.println(date1.isAfter(date2)); // date1은 date2보다 이후?
+		System.out.println(date1.isBefore(date2)); // date1은 date2보다 이전?
+		System.out.println(date1.isEqual(date2)); // date1과 date2가 동일한 날짜?
+		System.out.println(date1.isLeapYear()); // 윤년인가?
+	}
+}
+~~~
+OUTPUT : true  
+false  
+false  
+true  
+
+`LocalDate 클래스 : 날짜 비교를 수행하는 인스턴스 메소드`
+|메소드                             | 기능                                     |
+|---------------------------------|-----------------------------------------|
+|boolean isAfter(LocalDate date)  |date 이후 날짜라면 true, 아니면 false를 반환    |
+|boolean isBefore(LocalDate date) |date 이전 날짜라면 true, 아니면 false를 반환    |
+|boolean isEqual(LocalDate date)  |date와 동일한 날짜라면 true, 아니면 false를 반환 |
+|boolean isLeapYear()             |윤년이라면 true, 아니면 false를 반환           |
+
+#### `기간 계산`
+
 
 ## `Date and TIme 관련 클래스`
 |클래스 명          | 내용                                                                                               |
