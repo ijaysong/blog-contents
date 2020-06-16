@@ -798,7 +798,93 @@ true
 |boolean isLeapYear()             |윤년이라면 true, 아니면 false를 반환           |
 
 #### `기간 계산`
+2개의 날짜간 기간을 850일, 28개월, 12년처럼 년/월/일의 단위로 표시하는 것과, X년 X개월 X일 처럼 년월일의 합계로 표시하는 방법이 있다.
+~~~
+public class PeriodExcample {
+	public static void main(String[] args) {
+		LocalDate birthday = LocalDate.of(1998, 7, 13); // 탄생 년월일
+		LocalDate today = LocalDate.now(); // 오늘
+		System.out.println(birthday +"~"+ today);
 
+		// 기간을 일수로 취득
+		long days = ChronoUnit.DAYS.between(birthday, today);
+		System.out.println("탄생 년월일로부터 " + days + "일");
+
+		// 기간을 년, 월, 일의 합계로 취득
+		Period period = Period.between(birthday, today);
+		System.out.print("만 " + period.getYears() + "세"); // 만나이(년)
+		System.out.print(period.getMonths() + "개월"); // 개월 수
+		System.out.print(period.getDays() + "일"); // 일 수
+	}
+}
+~~~
+OUTPUT : 1998-07-13~2017-10-16  
+탄생 년월일로부터  7035일  
+19세 3개월 3일
+
+`ChronoUnit 클래스`에는 년, 월 주를 나타내는 열거 정수도 있고, 기간을 계산하는 between 메소드도 있다.
+
+~~~
+long ChronoUnit.DAYS.between(from, to); // from으로부터 to까지의 정수를 반환
+~~~
+
+`열거형 ChronoUnit 정수가 가지는 메소드`
+|메소드                                     |기능                        |
+|-----------------------------------------|---------------------------|
+|long ChronoUnit.YEARS.between(from, to)  |from ~ to 간의 햇수를 반환한다. |
+|long ChronoUnit.MONTHS.between(from, to) |from ~ to 간의 월수를 반환한다. |
+|long ChronoUnit.WEEKS.between(from, to)  |from ~ to 간의 주수를 반환한다. |
+|long ChronoUnit.DAYS.between(from, to)   |from ~ to 간의 일수를 반환한다. |
+
+* LocalDate 클래스에서 만든 기간에는 시간이 포함되지 않음.
+* Duration 클래스에서 시, 분, 초를 다룸. 
+* 혹은, LoalTime 클래스나 LocalDateTime 클래스.
+
+`Period 클래스`로부터는 기간을 구성하는 년, 월, 일의 값을 취득할 수 있다. 각각을 조합하면 윗 예시처럼 19세 3개월 3일 이라고 표시할 수 있다.
+
+`Period 클래스의 API`
+|메소드                                          | 기능                         |
+|----------------------------------------------|-----------------------------|
+|Period Period.between(from, to)               | Period 타입의 인스턴스를 반환한다. |
+|int getYears()                                |기간의 햇수를 반환한다.            |
+|int getMonths()                               | 기간의 월수를 반환한다.           |
+|int getDays()                                 | 기간의 일수를 반환한다.           |
+|Period plus(period) <br> Period minus(period) | 기간을 더한다. <br> 기간을 뺀다.   |
+
+#### `달력 계산`
+다음 월요일이나, 이번달 마지막 날짜 등을 구할 때 with()메소드로 계산할 수 있다.
+
+~~~
+public class AdjustExample {
+	public static void main(String[] args) {
+		LocalDate date = LocalDate.of(2021, 6, 12);
+		System.out.println(date);
+
+		// 다음 월요일 취득
+		TemporapAdjuster nextMonday = TemporalAdjusters.next(DayOfWeek.MONDAY);
+		System.out.println(date.with(nextMonday));
+
+		// 이번달 마지막 날 취득
+		TemporalAdjuster lastDay = TemporalAdjusters.lastDayOfMonth();
+		System.out.println(date.with(lastDay));
+	}
+}
+~~~
+OUTPUT : 2021-06-12  
+2021-06-14  
+2021-06-30  
+
+`TemporalAdjuster 클래스`는 static 메소드를 사용해 값을 취득한다.
+
+`TemporalAdjusters 클래스의 주요 API`
+|메소드                                             | 기능              |
+|-------------------------------------------------|------------------|
+|TemporalAdjusters.dayOfWeekInMonth(n, dayOfWeek) | 이번 달 n번째의 x요일 |
+|TemporalAdjusters.next(dayOfWeek)                | 다음 x요일          |
+|TemporalAdjusters.firstInMonth(dayOfWeek)        | 이번달 첫번째 요일    |
+|TemporalAdjusters.lastInMonth(dayOfWeek)         | 이번달 마지막 요일    |
+|TemporalAdjusters.lastDayOfMonth()               | 이번달 마지막 날      |
+|TemporalAdjusters.firstDayOfNextMonth()          | 다음달 첫번째 날      |
 
 ## `Date and TIme 관련 클래스`
 |클래스 명          | 내용                                                                                               |
