@@ -886,7 +886,85 @@ OUTPUT : 2021-06-12
 |TemporalAdjusters.lastDayOfMonth()               | 이번달 마지막 날      |
 |TemporalAdjusters.firstDayOfNextMonth()          | 다음달 첫번째 날      |
 
+#### `LocalTime과 LocalDateTime`
+LocalDate 이외에 LocalTime클래스와 LocalDateTime 클래스가 있다.
+
+* LocalDate :  날짜를 나타낸다.
+* LocalTime : 시간을 나타낸다.
+* LocalDateTime : 날짜 + 시간을 나타낸다.
+
+~~~
+public class Examples {
+	public static void main(String[] args) {
+		
+		// 15시 20분 35초
+		LocalTime time = LocalTime.of(15, 20, 35);
+		System.out.println(time);
+
+		// 2020년 2월 12일 15시 20분 35초
+		LocalDateTime datetime = LocalDateTime.of(2020, 2, 12, 15, 20, 35);
+		System.out.println(datetime);
+
+		// 시간 표시 형식 편집
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("ahh시mm분ss초");
+		System.out.println(time.format(fmt));
+	}
+}
+~~~
+OUTPUT : 15:20:35  
+2020-02-12T15:20:35  
+오후03시20분35초
+
+`a`, `h`, `m`, `s` 등의 패턴 문자를 사용해 format 메소드로 출력 형식을 지정할 수 있다.
+
+|패턴 문자 | 의미와 사용법                                    |
+|--------|----------------------------------------------|
+|a       |한 글자만 사용하여, 오전/오후의 구분을 표시한다.         |
+|h       |12시간제로 시간을 표시한다. hh라면, 2자리 수로 표시한다.  |
+|H       |24시간제로 시간을 표시한다. HH라면, 2자리 수로 표시한다.  |
+|m       |분을 표시한다. mm이라면, 2자리 수로 표시한다.           |
+|s       |초를 표시한다. ss이라면, 2자리 수로 표시한다.           |
+|S       |1초 미만의 밀리초를 표시한다. 최대 9개의 S로 지정 가능하다.|
+
+#### `시간에 대한 기간`
+날짜에 대한 기간은 Period 클래스를 사용하지만, 시간에 대한 기간은 `Duration 클래스`를 사용한다.  
+메소드는 다르지만 Period 클래스와 비슷한 처리를 시간에 대해서 작성 가능하다.
+
+~~~
+public class DurationExample {
+	public static void main(String[] args) {
+		
+		LocalTime start = LocalTime.of(12, 10, 30); // 출발
+		LocalTime goal = LocalTime.of(16, 46, 25); // 도착
+		System.out.println(start + "~" + goal);
+
+		// 시간에 대한 기간을 작성한다.
+		Duration d = Duration.between(start, goal);
+
+		System.out.println("출발로부터 통산 " + d.toseconds() + "초");
+		System.out.print("소요시간=" + d.toHoursPart() + "시간 "); // Java9부터 사용 가능
+		System.out.print(d.toMinutesPart() + "분 "); // Java9부터 사용 가능
+		System.out.println(d.toSecondsPart() + "초"); // Java9부터 사용 가능
+	}
+}
+~~~
+OUTPUT : 12:10:30~16:46:25  
+출발로부터 통산 16555초  
+소요시간=4시간 35분 55초
+
+toSecondsPart() 처럼 Part를 붙여서 toXxxPart() 메소드는 기간을 `4시간 35분 55초`처럼 표시할 때, 각각의 부분의 값을 취득할 때 사용하는 메소드이다.  
+toXxxPart() 메소드는 Java9(2017년)부터 사용되었으ㅁ, 이전 버전의 JDK에서는 사용할 수 없으므로 주의가 필요하다.
+
+`Duration 클래스의 주요 API`
+|메소드 | 기능 |
+|-----|-----|
+|Duration Duration.between(from, to) | Duration 타입의 인스턴스를 반환한다. |
+|toDays(), toHours(), toMinutes(), <br> toSeconds(), toMillis(), toNanos | 전기간을 일수로 환산한 값이나, 시간으로 환산한 값을 반환한다. |
+|toDaysPart(), toHoursPart(), toMinutesPart() <br> toSecondsPart(), toMillisPart(), toNanosPart() | 전기간을 일 + 시 + 분 + 초 + 밀리 초 + 나노 초로 구성한 시간의 각 부분 값을 반환한다. |
+|Duration plus(duraion) <br> Duration minus(duration) | 시간을 더한다. <br> 시간을 뺀다. |
+
 ## `Date and TIme 관련 클래스`
+
 |클래스 명          | 내용                                                                                               |
 |-----------------|---------------------------------------------------------------------------------------------------|
 |DateTimeFormatter|날짜, 시간의 서식을 나타내는 클래스 이다. <br> DateTimeFormatter fmt = DateTimeFormatter.ofPatter(서식문자열); |
