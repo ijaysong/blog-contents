@@ -41,6 +41,74 @@ String s3 = new String("Hello");
 String s4 = new String("Hello");
 ~~~
 
+## `String 클래스의 주요 API`
+`컨스트럭터`
+|메소드                           |기능                          |
+|-------------------------------|-----------------------------|
+|String (String str)            | 문자열로부터 작성               |
+|String (byte[] bytes, charset) | byte 배열과 문자열 셋으로부터 작성 |
+|String (byte[] bytes)          | byte 배열로부터 작성            |
+|String (char[] values)         | char 배열로부터 작성            |
+
+`문자의 추출, 길이 취득`
+|메소드                |기능                                        |
+|--------------------|-------------------------------------------|
+|char charAt(i)      | i번째 문자를 반환                             |
+|int codePointAt(i)  | i번째 문자의 유니코드를 반환                     |
+|int indexOf(str, i) | i번째 위치로부터 str을 찾아, 출현위치의 인덱스를 반환 |
+|int length()        | 문자열의 길이를 반환                           |
+|boolean isEmpty()   | 문자열의 길이가 0 (null이 아닌) 경우, true를 반환  |
+
+`문자열 비교`
+|메소드                         |기능                                        |
+|-----------------------------|-------------------------------------------|
+|int compareTo(str)           | 사전순으로 str을 비교하고, 음수, 0, 정수의 값을 반환 |
+|int compareToIgnoreCase(str) | 위와 같음. 다만, 대문자와 소문자를 구별하지 않음      |
+|boolean contains(str)        | str이 문자열에 포함되어 있다면 true를 반환         |
+
+`치환, 부분 문자열`
+|메소드                     |기능                                    |
+|-------------------------|---------------------------------------|
+|String replace(old, new) | 문자열 안에서 모든 old를 new로 치환          |
+|String substring(i)      | i번째부터 마지막까지 문자열을 추출             |
+|String substring(i, j)   | i번째부터 j-1번째까지 문자열을 추출 (j번째 포함) |
+
+`변환`
+|메소드                     |기능                                  |
+|-------------------------|-------------------------------------|
+|byte[] getBytes()        | byte 배열로 변환                       |
+|byte[] getBytes(charset) | 문자셋을 지정하고, byte 배열로 변환         |
+|char[] toCharArray()     | 문자 배열로 하여 반환                     |
+|String toLowerCase()     | 대문자를 소분자로 변환한 문자열을 반환         |
+|String toUpperCase()     | 소문자를 대문자로 변환한 문자열을 반환         | 
+|String trim()            | 문자 앞뒤로 존재하는 공백을 삭제한 문자열을 반환 |
+
+
+`static 메소드`
+|메소드                       |기능                                    |
+|---------------------------|---------------------------------------|
+|String valueOf(~)          | 다른 타입의 문자열로 변환하여 반환             |
+|String join(delim, elm...) | 배열등의 요소를 구분 문자로 결합한 문자열을 반환  |
+|String join(delim, list)   | 위의 내용과 같지만, 리스트 요소를 사용함        |
+|String format(fmt, elm...) | 포맷 문자열 fmt로 요소를 편집한 문자열을 반환    |
+
+`정규표현을 이용한 메소드`
+|메소드                          |기능                                       |
+|------------------------------|------------------------------------------|
+|boolean matches(reg)          | reg에 매치할 때 treu를 반환                   |
+|String replaceAll(reg, new)   | reg에 매치하는 모든 부분을 new로 변환            |
+|String replaceFirst(reg, new) | reg에 매치한 첫부분만 new로 변환                |
+|String[] split(reg)           | reg에 매치하는 문자열을 기준으로 분할하여 배열로 반환 |
+
+`스트림 생성`
+|메소드                   |기능                                                |
+|-----------------------|---------------------------------------------------|
+|IntStream chars()      | 문자열로부터 IntStream을 반환 (surrogate pair 사용 안함) |
+|IntStream codePoints() | 문자열로부터 IntStream을 반환 (surrogate pair 사용 함)   |
+
+## `String 클래스의 메소드 사용법`
+
+
 ## `String 클래스`
 new를 사용해, 인스턴스를 다른 문자열이나 byte 배열로부터 작성할 수 있다.  
 byte 배열로부터 작성한 경우, 될수 있는 만큼 문자 셋을 지정해서 작성한다.  
