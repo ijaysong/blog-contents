@@ -107,6 +107,96 @@ String s4 = new String("Hello");
 |IntStream codePoints() | 문자열로부터 IntStream을 반환 (surrogate pair 사용 함)   |
 
 ## `String 클래스의 메소드 사용법`
+#### `byte배열로부터 String 작성`
+**byte[] Files.readAllBytes(Path p);**
+패스가 가리키는 파일 내용을 전부 읽어들여 byte 배열로 반환한다.
+
+~~~
+public static void main(String[] args) {
+    // 파일을 byte배열로서 읽어들임
+    byte[] bytes = Files.readAllBytes(Paths.get("sample.html"));
+
+    // byte 배열로부터 문자열을 작성해 표시
+    String str = new String(bytes, "UTF-8");
+    System.out.println(str);
+}
+~~~
+OUTPUT : \<!DOCTYPE html>  
+\<html>  
+\<title>샘플\</title>  
+\<body>
+\<h1>My First Hompate\</h1>  
+\<p>안녕하세요!\</p>
+\</body>
+\</html>
+
+#### `배열/리스트를 결합해 문자열로 한다`
+**String String.join(str, String[]);**
+join은 String 클래스의 static 메소드이다.  
+String[] 타입이나 List<String> 타입의 값에 대해서, 모든 요소를 지정한 문자(str)로 연결한 문자열을 반환한다.  
+
+~~~
+public static void main(String[] args) {
+    String[] array = { "2020", "07", "15" };
+    System.out.println(String.join("-", array));
+    System.out.println(String.join("\n", array));
+}
+~~~
+OUTPUT : 2020-07-15  
+2020  
+07  
+15  
+
+#### `문자열 안의 특정 문자를 치환한다`
+**String String.replace(str1, str2);**
+문자열 안의 특정 문자(str1)를 다른 문자(str2)로 치환한다. 
+~~~
+public static void main(String[] args) {
+    String str = "12/25 크리스마스\n" +
+                 "02/14 발렌타인데이\n" + 
+                 "03/14 화이트데이";
+    System.out.println(str.replace("/", "-")); 
+}
+~~~
+OUTPUT : 12-25 크리스마스  
+02-14 발렌타인데이  
+03-14 화이트데이  
+
+#### `문자열을 분할 문자로 나누어 배열로 한다`
+**String[] String.split(str)**
+split 메소드는 분할 문자(str)를 지정하여, 해당 문자를 기준으로 문자열을 분할하여 배열로 반환한다. 
+
+~~~
+public static void main(String[] args) {
+    String data = "월, 화, 수, 목, 금";
+    String[] dayOfWeek = data.split(",");
+    Arrays.stream(dayOfWeek)
+            .forEach(System.out::pringln);
+}
+~~~
+OUTPUT: 월  
+화  
+수  
+목  
+금  
+
+#### `대소문자를 구별하지 않고 비교한다`
+**Comparator<T> str1.compareTo(str2)**
+**Comparator<T> str1.compareToIgnoreCase(str2)**
+정렬을 위해서 비교를 이용한다. 
+결과 값으로 음수, 0, 양수를 반환한다.
+sort메소드의 인수는 Compartor 타입이다.
+compareToIgnoreCase메소드는 대문자와 소문자를 구별하지 않고 비교하여 리스트를 사전 순으로 정렬한다.
+
+****
+~~~
+public static void main(String[] args) {
+    List<String> list = Arrays.asList("Bb", "ac", "ba");
+    list.sort((s1, s2) -> s1.compareToIgnoreCase(s2)); // 비교
+    System.out.println(list); // 출력
+}
+~~~
+OUTPUT : [ac, ba, Bb]
 
 
 ## `String 클래스`
