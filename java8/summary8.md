@@ -266,10 +266,49 @@ OUTPUT:2020년7월
 ~~~
 
 #### `임의의 1문자`
+임의의 1문자를 나타내는 것은 `.(도트)`로 몇개 연속해서 지정하는 것이 가능하다.  
+
+|정규표현 | 의미        | 예시                         |
+|-------|-----------|-----------------------------|
+|.      | 임의의 1문자 | ab.c 는 ab c 나 abbc에 매치된다 |
+
+**ab.c**
+abc `ab c` ac % `abbc` ABC A_ 12.133 # A aAA aAAAA dogdog aabc
 
 #### `선두, 선미의 문자가 매치하는지`
+* 선두 문자 지정 : ^
+* 선미 문자 지정 : $
+
+정규표현 | 의미     | 예시               |
+|------|---------|-------------------|
+|^     | 행의 선두 | ^abc 행의 선두는 abc |
+|$     | 행의 말미 | abc$ 행의 말미는 abc |
+
+**^abc**
+`abc` ab c abbc ac % abbbc ABC A_ 12.133 # A aAA aAAAA dogdog aabc
+
+**abc$**
+abc ab c abbc ac % abbbc ABC A_ 12.133 # A aAA aAAAA dogdog a`abc`
 
 #### `문자의 반복`
+`+` 나 `*`는 문자의 연속을 표현한다.  
+어떤 문자를 X로 하면, X*는 0개 이상의 X, X+는 1개이상의 X를 표시한다.  
+X?는 0개 혹은 1개의 X를 표시한다. 
+
+정규표현 | 의미     | 예시               |
+|------|---------|-------------------|
+|X?    | 0 혹은 1개의 X | ab?c  ac 혹은 a`b`c |
+|X*    | 0개 이상의 X   | ab*c  ac, a`b`c, a`bb`c 등 |
+|X+    | 1개 이상의 X   | ab+c  a`b`c, a`bb`c. a`bbb`c 등 |
+
+**ab?c** : a와 c 사이에 0 ~ 1개의 b가 끼어있는 문자열
+`abc` ab c abbc ac % abbbc ABC A_ 12.133 # A aAA aAAAA dogdog a`abc`
+
+**ab*c** : a와 c 사이에 0개 이상의 b가 끼어있는 문자열
+`abc` ab c `abbc` `ac` % `abbbc` ABC A_ 12.133 # A aAA aAAAA dogdog a`abc`
+
+**ab+c** : a와 c 사이에 1개 이상의 b가 끼어있는 문자열
+`abc` ab c `abbc` ac % `abbbc` ABC A_ 12.133 # A aAA aAAAA dogdog a`abc`
 
 #### `문자 클래스`
 
