@@ -450,6 +450,75 @@ windowsxx10xx처럼 windows의 오른쪽, 임의의 위치에 10가 있는 것�
 ***^(?=.\*A)(?!.\*B).{1,6}$** : A를 포함하고, B를 포함하지 않는, 6문자까지의 문자열
 `x10xAx`
 
+## `정규표현식의 이용`
+
+#### `문자열의 교환과 분할`
+String 클래스에는 정규표현식을 써서 문자열을 교환하거나 분할하는 메소드가 있다.  
+replaceAll, split, matches의 각 메소드에서 정규표현을 활용할 수 있다.
+
+**replaceAll 메소드**
+~~~
+public class ReplaceAllExample {
+    public void main(String[] args) throws IOException {
+        String str = "<title>타이틀</title>";
+
+        // <와 >, 그 사이의 임의의 문자열을 공백문자("")로 교환한다
+        System.out.println(str.replaceAll("<.+?>)", "");
+    }
+}
+~~~
+OUTPUT : 타이틀
+
+**split 메소드**
+~~~
+public class SplitExample2 {
+    public static void main(String[] args) {
+        String dt = "100, 홍길동, 60.5";
+
+        // 컴마 전후에 존재하는 0개 이상의 공백문자
+        String[] dts = dt.split("\\s*,\\s*");
+        Arrays.stream(dts).forEach(System.out::println);
+    }
+}
+~~~
+OUTPUT : 100  
+홍길동  
+60.5
+
+#### `문자열의 검사`
+matches 메소드는 인수의 정규표현에 매치하는 경우, true를 반환한다.
+문자열이 올바른 패턴인지 체크하는 것이 가능하다.  
+
+* (?=.*[A-Z])) : 대문자를 포함
+* (?!.*\\W) : 단어구성문자 이외를 포함하지 않음
+* .{5,} : 길이가 5문자 이상
+
+**matches 메소드**
+~~~
+public class MatchesExample {
+    public static void main(String[] args) {
+        List<String> list = Arrays.asList("Jack110", "suzu-10", "Ken3", "tom10");
+
+        for(String s : list) {
+            // 대문자를 포함 단어 구성 문자 이외의 문자를 포함하지 않는 5문자 이상의 문자열
+            if(s.matches("^(?=.*[A-Z])(?!.*\\W).{5,}$")) {
+                System.out.println(s);
+            } 
+        }
+
+        // 스트림 식을 사용하여 다음과 같이 표현할 수 있다
+        list.stream()
+            .filter(s -> s.matches("^(?=.*[A-Z])(?!.*\\W).{5,}$")) // 선택한다
+            .forEach(System.out::println);
+    }
+}
+~~~
+OUTPUT : Jack110  
+Jack110 
+
+#### `Scanner 클래스의 단락 구분`
+
+
 
 ## `정규표현을 사용하는 메소드`
 * String 클래스의 split 메소드 : 분할 위치를 결졍하는 문자열을 지정한다. 
