@@ -456,7 +456,7 @@ windowsxx10xx처럼 windows의 오른쪽, 임의의 위치에 10가 있는 것�
 String 클래스에는 정규표현식을 써서 문자열을 교환하거나 분할하는 메소드가 있다.  
 replaceAll, split, matches의 각 메소드에서 정규표현을 활용할 수 있다.
 
-**replaceAll 메소드**
+**replaceAll 메소드** : 치환할 문자열에 정규표현식을 지정할 수 있다.
 ~~~
 public class ReplaceAllExample {
     public void main(String[] args) throws IOException {
@@ -469,7 +469,7 @@ public class ReplaceAllExample {
 ~~~
 OUTPUT : 타이틀
 
-**split 메소드**
+**split 메소드** : 분할 기준이 되는 문자열에 정규표현식을 지정할 수 있다.
 ~~~
 public class SplitExample2 {
     public static void main(String[] args) {
@@ -493,7 +493,7 @@ matches 메소드는 인수의 정규표현에 매치하는 경우, true를 반�
 * (?!.*\\W) : 단어구성문자 이외를 포함하지 않음
 * .{5,} : 길이가 5문자 이상
 
-**matches 메소드**
+**matches 메소드** : 정규표현에 매치하는 문자열인지 조사한다.
 ~~~
 public class MatchesExample {
     public static void main(String[] args) {
@@ -517,11 +517,50 @@ OUTPUT : Jack110
 Jack110 
 
 #### `Scanner 클래스의 단락 구분`
+Scanner 클래스의 useDelimiter메소드에 정규표현식을 이용해 단락 구분을 지정할 수 있다.
+* [\t]+ : 1개 이상의 공백, 탭 
+* | : 혹은
+* Sysem.lineSeparator()
+
+OS별 개행문자가 다르기 때문에 OS가 바뀌면 지정한 개행문자가 동작하지 않는 경우도 있다.  
+Sysem.lineSeparator() 메소드는 OS 고유의 개행문자를 반환하므로,  
+고정값을 사용하기 보다는 해당 메소드의 반환값을 사용하는 것이 더 유연하다.
+* Windows : \r\n
+* Mac : \r
+* Linux : \f
+
+**useDelimiter메소드** : 분할 기준이 되는 문자열을 변경한다. 문자열에 정규표현식을 지정할 수 있다.
+~~~
+public class ScannerExample {
+    public static void main(String[] args) {
+        Path path = Paths.get("data.txt"); // 파일의 패스
+
+        try(Scanner in = new Scanner(path);) { // Scanner를 생성
+            // 단락 구분 문자를 변경한다
+            in.useDelimiter("[\t]+|" + Sysem.lineSeparator());
+            while(in.hasNext()) { // 남아있는 것이 있으면 반복한다
+                int number = in.nextInt(); // int 값으로 추출
+                String name = in.next(); // String으로 추출
+                double weight = in.nextDouble(); // double 값으로 추출
+
+                // 편집한 콘솔에 표시한다
+                System.out.println(number + "\t" + name + "\t" + weight);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+~~~
+OUTPUT : 100    홍길동  60.5  
+110     김철수      73.2
 
 
-
-## `정규표현을 사용하는 메소드`
-* String 클래스의 split 메소드 : 분할 위치를 결졍하는 문자열을 지정한다. 
-* String 클래스의 replaceAll 메소드 : 치환할 문자열을 지정한다.
-* String 클래스의 matches 메소드 : 정규표현에 매치하는 문자열인지 조사한다.
-* String 클래스의 useDelimiter 메소드 : 분할 기준이 되는 문자를 변경한다.  
+## `열거형`
+열거형은 선언과 동시에 이름으로 지정한 인스턴스가 자동 생성된다.  
+ex) public enum Color{ WHITE, BLACK, GOLD }  
+열거형의 변수에는 선언시 작성된 인스턴스 이외의 것은 대입 할 수 없다 (타입 안전성을 보장한다)  
+ex) Color color = Color.WHITE;  
+인스턴스를 새롭게 작성 할 수 없으므로, `==` 및 `equals`메소드로 값을 비교할 수 있다.  
+Color.WHITE 라는 타입으로 사용하지만, switch 문에서 사용할때만 WHITE 등의 값 이름으로 사용한다.  
+메소드를 가지고 있는 것처럼 열거형을 작성할 수 있다.
