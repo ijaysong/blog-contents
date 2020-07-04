@@ -556,7 +556,80 @@ OUTPUT : 100    홍길동  60.5
 110     김철수      73.2
 
 
-## `열거형`
+# `열거형`
+## `열거형의 필요성`
+스마트폰 클래스에서 기기의 색상에 따라 다른 가격을 지정하고 싶다고 하자.
+흰색, 검정색, 금색에 각각 1, 2, 3의 번호로 구별하고, SmartPhone인스턴스의 색을 조사하여 가격을 표시하는 처리가 된다.
+~~~
+public class ColorMatching {
+    public void main(String[] args) {
+        SmartPhone myPhone = new SmartPhone("iPhone12", 2); // 모델명, 색깔
+        int color = myPhone.getColor(); // 인스턴스로부터 색 추출
+        
+        int price = 0;
+
+        if(color == 1) {
+            price = 10000;
+        } else if(color == 2) {
+            price = 11000;
+        } else if(color == 3) {
+            price = 12000;
+        }
+
+        System.out.println(price);
+    }
+}
+~~~ 
+
+위와 같은 방법으로는 1, 2, 3이 무엇을 의미하는지 알기 어렵다는 단점이 있다.
+그래서 이를 보완하고자 final한 int 타입의 변수를 지정하여 값을 비교하는 방법이 있다.
+
+~~~
+public class ColorMatching {
+    private final int WHITE = 1; // 1 대신에 WHITE라는 변수명을 사용
+    private final int BLACK = 2; // 2 대신에 BLACK라는 변수명을 사용
+    private final int GOLD = 3; // 3 대신에 GOLD라는 변수명을 사용
+
+    public void main(String[] args) {
+        SmartPhone myPhone = new SmartPhone("iPhone12", 2); // 모델명, 색깔
+        int color = myPhone.getColor(); // 인스턴스로부터 색 추출
+        
+        int price = 0;
+
+        if(color == WHITE) {
+            price = 10000;
+        } else if(color == BLACK) {
+            price = 11000;
+        } else if(color == GOLD) {
+            price = 12000;
+        }
+
+        System.out.println(price);
+    }
+}
+~~~ 
+
+하지만 위의 방법도 데이터를 잘못 지정하여 오류가 발생할 수 있다는 단점이 있다.
+예를 들어, 색깔을 잘못 지정한 경우
+~~~
+SmartPhone myPhone = new SmartPhone("iPhone12", 1); // 색깔을 잘못 지정
+~~~
+int 타입은 1~3 이외의 값을 대입할 수 있으므로 오류를 방지할 방법이 없다.  
+String 타입 또한 마찬가지로 스펠링이 틀릴 가능성이 있다. 
+
+이러한 단점을 보완하기 위해 사용되는 것이 열거형이다.
+대입할 수 있는 값을 아래처럼 Color 타입으로 선언하고 값으로는 Color.WHITE, Color.BLACK, Color.GOlD라고 지정함으로서  
+오류를 줄일 수 있다.
+
+~~~
+enum Color {WHITE, BLACK, GOLD} // Color 타입을 선언
+...
+SmartPhone myPhone = new SmartPhone("iPhone12", Color.BLACK); // 검정색을 설정 
+~~~
+
+위와 같이 사용하려면 SmartPhone의 int 타입의 색깔 변수를 Color 타입으로 변경해야 한다.
+
+
 열거형은 선언과 동시에 이름으로 지정한 인스턴스가 자동 생성된다.  
 ex) public enum Color{ WHITE, BLACK, GOLD }  
 열거형의 변수에는 선언시 작성된 인스턴스 이외의 것은 대입 할 수 없다 (타입 안전성을 보장한다)  
