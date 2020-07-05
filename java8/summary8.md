@@ -629,6 +629,29 @@ SmartPhone myPhone = new SmartPhone("iPhone12", Color.BLACK); // 검정색을 �
 
 위와 같이 사용하려면 SmartPhone의 int 타입의 색깔 변수를 Color 타입으로 변경해야 한다.
 
+## `열거형의 작성법과 특징`
+열거형은 `enum`이라는 키워드를 사용해 다음과 같이 사용한다.
+~~~
+public enum Color{ WHITE, BLACK, GOLD }
+~~~
+
+열거법의 작성법은 특이하지만, 클래스 선언의 한 종류이다.  
+내부에 적혀있는 WHITE, BLACK, GOLD를 제외하고 보면 다음과 같다.
+~~~
+public enum Color {
+
+}
+~~~
+class 가 enum으로 표현된 것 뿐이다.
+WHITE, BLACK, GOLD는 열거형의 static한 인스턴스의 이름으로 `열거자`라고도 부른다.  
+enum 타입은 새로운 열거형을 선언함과 동시에 해당 타입의 인스턴스를 만든다는 특징이 있다.
+Color타입의 인스턴스는 선언할 수 없는 구조이므로, 열거자의 인스턴스가 유일하다고 할 수 있다.
+Color 타입에서는 처음부터 열거자의 인스턴스 3개가 작성된다.
+Color 타입을 정의하면 다음과 같이 Color 타입의 변수 color를 사용하는 것이 가능하다.
+~~~
+Color color;
+~~~
+
 
 열거형은 선언과 동시에 이름으로 지정한 인스턴스가 자동 생성된다.  
 ex) public enum Color{ WHITE, BLACK, GOLD }  
@@ -637,3 +660,42 @@ ex) Color color = Color.WHITE;
 인스턴스를 새롭게 작성 할 수 없으므로, `==` 및 `equals`메소드로 값을 비교할 수 있다.  
 Color.WHITE 라는 타입으로 사용하지만, switch 문에서 사용할때만 WHITE 등의 값 이름으로 사용한다.  
 메소드를 가지고 있는 것처럼 열거형을 작성할 수 있다.
+
+~~~
+public class EnumExample {
+    public static void main(String[] args){
+        List<SmartPhone> list = Arrays.asList(
+            new SmartPhone("iPhone11", Color.WHITE),
+            new SmartPhone("iPhone11 MAX", Color.BLACK),
+            new SmartPhone("iPhone11 SE", Color.GOLD);
+        );
+        list.forEach(System.out::println);
+    }
+
+    public enum Color {
+        WHITE,
+        BLACK,
+        GOLD
+    }
+
+    static enum Color {
+        WHITE,
+        BLACK,
+        GOLD
+    }
+}
+~~~
+
+Color 타입에는 WHITE, BLACK, GOLD 밖에 없으므로, 실수로 값을 잘못 사용할 수 없는 구조이다.  
+그러므로 타입의 안전성이 보장된다고 말할 수 있다.  
+
+#### `열거형의 정의 파일 작성법`
+1. Eclipse의 메뉴로부터 `파일 > 신규 > 열거형`을 선택하면 간단하게 작성할 수 있다.
+2. 클래스 안에 지정하는 것도 가능하다. 이 경우, static 멤버처럼 간주된다.
+~~~
+public class SmartPhone { 
+    static enum Color {WHITE, BLACk, GOLD};
+    private String name;
+    private Color color;
+}
+~~~
