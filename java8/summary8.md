@@ -699,3 +699,53 @@ public class SmartPhone {
     private Color color;
 }
 ~~~
+
+## `열거형의 사용법`
+#### `열거형의 값 비교`
+열거형의 값은 Color.BLACK처럼 `타입명.값`의 형태로 사용한다.  
+값은 오브젝트 이면서, statci한 값으로, 같은 값은 1개 밖에 생성되지 않는다.
+유일하면서, 불변한 값이므로, `==`로 비교할 수 있다.
+오브젝트이기도 하므로, `equals`메소드로 다음과 같이 비교할 수도 있다.
+~~~
+list.stream()
+    .filter(s -> Color.BLACK.equals(s.getColor()))
+    .forEach(System.out::println);
+~~~
+
+열거형은 JVM에 의해서 Enum클래스를 계승하고 있다.
+Comparable과 Serializable 인터페이스도 적용되어 있으므로 실질적으로는 클래스라고 할 수 있다.
+
+#### `열거형의 메소드`
+열거형은 독특한 클래스타입이므로, 보통의 클래스처럼 다룰 수 없다.
+인스턴스를 작성할 수 있는 것은 컴파일러 뿐이다.
+내부적으로는 java.lang 패키지의 Enum 클래스를 계승하여 작성되지만,  
+그 이외의 부분은 컴파일러가 독자적으로 메소드를 더하고 있다.
+~~~
+public class AllNames {
+    public static void main(String[] args) {
+        Color[] values = Color.values(); // 열거형 값의 배열
+        Arrays.stream(values)
+            .forEach(System.out::println);
+    }
+}
+~~~
+OUTPUT : WHITE  
+BLACK   
+GOLD  
+
+컴파일러는 열거형에 values()라는 static 메소드를 더한다.  
+이것은 Enum클래스에도, API 도큐먼트에도 게재되어 있지 않다.  
+`values()`는 열거 값의 리스트를 배열로 하여 반환하는 매소드이다.
+
+~~~
+public class MethodExample {
+    public static void main(String[] args) {
+        Color color = Color.WHITE;
+        System.out.print(color.name()  + " : "); // 값의 이름
+        System.out.print(color.ordinal()); // 값의 숫자
+    }
+}
+~~~
+OUTPUT : WHITE : 0
+
+`name()`, `ordinal()`메소드는 Enum 클래스로부터 계승한 인스턴스 메소드 이다.
