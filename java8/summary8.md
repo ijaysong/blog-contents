@@ -749,3 +749,44 @@ public class MethodExample {
 OUTPUT : WHITE : 0
 
 `name()`, `ordinal()`메소드는 Enum 클래스로부터 계승한 인스턴스 메소드 이다.
+
+#### `독자적인 열거형의 작성법`
+~~~
+public enum Color {
+    WHITE("iPhone11");
+    BLACK("iPhone11 Max");
+    GOLD("iPhone11 SE");
+
+    private String ModelNumber;
+
+    private Color(String ModelNumber) { // 컨스트럭터
+        this.ModelNumber = ModelNumber;
+    }
+
+    private String getModelNumber() { // Getter
+        return ModelNumber;
+    }
+}
+~~~
+
+WHITE, BLACK, GOLD는 Color 타입 인스턴스의 이름이다.  
+이것은 컴파일러에 지시를 하는 부분으로 컴파일러는 나열된 이름을 가지는 인스턴스를 만들라는 지시를 받는다.  
+인스턴스의 이름에 ()을 붙여서 인수를 적어놓았는데, 이는, 인스턴스를 작성할 때, 컨스트럭터에 전달하는 값이다.  
+컨스트럭터는 private이다.  
+public, protected는 사용할 수 없다. 
+접근 연산자를 생략한 경우, private이 작성되어져 있다고 본다.
+
+~~~
+public class Exec {
+    public static void main(String[] args) {
+        System.out.println(Color.WHITE.getModelNumber());
+        System.out.println(Color.BLACK.getModelNumber());
+        System.out.println(Color.GOLD.getModelNumber());
+    }
+}
+~~~
+OUTPUT : iPhone11  
+iPhone11 Max  
+iPhone11 SE  
+
+getter 메소드로부터 컨스트럭터에 지정된 인수가 반환되어 출력된 것을 알 수 있다.
