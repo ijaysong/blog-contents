@@ -790,3 +790,40 @@ iPhone11 Max
 iPhone11 SE  
 
 getter 메소드로부터 컨스트럭터에 지정된 인수가 반환되어 출력된 것을 알 수 있다.
+
+# `멀티 스레드`
+## `멀티 스레드 처리란`
+프로그램 안에서 독립해서 실행하는 일련의 처리를 스레드라고 한다.
+새로운 스레드를 작성해서 다른 처리를 동시보행적으로 실행하는 것을 비동기처리라고 한다.
+
+## `스래드의 작성과 실행`
+Thread 클래스의 인스턴스를 작성해서 start 메소드에서 실행하는 것이 기본적인 방법이다.  
+Runnable 인터페이스에 대한 람다식으로 실행하는 내용을 지시한다.  
+Runnable은 () -> void 형식이다.  
+복수의 스레드의 실행순서는 컨트롤 할 수 없다.  
+스레드 세이프 하기 위해선, 로컬 변수만 사용하는 것이 좋다.
+
+## `스레드 풀`
+스레드 풀에는 새롭게 몇개의 스레드를 만들어 필요에 따라서 그것들을 사용한다.
+다음과 같은 작성 방법이 있다.
+~~~
+// 스레드 풀의 작성
+ExecutorService es = Executors.newFixedThreadPool(n);
+ExecutorService es = Executors.newCachedThreadPool();
+ExecutorService es = Executors.newSingleThreadExecutor();
+ExecutorService es = Executors.newWorkStealingPool();
+ExecutorService es = Executors.newWorkStrealingPool(n);
+~~~
+
+## `CompletableFuture`
+몇개의 비동기처리를 연속해서 실행할 수 있다.  
+기다림에 의한 블록을 피하는 것이 가능하다.  
+주로 supplyAsyn()로 기동한다.  
+thenAccept(), thenApply(), thenRun()을 사용해서 비동기처리의 다음 처리를 자동으로 실행 가능하다.  
+orTimeout() 메소드에서 타임아웃을 설정할 수 있다.  
+whenComplete() 메소드에서 에러가 발생했는지 아닌지 판단할 수 있다.  
+thenCompose() 메소드에서 비동기처리를 연결해, 후속 처리에 리턴값을 넘긴다.  
+thenCombine() 메소드에서 비동기처리를 기다려, 각각의 리턴값을 모아 처리할 수 있다.
+
+
+
