@@ -818,6 +818,67 @@ Thread t = new Thread(() - System.out.println("thread-1"));
 t.start();
 ~~~
 
+스레드를 여러번 실행한 경우, 각 스레드의 실행결과를 보여주는 예이다.
+~~~
+public class ThreadExample {
+    public static void main(String[] args) {
+        // 3개의 스레드를 작성
+        Thread t1 = new Thread(() -> System.out.println("thread-1"));
+        Thread t2 = new Thread(() -> System.out.println("thread-2"));
+        Thread t3 = new Thread(() -> System.out.println("thread-3"));
+
+        // 멀티스레드의 실행
+        t1.start();
+        t2.start();
+        t3.start();
+        System.out.println("--- main 종료 ---");
+    }
+}
+~~~
+OUTPUT:
+|--- main 종료 ---<br>thread-1<br>thread-3<br>thread-2|--- main 종료 ---<br>thread-3<br>thread-2<br>thread-1|thread-1<br>thread-2<br>thread-3<br>--- main 종료 ---|--- main 종료 ---<br>thread-2<br>thread-1<br>thread-3|
+|-|-|-|-|
+
+아래의 소스에서 main메소드를 실행시키는 메소드를 포함하여 총 4개의 스레드가 실행되고 있다.
+실행할 때마다 순서가 다르기 때문에, 실행순서의 컨트롤은 되지 않는 다는 것을 알 수 있다. 
+
+#### `멈춰있는 처리를 실행`
+람다식으로 Task 클래스의 인스턴스를 작성해, 그 메소드를 실행하는 예이다.
+Task클래스의 doit()메소드가 처리의 본체이다.
+
+~~~
+public class ThreadExample2 {
+    public static void main(String[] args) {
+        Thread t1 = new Thread(() -> {
+            Task task = new Task("thread-1");
+            task.doit();
+        });
+        t1.start();
+        System.out.println("--- main 종료 ---");
+    }
+}
+~~~
+
+~~~
+class Task { 
+    private String msg;
+    public Task(String msg) {
+        this.msg = msg;
+    }
+    public void doit() {
+        System.out.println(msg); // 필드의 문자열을 표시
+
+        // 스레드가 지연되는 것을 시뮬레이트 하기 위해 1시간 정지
+        try {
+            TimeUnit.SECONDS.sleep(1); // 1시간 정지
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+}
+~~~
+OUTPUT : --- main 종료 ---
+thread-1
 
 ## `멀티 스레드 처리란`
 프로그램 안에서 독립해서 실행하는 일련의 처리를 스레드라고 한다.
