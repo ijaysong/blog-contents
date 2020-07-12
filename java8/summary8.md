@@ -939,7 +939,49 @@ ExecutorService es = Executors.newWorkStealingPool();
 ExecutorService es = Executors.newWorkStrealingPool(n);
 ~~~
 
+#### `스레드 풀의 사용법`
+Concurrency Utilites의 Executors 클래스를 사용하면, 스레드 풀을 간단하게 작성할 수 있다.  
+4개의 클래스 메소드가 각각 다른 4개의 타입의 스레드 풀을 작성하는데 사용된다.
+이것들은 ExecutorService 인터페이스를 implements 하고 있기 때문에, 다음과 같이 ExecutorService 타입의 변수에 대압해서 사용한다.
+|스레드 풀의 작성 |
+|-------------|
+|ExecutorsService es = Executors.newFixedThreadPool(n);<br>ExecutorService es = Executors.newCachedThreadPool(); <br> ExecutorService es = Executors.newSingleThreadExecutor(); <br> ExecutorService es = Executors.newWorkStealingPool(); <br> ExecutorService es = Executors.newWorkStrealingPool(n);
+
+다음은 Fixed Thread Pool을 사용한 멀티 스레드의 예제이다.
+~~~
+public class ThreadPoolExample {
+    public static void main(String[] args) {
+        // 스레드 풀의 작성
+        ExecutorService es = Executors.newFixedThreadPool(10);
+
+        // 멀티 스레드로 실행
+        es.execute(() -> System.out.println("thread-1"));
+        es.execute(() -> System.out.println("thread-2"));
+        es.execute(() -> System.out.println("thread-3"));
+
+        // 스레드 풀을 종료
+        es.shutdown();
+    }
+}
+~~~
+OUTPUT : thread-2
+thread-3
+thread-1
+
+ExecutorServie의 execute 메소드를 사용해서 스레드를 기동한다.
+Thread 클래스의 경우와 동일하게, 처리내용은 execute 메소드의 인수에 람다식을 지정한다.
+함수형 인터페이스는 Runnable 이므로, () -> void 형식이다.  
+그러므로, 스레드 풀은 한번 작성하면 셧다운 할때까지 움직임이 계속 된다.
+움직임을 멈추고 싶을 때는 shutdown()메소드를 사용해 중지하지 않으면 안된다.
+
 ## `CompletableFuture`
+
+#### `CompletableFuture이란?`
+다른 스레드에서 무언가 처리한 결과값을 리턴하는 케이스가 있다. 헤당 케이스를 다루는 것이 CompletableFuture이다.
+결과가 얻어지는 것은 실행완료 후가 된다. 그래서 실행 후 얻어지는 처리결과를 `Future`라고 부른다.
+`Completable`은 비동기 처리의 종료를 트리거로 하여 다양한 처리를 기동하고, 최종 처리까지 완료할 수 있다라는 의미이다.
+
+
 몇개의 비동기처리를 연속해서 실행할 수 있다.  
 기다림에 의한 블록을 피하는 것이 가능하다.  
 주로 supplyAsyn()로 기동한다.  
