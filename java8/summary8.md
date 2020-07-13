@@ -981,6 +981,50 @@ Thread 클래스의 경우와 동일하게, 처리내용은 execute 메소드의
 결과가 얻어지는 것은 실행완료 후가 된다. 그래서 실행 후 얻어지는 처리결과를 `Future`라고 부른다.
 `Completable`은 비동기 처리의 종료를 트리거로 하여 다양한 처리를 기동하고, 최종 처리까지 완료할 수 있다라는 의미이다.
 
+각기 다른 스레드에서 비동기로 실행한 처리로부터 결과를 받는 방법으로서 Future가 있지만,  
+Java8(2014년)에서 그 기능을 대폭 개선한 것이 `CompletableFuture`이다.
+Future에서는 후속 처리를 실행하기 위해서 전단계 처리의 완료를 기다려 결과값을 취득하고, 그것을 다음 처리에 넘겨 실행하는 처리가 필요했다. 
+즉, Future가 완료할때까지, 후속처리는 하나하나 블록된다는 뜻이다.
+
+CompletaleFuture에너슨 이와 같은 비동기 처리에서 하나하나 중간 결과를 취득해서, 해당 값을 다음 처리에 넘길 필요가 없다.
+전단계 처리가 완료되면, 자동적으로 그 결과를 다음 단계에 넘겨 실행할 수 있다.
+즉, 비동기처리 전체가 Non-Block 처리가 되어 속도가 빨라진다.
+
+#### `supplyAsync()에 의한 비동기처리 기동`
+CompletableFuture에서는 리턴값에 있는 비동기처리를 다음과 같이 supplyAsyn()로 기동한다.
+
+~~~
+public class Example1 {
+    public static void main(String[] args) throws Exception {
+        // 실행할 비동기처리 지정
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "value");
+
+        // 결과 취득
+        String msg = future.get();
+        System.out.println(msg);
+    }
+}
+~~~
+OUTPUT : value
+
+위와 같이 리턴값이 있는 비동기처리에서 supplyAsync 메소드의 인수에 람다식에서 실행할 처리를 적는다.
+람다식은 `() -> T`의 형식으로 supplier 인터페이스이다. 즉, 리턴값을 반환하는 처리이다.
+(리턴값이 없는 비동기처리는 Runnable 인터페이스를 사용했기 때문)
+
+예제에서는 문자열 value를 반환했지만, 메인 스레드(비동기 처리를 실행한 스레드)에서 그 값을 직접 받는다는 뜻은 아니다.
+비동기처리 실행의 큰 틀은 다음과 같은 형태이다.
+~~~
+CompletableFuture<String> future = CompletableFuture.supplyAsync(~);
+~~~
+
+supplyAsync 메소드는 CompletableFuture<String> 타입의 값을 반환하므로, future라는 변수로 받는다.
+제네릭 타입에 String으로 지정되어 있는 것은, 람다식에 문자열 `value`를 반환하도록 지정했기 때문이다.
+메인 스레드에서 반환값을 받기 위해서, 처리가 완료된 후, future.get()을 통해 취득한다.
+~~~
+String msg = future.get();
+~~~ 
+다만, get메소드에서는 비동기처리가 완료할때까지, 값을 넘겨 받을 수 없다.  
+완료가 되면 넘겨받을 수 있어 그때까지는 블록(Block)된 상태가 된다.
 
 몇개의 비동기처리를 연속해서 실행할 수 있다.  
 기다림에 의한 블록을 피하는 것이 가능하다.  
