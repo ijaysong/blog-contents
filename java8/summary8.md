@@ -1026,6 +1026,44 @@ String msg = future.get();
 다만, get메소드에서는 비동기처리가 완료할때까지, 값을 넘겨 받을 수 없다.  
 완료가 되면 넘겨받을 수 있어 그때까지는 블록(Block)된 상태가 된다.
 
+#### `thenAccept()에 의한 후속처리를 실행`
+get()을 실행하면 값을 취득할 때까지 블록(Block)이 발생한다.
+이것을 피하기 위해선, 마지막 비동기처리가 종료한 후, 그 스레드에서 반환값을 사용해 다음 처리까지 실행하도록 지시해야한다.
+그것을 실행하는 것이 thenAccept()메소드이다.
+
+~~~
+public class Example2 {
+    public static void main(String[] args) {
+        CompletableFuture<Void> future
+         = CompletableFuture.supplyAsync(() -> "Value")
+         .thenAceept(result -> { // result는 supplyAsync로부터의 반환값
+            // 반환값을 사용해 후속처리를 실행한다
+            System.out.println("##" + result); // 더미 접속 처리
+         });
+    }
+}
+~~~
+OUTPUT : ##Value
+
+thenAccept는 Consumer 인터페이스 타입의 인수로, T -> void 라는 함수 기술자이다.
+즉, 값을 반환할 수 없게 된다. 그렇기 떄문에 리턴값의 타입이 CompletableFuture<Void>가 된다.
+(Void는 void의 wrapper 클래스이다.)
+
+result는 넘겨받은 리턴값이므로 "value"이다. 
+즉, thenAccept로부터 리턴값을 사용해, 후속 처리까지 실행할수 있게 된다.
+Block되지 않고, 연속해서 처리를 완성할 수 있다.
+
+##Value가 표시 되는 부분에서는 DB에 데이터 등록 등의 복잡한 처리가 들어가는 부분이다.
+그러나, 그 부분까지 처리를 환성할 수 있으므로, 메인스레드가 get메소드로 리턴값을 기다릴 필요는 없다.
+Block도 발생하지 않는다.
+
+이러한 후속처리 사용에 thenAccept를 포함해 다음 3개의 메소드를 사용하는 것이 가능하다.
+|메소드       | 인터페이스 타입 | 함수기술자   | 실행할 처리                               |
+|-----------|-------------|------------|----------------------------------------|
+|thenAccept | consumer<T> | T -> void  | 리턴값을 받아서, 값을 반환하지 않는 처리를 실행   |
+|thenApply  | Function<T> | T -> U     | 리턴값을 받아서, 다른 값을 반환하는 처리를 실행   |
+|thenRun    | Runnable    | () -> void | 어떤것도 받지 않고, 값을 반환하지 않는 처리를 실행 |
+
 몇개의 비동기처리를 연속해서 실행할 수 있다.  
 기다림에 의한 블록을 피하는 것이 가능하다.  
 주로 supplyAsyn()로 기동한다.  
