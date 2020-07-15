@@ -1064,6 +1064,49 @@ Block도 발생하지 않는다.
 |thenApply  | Function<T> | T -> U     | 리턴값을 받아서, 다른 값을 반환하는 처리를 실행   |
 |thenRun    | Runnable    | () -> void | 어떤것도 받지 않고, 값을 반환하지 않는 처리를 실행 |
 
+
+#### `에러 대책`
+지정된 시간이 경과하면, 타임아웃으로 비동기처리를 종료시키는 경우도 있다.
+또한, 에러 발생인지 아닌지 판정하여, 예외 대책을 실행하거나, 일반적인 후속처리를 실행하는 것도 가능하다.
+
+~~~
+public class errorPlan {
+    public static void main(String[] args) throws Exception {
+        CompletableFuture<String> future = CompletableFurue
+                                            .supplyAsync(() -> "hello")
+                                            .orTimeout(1, TimeUnit.SECONDS) // 타임아웃 설정
+                                            .whenComplete((ret, err) -> {   // 에러 대책 처리
+                                                if(err == null) {
+                                                    // thenAccept 실행하고 싶은 처리
+                                                    System.out.println("##"+ret);
+                                                } else {
+                                                    System.out.println("에러입니다"); // 에러 대책
+                                                }
+                                            })
+    }
+}
+~~~
+
+`orTimeout` 메소드는 orTimeout(long n, TImeUnit t) 형식이다.
+처리 종료까지의 제한시간과 그 시간 단위를 설정한다.
+지정 가능한 시간단위는 열거형으로 다음과 같이 정의되어 진다.
+
+|열거형         | 의미                             |
+|-------------|---------------------------------|
+|DAYS         | 24시간을 나타내는 시간단위            |
+|HOURS        | 60분을 나타내는 시간단위              |
+|MICROSECONDS | 미리 초의 1/1000을 나타내는 시간단위    |
+|MILLISECONDS | 초의 1/1000을 나타내는 시간단위        |
+|MINUTES      | 60초를 나타내는 시간단위              |
+|NANOSECONDS  | 마이크로 초의 1/1000을 나타내는 시간단위 |
+|SECONDS      | 1초를 나타내는 시간단위               |
+
+`whenComplete` 메소드는 종료시의 처리를 람다식으로 지정한다.
+람다식은 (T, U) -> void 라는 형식으로, 인수 T는 처리의 리턴값, U는 타임아웃이나 예외가 발생한 때 받는 예외 오브젝트이다.
+예제에서 T는 ret, U는 err이다.
+err가 null이면 정상종료이므로 if문으로 분기하여 처리한다.
+정상종료의 경우는, 후처리의 리턴값 ret을 사용할 수 있다.
+
 몇개의 비동기처리를 연속해서 실행할 수 있다.  
 기다림에 의한 블록을 피하는 것이 가능하다.  
 주로 supplyAsyn()로 기동한다.  
