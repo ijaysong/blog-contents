@@ -1107,6 +1107,25 @@ public class errorPlan {
 err가 null이면 정상종료이므로 if문으로 분기하여 처리한다.
 정상종료의 경우는, 후처리의 리턴값 ret을 사용할 수 있다.
 
+#### `비동기 처리의 연결`
+
+~~~
+public class ThreadExample {
+    public static void main(String[] args) throws Exception {
+        CompletableFuture<String> future = CompletableFuture.supplyAsyn(() -> "Value")
+                                            .thenCompose(result -> CompletableFuture.supplyAsyn(() -> "#"+result))
+                                            .whenComplete((ret, err) -> { // ret은 2번째 비동기 처리의 리턴값
+                                                if(err == null) {
+                                                    System.out.println(ret + "#");
+                                                } else {
+                                                    System.out.println("error");
+                                                }
+                                            })
+    }
+}
+~~~
+OUTPUT : #Value#
+
 몇개의 비동기처리를 연속해서 실행할 수 있다.  
 기다림에 의한 블록을 피하는 것이 가능하다.  
 주로 supplyAsyn()로 기동한다.  
