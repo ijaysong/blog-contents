@@ -1108,6 +1108,9 @@ err가 null이면 정상종료이므로 if문으로 분기하여 처리한다.
 정상종료의 경우는, 후처리의 리턴값 ret을 사용할 수 있다.
 
 #### `비동기 처리의 연결`
+여러개의 비동기처리를 실행하면 효율이 안좋아진다.
+동작이 끝나길 기다려 리턴값을 받아서, 그 리턴값을 사용해 처리를 이어나가는 것이 반복되므로 수고스럽다.
+`CompletableFuture`는 리턴값을 다음 비동기처리에 넘겨주고, 자동으로 실행하는 구조를 가지고 있다.
 
 ~~~
 public class ThreadExample {
@@ -1126,14 +1129,43 @@ public class ThreadExample {
 ~~~
 OUTPUT : #Value#
 
-몇개의 비동기처리를 연속해서 실행할 수 있다.  
-기다림에 의한 블록을 피하는 것이 가능하다.  
-주로 supplyAsyn()로 기동한다.  
-thenAccept(), thenApply(), thenRun()을 사용해서 비동기처리의 다음 처리를 자동으로 실행 가능하다.  
-orTimeout() 메소드에서 타임아웃을 설정할 수 있다.  
-whenComplete() 메소드에서 에러가 발생했는지 아닌지 판단할 수 있다.  
-thenCompose() 메소드에서 비동기처리를 연결해, 후속 처리에 리턴값을 넘긴다.  
-thenCombine() 메소드에서 비동기처리를 기다려, 각각의 리턴값을 모아 처리할 수 있다.
+supplyAsyn() 메소드로 실행하는 비동기처리가 하나있다.
+thenCompose() 메소드로 연결하고, 이에 대한 인수는 2번째 비동기 처리를 실행하는 람다식이다.
+구체적으로는, 첫번째 비동기처리의 리턴값을 인수로 하여, 두번째 비동기 처리를 실행하는 람다식이다.
+첫번째 비동기 처리 결과를 받아 넘기고 있다는 뜻이다.
+이러한 것은 예를 들어, 네트워크에서 시간이 걸리는 검색처리를 하여 그 결과를 메일 전송 처리에 넘여 실행하는 듯한 처리이다.
 
+#### `비동기처리의 결합`
+~~~
+public class ProcessCombine {
+    public static void main(String[] args) {
+        
+        // 2개의 리턴값을 사용해서 처리를 수행한다
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "##")
+                                                .thenCombine(CompletableFuture.supplyAsync(() -> "^^"), (r1, r2) -> r1 + r2)
+                                                .whenComplete((ret, err) -> {
+                                                    if(err == null) {
+                                                        System.out.println("@" + ret + "@");
+                                                    } else {
+                                                        System.out.println("error"); // 에러 대책
+                                                    }
+                                                })
+    }
+}
+~~~
+OUTPUT : @##^^@
 
+`thenCombine`메소드는 2개의 비동기처리의 종료를 기다려서, 양쪽의 리턴값을 사용해 무언가 처리를 하고 싶을 때 사용한다.
+1개의 비동기처리 실행에서 thenCombine 메소드를 연결하고 있다.
+thenCombine의 인수는 2개의 람다식으로 첫번째는 2번째 비동기처리를 실행하는 람다식, 두번째는 양쪽의 리턴값을 사용하는 람다식이다.
+ret은 양쪽의 리턴값을 사용하는 처리의 리턴값으로 내용은 (r1 + r2)의 결과인 ##^^이다.
+예제에서는 양쪽 끝에 @@를 연결해서 표시하고 있다. 
 
+#### `평행 스트림 (Parallel Stream)`
+List나 Set에 parallelStream() 메소드를 사용해 스트림을 만드는 것만으로도 간단하게 멀티스레드화 할 수 있다.
+~~~
+List<Book> list = ~;
+list.parallelStream().map(Book::getTitle).forEach(System.out::println);
+~~~
+평행 스트림에서는 하나의 Stream을 몇개로 분할해서 복수의 CPU 코어에 나눠서 할당하여 동시보행적으로 실행함으로서, 처리속도를 향상시킨다.
+평행화하는 부하가 크기 때문에 데이터 수가 10,000건을 넘을 정도가 아니면, 커다란 효과는 없다. 
