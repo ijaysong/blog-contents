@@ -57,6 +57,49 @@ A - B
 A는 B의 이웃이다.
 B도 A의 이웃이다.
 
+## `알고리즘의 구현`
+예를 들어, 내가 망고 농장의 주인이라고 생각해보자.
+망고를 팔아줄 수 있는 판매상을 찾고 있는데, 페이스북 친구 목록 가운데 망고 판매상이 있는지 확인하고 싶다.
+만약에 친구들 중에 망고 판매상이 없다면, 친구의 친구를 통해서라도 찾고 싶다.
+목표는 나의 네트워크에서 망고 판매상을 찾는 것이다. (전체 네트워크를 탐색 -> 너비 우선 탐색)
+
+위와 같은 케이스를 해결하는 알고리즘은 다음과 같다.
+1. 확인할 사람의 명단을 넣을 큐를 준비한다.
+2. 큐에서 한 사람을 꺼낸다.
+3. 이 사람이 망고 판매상인지 확인한다.
+   1. 망고 판매상이라면? 종료
+   2. 망고 판매상이 아니라면? 그 사람의 이웃을 모두 큐에 추가한다.
+4. 2~3번의 과정을 반복한다.
+   1. 만약 큐가 비어있으면 네트워크에는 망고 판매상이 없다.
+
+위 알고리즘의 수도코드
+~~~
+public boolean algo() {
+    // 새 큐를 생성
+    Queue<String> queue = new LinkedList();
+    // 내 친구 목록을 큐에 등록
+    String[] yourList = getFriendList("you");
+    for(String yourfriend : yourList) queue.add(yourfriend);
+    
+    // 큐가 비어 있지 않는 한 계속 실행
+    while(!queue.isEmpty()) {
+        // 큐의 첫번째 사람을 꺼냄
+        String person = queue.poll();
+        // 망고 판매상인지 확인
+        if(person.isSeller()) {
+            System.out.println(person + "은 망고 판매상이 맞음!");
+            return true;
+        } else {
+            // 망고 판매상이 아님. 모든 이웃을 탐색 목록에 추가
+            String[] friendList = getFriendList(person);
+            for(String friend : friendList) queue.add(friend);
+        }
+    }
+    // 여기에 도달했다는 것은 망고 판매상이 아무도 없다는 의미
+    return false;
+}
+~~~
+
 ## `Summary`
 * 너비 우선 탐색은 A에서 B로 가는 경로가 있는지 알려준다.
 * 만약 경로가 존재한다면 최단 경로도 찾아준다.
