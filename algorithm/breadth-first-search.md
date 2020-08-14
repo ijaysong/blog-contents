@@ -72,7 +72,7 @@ B도 A의 이웃이다.
 4. 2~3번의 과정을 반복한다.
    1. 만약 큐가 비어있으면 네트워크에는 망고 판매상이 없다.
 
-위 알고리즘의 수도코드
+위 알고리즘의 수도코드이다.
 ~~~
 public boolean algo() {
     // 새 큐를 생성
@@ -99,6 +99,57 @@ public boolean algo() {
     return false;
 }
 ~~~
+
+위 알고리즘은 다음과 같은 두가지 경우에 종료된다.
+* 망고 판매상을 발견하거나
+* 큐가 비게 되는 경우(이 경우는 망고 판매상이 존재하지 않는 경우이다.)
+
+예를 들어 A와 B는 모두 C라는 친구가 있다.
+그래서 C는 큐에 두번 들어간다. A의 친구로 한번, B의 친구로 한번.
+탐색 큐에 C가 두번 들어가므로 쓸데 없는 일이 반복된다. 
+그래서 어떤 사람을 확인하고 나면 그 사람이 다시 탐색되지 않도록 표시를 해야 한다.
+이것까지 고려한 최종 수도코드는 다음과 같다.
+
+~~~
+public boolean breadthFirst() {
+    // 새 큐를 생성
+    Queue<String> queue = new LinkedList();
+    // 내 친구 목록을 큐에 등록
+    String[] yourList = getFriendList("you");
+    for(String yourfriend : yourList) queue.add(yourfriend);
+    // 이미 확인한 사람들 추적하기 위한 리스트 생성
+    List<String> searched = new ArrayList<>();
+    
+    
+    // 큐가 비어 있지 않는 한 계속 실행
+    while(!queue.isEmpty()) {
+        // 큐의 첫번째 사람을 꺼냄
+        String person = queue.poll();
+        // 이전에 확인한 사람이 아니라면
+        if(searched.stream().filter(c -> person.equals(c)) == null) {
+            // 망고 판매상인지 확인
+            if(person.isSeller()) {
+                System.out.println(person + "은 망고 판매상이 맞음!");
+                return true;
+            } else {
+                String[] friendList = getFriendList(person);
+                for(String friend : friendList) queue.add(friend);
+                // 이미 확인한 사람으로 표시
+                searched.add(person);
+            }
+        }
+    }
+    return false;
+}
+~~~
+
+## 실행시간
+망고 판매상을 찾기 위해 내가 가진 네트워크 전체를 탐색한다는 것은 모든 정점을 따라서 움직인다는 뜻이다. 그러므로 실행시간은 최소한 O(간선의 개수)가 된다. (정점을 이어주는 것은 간선이므로)
+그리고 탐색할 사람을 저장하는 큐도 있어야 한다.
+큐에 사람을 추가하는데는 O(1)이 걸린다. 즉, O(사람의 수)가 걸린다.
+따라서 너미 우선 탐색은 O(사람의 수 + 간선의 수)가 되고, 보통 O(V + E)라고 표기한다.
+* V : 정점의 수
+* E : 간선의 수
 
 ## `Summary`
 * 너비 우선 탐색은 A에서 B로 가는 경로가 있는지 알려준다.
