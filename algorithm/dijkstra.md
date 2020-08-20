@@ -282,6 +282,68 @@ public void dijkstra() {
 }
 ~~~
 
+다음으로는 각 정점의 가격을 저장하는 해시테이블이 있어야 한다.
+정점의 가격은 출발점에서 그 정점까지 도달하는데 걸리는 시간이다.
+다음은 가격에 대한 표를 만드는 코드이다.
+~~~
+Map<String, Integer> costs = new HashMap<>();
+costs.put("a", 6);
+costs.put("b", 2);
+costs.put("fin", 0);
+~~~
+
+부모를 나타내는 추가적인 해시 테이블도 필요하다.
+부모를 위한 해시 테이블을 만드는 코드는 다음과 같다.
+~~~
+Map<String, String> parents = new HashMap<>();
+parents.put("a", "start");
+parents.put("b", "start");
+parents.put("fin", "");
+~~~
+
+마지막으로 각 정점은 한번씩만 처리해야 하므로, 이미 처리한 정점을 추적하기 위한 배열도 있어야 한다.
+~~~
+List<String> processed = new ArrayList<>();
+~~~
+
+이것으로 모든 준비를 마쳤다.
+알고리즘을 구현해보자. 
+1. 모든 정점을 처리할 때까지 반복한다. 
+2. 출발점에서 가장 가까운 정점을 찾는다.
+3. 이웃 정점의 가격을 갱신한다.
+4. 만약 이웃 정점의 가격을 갱신하면 부모도 갱신한다.
+5. 해당 정점을 처리했다는 사실을 기록한다.
+6. 그리고 다시 1번부터 반복한다.
+~~~
+public void test() {
+    // 아직 처리하지 않는 가장 싼 정점을 찾는다.
+    String node = findLowestCostNode(costs);
+    
+    // 모든 정점을 처리하면 반복문이 종료된다.
+    while(node != null) {
+        int cost = costs.get(node);
+        Map<String, Integer> neighbors = graph.get(node);
+        
+        // 모든 이웃에 대해 반복한다.
+        for(String key : neighbors.keySet()) {
+            int newCost = cost + neighbors.get(key);
+            
+            // 만약 이 정점을 지나는 것이 가격이 더 싸다면
+            if(costs.get(key) > newCost) {
+                // 정점의 가격을 갱신하고	
+                costs.put(key, newCost);
+                // 부모를 이 정점으로 새로 설정한다.
+                parents.put(key, node);
+            }
+        }
+        // 정점을 처리한 사실을 기록한다.
+        processed.add(node);
+        // 다음으로 처리할 정점을 찾아 반복한다.
+        node = findLowestCostNode(costs);
+    }
+}
+~~~
+
 ## `Summary`
 * 너비 우선 탐색은 가중치가 없는 균일 그래프에서 최단 경로를 계산하는데 사용된다.
 * 다익스트라 알고리즘은 가중 그래프에서 최단 거리를 계산하는데 사용된다.
