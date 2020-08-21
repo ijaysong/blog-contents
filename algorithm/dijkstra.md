@@ -344,6 +344,135 @@ public void test() {
 }
 ~~~
 
+가장 싼 정점을 찾는다.
+정점 B가 반환된다.
+~~~
+String node = findLowestCostNode(costs);
+~~~
+|정점   | 가격   |
+|------|-------|
+| B    | 2     |
+
+가격은 2달러 이고,
+정점 B의 이웃의 가격을 구한다.
+~~~
+int cost = costs.get(node);
+Map<String, Integer> neighbors = graph.get(node);
+~~~
+<그래프>
+|정점   | 이웃정점 | 가격   |
+|------|--------|-------|
+| B    | A      | 3    |
+|      | 도착점   | 5    |
+
+해당 이웃 정점들을 살펴본다.
+각 정점은 가격을 가지고 있고, 이 가격은 출발점에서 해당 정점까지 걸리는 시간이다.
+출발점 -> 정점 A로 가는 경로가 아니라, 출발점 -> 정점 B -> 정점 A로 가는 경로 중에서 어느것이 더 빠른지 계산한다.
+~~~
+for(String key : neighbors.keySet()) {
+    int newCost = cost + neighbors.get(key);
+~~~
+* cost : 정점 B의 가격. 즉, 2
+* neighbors.get(key) : 정점 B에서 A까지의 거리. 즉, 3
+
+이 두 가격을 비교한다.
+~~~
+if(costs.get(key) > newCost) {
+~~~
+* costs.get(key) : 옛날 가격. 6
+* newCost : B를 통과하는 새로운 가격. 5
+
+정점 A로 가는데 더 짧은 경로를 발견했으니 가격 해시 테이블을 갱신한다.
+~~~
+costs.put(key, newCost);
+~~~
+<가격>
+|정점   | 가격   |
+|------|-------|
+| A    | 5     |
+| B    | 2     |
+| 도착점 | 무한대 |
+
+새 경로는 B를 통과하기 때문에 B가 새로운 부모 정점이 된다.
+~~~
+parents.put(key, node);
+~~~
+<부모>
+|정점   | 부모   |
+|------|-------|
+| A    | B    |
+| B    | 출발점 |
+| 도착점 | -    |
+
+반복문의 처음으로 되돌아 간다.
+다음 이웃은 도착점이다.
+정점 B를 통과해 도착점으로 가는 시간은 7이 된다.
+~~~
+for(String key : neighbors.keySet()) {
+    int newCost = cost + neighbors.get(key);
+~~~
+* cost : 정점 B의 가격. 즉, 2
+* neighbors.get(key) : 정점 B에서 도착점까지의 거리. 즉, 5
+
+이전에는 무한대였는데, 이제는 7분 밖에 안걸린다.
+~~~
+if(costs.get(key) > newCost) {
+~~~
+
+도착점에 대한 새로운 가격과 부모를 설정한다.
+~~~
+costs.put(key, newCost);
+parents.put(key, node);
+~~~
+<가격>
+|정점   | 가격   |
+|------|-------|
+| A    | 5     |
+| B    | 2     |
+| 도착점 | 7     |
+
+<부모>
+|정점   | 부모   |
+|------|-------|
+| A    | B     |
+| B    | 출발점 |
+| 도착점 | B    |
+
+이제 정점 B의 모든 이웃에 대한 가격을 갱신하였다.
+정점 B를 처리 완료했다고 기록한다.
+~~~
+processed.add(node);
+~~~
+
+다음으로 처리할 정점을 찾는다.
+처리하지 않는 정점 중에서 가장 싼 정점 A.
+위와 같은 처리를 반복한다.
+~~~
+node = findLowestCostNode(costs);
+~~~
+
+모든 정점을 다 처리하면 알고리즘이 끝난다.
+findLowestCostNode 함수로 가장 싼 정점을 찾는 코드는 다음과 같다.
+~~~
+public String findLowestCostNode(Map<String, Integer> costs) {
+    int lowestCost = 0;
+    String lowestCostNode = "";
+    
+    // 모든 정점을 확인한다.
+    for(String node : costs.keySet()) {
+        int cost = costs.get(node);
+        // 아직 처리하지 않는 정점 중 더 싼 것이 있으면,
+        if((cost < lowestCost) && !(testList.contains(node))) {
+            // 새로운 최저 정점으로 설정한다.
+            lowestCost = cost;
+            lowestCostNode = node;
+        }
+    }
+    
+    return lowestCostNode;
+}
+~~~
+
 ## `Summary`
 * 너비 우선 탐색은 가중치가 없는 균일 그래프에서 최단 경로를 계산하는데 사용된다.
 * 다익스트라 알고리즘은 가중 그래프에서 최단 거리를 계산하는데 사용된다.
