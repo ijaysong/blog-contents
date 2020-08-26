@@ -110,6 +110,63 @@
 이 경우에 탐욕 알고리즘의 실행속도는 O(n의 2제곱) 시간이다.
 여기서 n은 방송국의 수이다.
 
+### 준비 코드
+Set을 사용해 방송하고자 하는 주의 목록을 만든다.
+집합 타입은 리스트와 비슷하지만 각 원소가 한번씩만 나타난다.
+즉, 중복된 원소를 가지지 않는다.
+~~~
+HashSet<String> areaNeeded = new HashSet<>();
+areaNeeded.add("Seoul"); // 서울특별시
+areaNeeded.add("Kyungi-do"); // 경기도
+areaNeeded.add("Kangwon-do"); // 강원도
+areaNeeded.add("Choongchungnam-do"); // 충청남도
+areaNeeded.add("Choongchungbuk-do"); // 충청북도
+areaNeeded.add("Kyungsangnam-do"); // 경상남도
+areaNeeded.add("Kyungsangbuk-do"); // 경상북도
+areaNeeded.add("Jeonlanam-do"); // 전라남도
+areaNeeded.add("Jeonlabuk-do"); // 전라북도
+areaNeeded.add("Jeju-do"); // 제주도
+~~~
+
+그리고 선택된 방송국의 목록을 저장한다.
+이 목록을 저장하는 데는 해시 테이블을 사용한다.
+
+~~~
+HashMap<String, Set<String>> stations = new HashMap<>();
+stations.put("kone", Arrays.asList("Seoul", "Kyungi-do", "Kangwon-do").stream().collect(Collectors.toSet()));
+stations.put("ktwo", Arrays.asList("Kangwon-do", "Choongchungnam-do", "Choongchungbuk-do").stream().collect(Collectors.toSet()));
+stations.put("kthree", Arrays.asList("Kyungsangnam-do", "Kyungsangbuk-do", "Jeonlanam-do").stream().collect(Collectors.toSet()));
+stations.put("kfour", Arrays.asList("Jeonlanam-do", "Jeonlabuk-do", "Jeju-do").stream().collect(Collectors.toSet()));
+stations.put("kfive", Arrays.asList("Jeju-do", "Jeonlanam-do").stream().collect(Collectors.toSet()));
+~~~
+
+마지막으로 방문할 방송국의 목록을 저장할 집합이 필요하다.
+~~~
+HashSet<String> finalStations = new HashSet<>();
+~~~
+
+### 답을 계산하기
+모든 방송국을 하나씩 보면서 아직 방송이 되지 않은 지역 중에서 가장 많은 지역을 커버하고 있는 방송국을 고른다.
+이 방송국을 bestStation이라고 한다.
+~~~
+String bestStation = ""; // 방송이 되지 않은 지역 중에서 가장 많은 지역을 커버하는 방송국
+Set<String> areaCovered = null; // 방송이 된 지역
+for(String station : stations.keySet()) {
+    // 아직 방송되지 않은 지역 중에서 해당 방송국이 커버하는 지역의 교집합을 구한다
+    HashSet<String> covered = new HashSet<>();
+    Iterator<String> sn = areaNeeded.iterator();
+    while(sn.hasNext()) {
+        Set<String> stationArr = stations.get(station);
+        if(stationArr.contains(sn.next())) covered.add(sn.next());
+    }
+    
+    if(covered.size() > areaCovered.size()) {
+        bestStation = station;
+        areaCovered = covered;
+    }
+}
+~~~
+
 `‘그렇게 간단한 방법으로 답이 나올까?’`
 
 물론 정답이 나올리 없다!  
