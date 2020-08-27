@@ -146,8 +146,11 @@ HashSet<String> finalStations = new HashSet<>();
 ~~~
 
 ### 답을 계산하기
+covered는 areaNeeded와 stationArr에 모두 포함된 지역의 집합이다.
+즉, 아직 방송되지 않는 주 주에서 현재 고려하고 있는 방송국이 커버하는 지역의 집합이다.
+이 방송국이 현재 bestStation보다 더 많은 주를 커버하는지 확인한다.
 모든 방송국을 하나씩 보면서 아직 방송이 되지 않은 지역 중에서 가장 많은 지역을 커버하고 있는 방송국을 고른다.
-이 방송국을 bestStation이라고 한다.
+
 ~~~
 String bestStation = ""; // 방송이 되지 않은 지역 중에서 가장 많은 지역을 커버하는 방송국
 Set<String> areaCovered = null; // 방송이 된 지역
@@ -164,6 +167,61 @@ for(String station : stations.keySet()) {
         bestStation = station;
         areaCovered = covered;
     }
+}
+~~~
+
+for 반복문이 끝나면 bestStation을 방송국 목록에 추가한다.
+areaNeeded도 갱신해야 한다. 왜냐하면 해당 방송국에서 커버하는 주는 이제 더이상 고려할 필요가 없기 때문이다.
+~~~
+finalStations.add(bestStation);
+areaNeeded.remove(areaCovered);
+~~~
+
+### 전체 코드
+~~~
+public static void test() {
+    // 사전준비
+    HashSet<String> areaNeeded = new HashSet<>();
+    areaNeeded.add("Seoul"); // 서울특별시
+    areaNeeded.add("Kyungi-do"); // 경기도
+    areaNeeded.add("Kangwon-do"); // 강원도
+    areaNeeded.add("Choongchungnam-do"); // 충청남도
+    areaNeeded.add("Choongchungbuk-do"); // 충청북도
+    areaNeeded.add("Kyungsangnam-do"); // 경상남도
+    areaNeeded.add("Kyungsangbuk-do"); // 경상북도
+    areaNeeded.add("Jeonlanam-do"); // 전라남도
+    areaNeeded.add("Jeonlabuk-do"); // 전라북도
+    areaNeeded.add("Jeju-do"); // 제주도
+    
+    HashMap<String, Set<String>> stations = new HashMap<>();
+    stations.put("kone", Arrays.asList("Seoul", "Kyungi-do", "Kangwon-do").stream().collect(Collectors.toSet()));
+    stations.put("ktwo", Arrays.asList("Kangwon-do", "Choongchungnam-do", "Choongchungbuk-do").stream().collect(Collectors.toSet()));
+    stations.put("kthree", Arrays.asList("Kyungsangnam-do", "Kyungsangbuk-do", "Jeonlanam-do").stream().collect(Collectors.toSet()));
+    stations.put("kfour", Arrays.asList("Jeonlanam-do", "Jeonlabuk-do", "Jeju-do").stream().collect(Collectors.toSet()));
+    stations.put("kfive", Arrays.asList("Jeju-do", "Jeonlanam-do").stream().collect(Collectors.toSet()));
+    
+    HashSet<String> finalStations = new HashSet<>();
+    
+    // 답을 계산하기
+    String bestStation = "";
+    Set<String> areaCovered = null;
+    for(String station : stations.keySet()) {
+        // 아직 방송되지 않은 지역 중에서 해당 방송국이 커버하는 지역의 교집합을 구한다
+        HashSet<String> covered = new HashSet<>();
+        Iterator<String> sn = areaNeeded.iterator();
+        while(sn.hasNext()) {
+            Set<String> stationArr = stations.get(station);
+            if(stationArr.contains(sn.next())) covered.add(sn.next());
+        }
+        
+        if(covered.size() > areaNeeded.size()) {
+            bestStation = station;
+            areaCovered = covered;
+        }
+    }
+    
+    finalStations.add(bestStation);
+    areaNeeded.remove(areaCovered);
 }
 ~~~
 
