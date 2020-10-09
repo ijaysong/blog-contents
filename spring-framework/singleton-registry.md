@@ -45,6 +45,39 @@ spring.book.dao.UserDao@ee22f7
 스프링이 처음 설계됐던 대규모의 엔터프라이즈 서버환경은 서버 하나당 최대로 초당 수십에서 수백번씩 브라우저나 여타 시스템으로부터의 요청을 받아 처리할 수 있는 높은 성능이 요구되는 환경이었다.
 하나의 요청을 처리하기 위해 매번 클라이언트로부터 요청이 올때마다 오브젝트를 새로 만들어 사용한다면, 서버에 큰 부하가 걸리게 되기 때문에 사용자의 요청을 담당하는 여러 스레드에서 하나의 오브젝트를 공유해 동시에 사용하도록 한 것이다.
 
+### 싱글톤 패턴의 구현
+* 클래스 밖에서는 오브젝트를 생성하지 못하도록 private으로 만든다.
+* 생성된 싱글톤 오브젝트를 저장할 수 있는 자신과 같은 타입의 스태틱 필드를 정의한다.
+* 스태틱 팩토리 메소드인 getInstance()를 만들고 이 메소드가 최도로 호출되는 시점에서 한번만 오브젝트가 만들어지게 한다. 생성된 오브젝트는 스태틱 필드에 저장된다. 또는 스태틱 필드의 초기값으로 오브젝트를 미리 만들어둘 수도 있다.
+* 한번 오브젝트(싱글톤)가 만들어지고 난 후에는 getInstance() 메소드를 통해 이미 만들어져 스태틱 필드에 저장해둔 오브젝트를 넘겨준다.
+
+~~~
+public class UserDao {
+    private static UserDao INSTANCE;
+
+    private ConnectionMaker connectionMaker;
+
+    private UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
+
+    public static synchronized UserDao getInstance() {
+        if (INSTANCE == null) INSTANCE = new UserDao(???);
+        return INSTANCE;
+    }
+}
+~~~
+
+UserDao에 싱글톤을 위한 코드가 추가되었다.
+private으로 바뀐 생성자는 외부에서 호출할 수 없기 때문에 DaoFactory에서 UserDao를 생성하여 Connectionmaker 오브젝트를 넣어주는게 이제는 불가능해졌다.
+
 ### 싱글톤 패턴의 한계
+일반적으로 싱글톤 패턴 구현 방식에는 다음과 같은 문제가 있다.
+
+* private 생성자를 갖고 있기 때문에 상속할 수 없다.
+* 싱글톤은 테스트하기가 힘들다
+* 서버환경에서는 싱글톤이 하나만 만들어지는 것을 보장하지 못한다.
+* 싱글톤의 사용은 전역 상태를 만들 수 있기 때문에 바람직하지 못하다.
+
 
 ### 싱글톤 레지스트리
