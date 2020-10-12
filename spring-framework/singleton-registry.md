@@ -121,3 +121,53 @@ private으로 바뀐 생성자는 외부에서 호출할 수 없기 때문에 Da
 파라미터와 로컬변수, 리턴 값 등을 활용하면 된다.
 메소드 파라미터나, 메소드 안에서 생성되는 로컬변수는 매번 새로운 값을 저장할 독립적인 공간이 만들어지기 때문에 싱글톤이라고 해도 여러 스레드가 변수의 값을 덮어쓸 일은 없다.
 
+~~~
+public class UserDao {
+    // 초기에 설정하면 사용 중에는 바뀌지 않는 읽기전용 인스턴스 변수
+    private ConnectionMaker connectionMaker; 
+
+    // 매번 새로운 값으로 비뀌는 정보를 담은 인스턴스 변수. 심각한 문제가 발생한다.
+    private Connection c;
+    private User user;
+
+    public User get(String id) throws ClassNotFoundException, SQLException {
+		this.c = connectionMaker.makeConnection();
+		
+		PreparedStatement ps = c.prepareStatement(
+				"SELECT * FROM USER WHERE id = ?");
+		ps.setString(1, id);
+		
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		this.user = new User();
+		this.user.setId(rs.getString("id"));
+		this.user.setName(rs.getString("name"));
+		this.user.setPassword(rs.getString("password"));
+		
+		rs.close();
+		ps.close();
+		c.close();
+		
+		return this.user;
+	}
+}
+~~~
+
+기존에 만들었던 UserDao와 다른 점은 기존에 로컬 변수로 선언하고 사용했던 Connection과 User를 클래스의 인스턴스 필드로 선언했다는 것이다.
+따라서 싱글톤으로 만들어져서 멀티스레드 환경에서 사용하면 위에서 설명한대로 심각한 문제가 발생한다.
+스프링의 싱글톤 빈으로 사용되는 클래스를 만들때는 기존의 UserDao처럼 개별적으로 바뀌는 정보는 로커련수로 정의하거나, 파라미터로 주고받으면서 사용하게 해야한다.
+
+UserDao에서 인스턴스 변수로 정의해서 사용한 ConnectionMaker 인터페이스 타입의 connectionMaker는 읽기 전용의 정보이다.
+읽기전용의 속성을 가진 정보라면 싱글톤에서 인스턴스 변수로 사용해도 좋다.
+
+## 스프링 빈의 스코프
+스프링이 관리하는 오브젝트인 빈이 생성되고, 존재하고, 적용되는 범위를 `빈의 스코프(scope)`라고 한다.
+스프링 빈의 기본 스토프는 싱글톤이다.
+싱글톤 스코프는 컨테이너 내에 한 개이ㅢ 오브젝트만 만들어져서, 강제로 제거하지 않는 한 스프링 컨테이너가 존재하는 동안 계속 유지된다.
+스프링에서 만들어지는 대부분의 빈은 싱글톤 스코프를 갖는다.
+
+경우에 따라서 싱글톤 외의 스코프르 가질 수 있다.
+대표적으로 프로토타입 스코프가 있다.
+프로토타입은 싱글톤과 달리 컨테이너에 빈을 요청할 때마다 매번 새로운 오브젝트를 만들어준다.
+
+그 외에도 웹을 통해 새로운 HTTP 요청이 생길때마다 생성되는 요청(request)스코프가 있고, 웹의 세셔놔 스코프가 유사한 세션(session)스코프도 있다.
