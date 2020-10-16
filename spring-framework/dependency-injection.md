@@ -21,8 +21,9 @@ ex) A에서 B에 정의된 메소드를 호출해서 사용하는 경우
 A가 B에 의존하고 있지만, 반대로 B는 A에 의존하지 않는다.
 의존하지 않는다는 말은 B는 A의 변화에 영향을 받지 않는다는 뜻이다.
 
+### UserDao의 의존관계
 ex)
-UserDao는 ConnectionMaker 인터페이스에만 의조나고 있다.
+UserDao는 ConnectionMaker 인터페이스에만 의존하고 있다.
 따라서 ConnectionMaker 인터페이스가 변한다면 그 영향을 UserDao가 직접적으로 받게 된다.
 하지만 ConnectionMaker 인터페이스를 구현한 클래스, 즉 DConnectionMaker 등이 다른 것으로 바뀌거나 그 내부에서 사용하는 메소드에 변화가 생겨도 UserDao에 영향을 주지 않는다.
 (이렇게 인터페이스에 대해서만 의존관계를 만들어두면 인터페이스 구현 클래스와의 관계는 느슨해지면서 변화에 영향을 덜 받는 상태가 된다.)
@@ -34,3 +35,45 @@ UserDao는 ConnectionMaker 인터페이스에만 의조나고 있다.
 * 런타임 시점의 의존관계는 컨테이너나 팩토리 같은 제3의 존재가 결정한다.
 * 의존관계는 사용할 오브젝트에 대한 레퍼런스를 외부에서 제공(주입)해줌으로서 만들어진다.
 
+의존관계 주입의 핵심은 설계시점에는 알지 못했던 두 오브젝트의 관계를 맺도록 도와주는 제 3의 존재가 있다는 것이다.
+DI에서 말하는 제 3의 존재는 바로 관계설정 책임을 가진 코드를 분리해서 만들어진 오브젝트라고 볼 수 있다.
+DaoFactory, 스프링의 애플리케이션, 빈 팩토리, IoC 컨테이너 등이 모두 외부에서 오브젝트 사이의 런타임 관계를 맺어주는 책임을 지닌 제 3의 존재라고 할 수 있다.
+
+## 의존관계 검색과 주입
+스프링이 제공하는 IoC 방법에는 의존관계 주입만 있는 것이 아니다.
+의존관계를 맺는 방법이 외부로부터의 주입이 아니라 스스로 검색을 이용하기 때문에 `의존관계 검색`이라고 불리는 것이 있다.
+
+의존관계 검색은 자신이 필요로 하는 의존 오브젝트를 능동적으로 찾는다.
+(물론 자신이 어떤 클래스의 오브젝트를 이용할지 결정하지 않는다.)
+의존관계 검색은 런타임 시 의존관계를 맺을 오브젝트를 결정하는 것과 오브젝트의 생성작업은 외부 컨테이너에게 IoC로 맡기지만, 이를 가져올 때는 메소드나 생성자를 통한 주입 대신 스스로 컨테이너에게 요청하는 방법을 사용한다.
+
+~~~
+public UserDao(ConnectionMaker connectionMaker) {
+    DaoFactory daoFactory = new DaoFactory();
+    this.connectionMaker = daoFactory.connectionMaker();
+}
+~~~
+
+이렇게 해도 UserDao는 자신이 어떤 ConnectionMaker를 사용할지 미리 알지 못한다.
+코드의 의존대상은 ConnectionMaker 인터페이스 뿐이다.
+런타임 시에 DaoFactory가 만들어서 돌려주는 오브젝트와 다이내믹하게 런타임 의존관계를 맺는다.
+
+해당 방법은 외부로부터의 주입이 아니라 스스로 IoC 컨테이너인 DaoFactory에게 요청하는 것이다.
+DaoFactory의 경우라면 미리 준비된 메소드를 호출하면 되니까 단순히 요청으로 보이겠지만,
+이런 작업을 일반화한 스프링의 애플리케이션 컨텍스트라면 미리 정해놓은 이름을 전달해서 그 이름에 해당하는 오브젝트를 찾게 된다.
+따라서 일종의 검색이라고 볼 수 있다.
+또한 그 대상이 런타임 의존관계를 가질 오브젝트이므로 의존관계 검색이라고 부른다.
+
+~~~
+public UserDao(ConnectionMaker connectionMaker) {
+    AnnotaionConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+    this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
+}
+~~~
+
+스프링의 IoC 컨테이너인 애플리케이션 컨텍스트의 getBean()이라는 메소드가 의존관계 검색에 사용되는 것이다.
+
+의존관계 검색과 의존관계 주입을 적용할 때의 중요한 차이점이 있다.
+의존관계 검색 방식에서는 검색하는 오브젝트는 자신이 스프링의 빈일 필요가 없다.
+반면에 의존관계 주입에서는 반드시 컨테이너가 만드는 빈이여야 한다.
+이런 점에서 적용방법에 차이가 있다.
