@@ -77,3 +77,35 @@ public UserDao(ConnectionMaker connectionMaker) {
 의존관계 검색 방식에서는 검색하는 오브젝트는 자신이 스프링의 빈일 필요가 없다.
 반면에 의존관계 주입에서는 반드시 컨테이너가 만드는 빈이여야 한다.
 이런 점에서 적용방법에 차이가 있다.
+
+## 의존관계 주입의 응용
+의존관계 주입의 장점은 다음과 같다.
+코드에는 런타임 클래스에 대한 의존관계가 나타나지 않고, 인터페이스를 통해 결합도가 낮은 코드를 만드므로, 다른 책임을 가진 사용 의존관계에 있는 대상이 바뀌더라도 자신은 영향받지 않으며, 변겨을 통한 다양한 확장 방법에는 자유롭다는 장점이 있다.
+
+UserDao가 ConnectionMaker 라는 인터페이스에만 의존하고 있다는 건 ConnectionMaker를 구현하기만 하고 있다면 어떤 오브젝트든지 사용할 수 있다는 뜻이다.
+
+### 기능 구현의 교환
+개발 중에는 로컬에 있는 DB를 사용한다.
+로컬 DB에 대한 연결 기능이 있는 LocalDBConnectionMaker라는 클래스를 만들고, 모든 DAO에서 이 클래스의 오브젝트를 매번 생성해서 사용한다고 하자.
+
+그런데 서버에 배포할때는 다시 서버가 제공하는 특별한 DB 연결 클래스를 사용해야 한다.
+이미 모든 클래스는 LocalDBConnectionMaker라는 클래스에 의존하고 있고, 이를 서버에 배치하는 시점에서 운영서버에서 DB에 연결할 때 필요한 ProductionDBConnectionMaker라는 클래스로 변경해야 한다.
+DAO가 100개라면 최소한 100군데의 코드를 수정해야 할 것이다. (하나라도 빼먹거나 잘못 고치면 서버에서 오류가 발생할 것이다.)
+
+모든 DAO가 생성 시점에 ConnectionMaker타입의 오브젝트를 컨테이너로부터 제공받는다.
+다음은 개발 시의 DaoFactory 코드이다.
+~~~
+@Bean
+public ConnectionMaker connectionMaker() {
+    return new LocalDBConnectionMaker();
+}
+~~~
+
+이를 서버에 배포할 때는 어떤 DAO 클래스와 코드도 수정할 필요가 없다.
+단지 서버에서 사용할 DaoFactory를 다음과 같이 수정해주기만 하면 된다.
+~~~
+@Bean
+public ConnectionMaker connectionMaker() {
+    return new ProductionDBConnectionMaker();
+}
+~~~
