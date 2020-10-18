@@ -109,3 +109,33 @@ public ConnectionMaker connectionMaker() {
     return new ProductionDBConnectionMaker();
 }
 ~~~
+
+### 부가기능 추가
+DAO가 DB를 얼마나 많이 연결해서 사용하는지 파악하고 싶다고 해보자.
+DAO의 코드를 수정하는 것을 지금까지 가장 피해왔던 일이며, DB 연결횟수를 세는 일은 DAO의 관심사항이 아니다.
+DI 컨테이너를 활용하여 DAO와 DB 커넥션을 만드는 오브젝트 사이에 연결횟수를 카운팅 하는 오브젝트를 하나 더 추가하는 것이다.
+기존 코드는 수정하지 않아도 되며, 컨테이너가 사용하는 설정정보만 수정해서 런타임 의존관계만 새롭게 정의해주면 된다.
+
+다음은 연결횟수 카운팅 기능이 있는 클래스이다.
+~~~
+public class CountingConnectionMaker implements ConnectionMaker {
+    int counter = 0;
+    private ConnectionMaker realConnectionMaker;
+
+    public CountingConnectionMaker(ConnectionMaker realConnectionMaker) {
+        this.realConnectionMaker = realConnectionMaker;
+    }
+
+    public Connection makeConnection() throws ClassNotFoundException, SQLException {
+        this.counter++;
+        return realConnectionMaker.makeConnection();
+    }
+
+    public int getCounter() {
+        return this.counter;
+    }
+}
+~~~
+
+CountingConnectionMaker 클래스는 ConnectionMaker 인터페이스를 구현했지만 내부에서 직접 DB 커넥션을 만들지 않는다.
+대신 DAO가 DB 커넥션을 가져 올 때마다 호출하는 makerConnection()에서 DB 연결횟수 카운터를 증가시킨다.
