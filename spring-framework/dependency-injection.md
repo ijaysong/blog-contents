@@ -137,5 +137,30 @@ public class CountingConnectionMaker implements ConnectionMaker {
 }
 ~~~
 
+UserDao는 ConnectionMaker 인터페이스에만 의존하고 있기 때문에 ConnectionMaker 인터페이스를 구현하고 있다면 어떤 것이든 의존성 주입이 가능하다.
 CountingConnectionMaker 클래스는 ConnectionMaker 인터페이스를 구현했지만 내부에서 직접 DB 커넥션을 만들지 않는다.
 대신 DAO가 DB 커넥션을 가져 올 때마다 호출하는 makerConnection()에서 DB 연결횟수 카운터를 증가시킨다.
+
+새로운 의존관계를 컨테이너가 사용할 설정정보를 이용해 만들어보자.
+CountingFactory라는 이름의 설정용 클래스를 만든다.
+다음은 CountingConnectionMaker 의존관계가 추가된 의존성주입 설정용 클래스이다.
+~~~
+@Configuration
+public class CountingDaoFactory {
+    @Bean
+    public UserDao userDao() {
+        // 모든 DAO는 connectionMaker()에서 만들어지는 오브젝트의 의존성을 주입받는다.
+        return new UserDao(connectionMaker());
+    }
+
+    @Bean
+    public ConnectionMaker connectionMaker() {
+        return new CountingConnectionmaker(realConnectionMaker());
+    }
+
+    @Bean
+    public ConnectionMaker realConnectionMaker() {
+        return new DConnectionMaker();
+    }
+}
+~~~
