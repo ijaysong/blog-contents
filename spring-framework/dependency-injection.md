@@ -164,3 +164,23 @@ public class CountingDaoFactory {
     }
 }
 ~~~
+
+다음은 커넥션 카운팅을 위한 실행 코드이다.
+~~~
+public class UserDaoConnectionCountingTest {
+    public static void main(String[] args) throws ClassNotFoundException , SQLException {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
+        UserDao dao = context.getBean("userDao", UserDao.class);
+
+        // Dao 사용 코드
+        // 의존관계 검색을 사용하면 이름을 이용해 어떤 빈이든 가져올 수 있다.
+        CountingConnectionMaker ccm = context.getBean("connectionMaker", CountingConnectionMaker.class);
+        System.out.println("Connection counter : " + ccm.getCounter());
+    }
+}
+~~~
+
+지금은 DAO가 하나뿐이지만 DAO가 수십, 수백개여도 상관없다.
+의존관계 주입의 장점은 관심사를 분리함으로서 높은 응집도를 가지는 것이기 때문에,
+모든 DAO가 직접 의존해서 사용할 ConnectionMaker 타입의 오브젝트는 DaoFactory의 connectionMaker() 메소드에서 만든다.
+따라서 CountingConnectionMaker의 의존관계를 추가하려면 이 메소드만 수정하면 된다.
