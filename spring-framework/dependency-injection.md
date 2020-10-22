@@ -206,3 +206,27 @@ XML 설정은 @Configuration과 @Bean이 붙은 자바 클래스로 만든 설�
 * 빈의 의존 오브젝트
 빈의 생성자 메소드를 통해 의존 오브젝트를 넣어준다.
 의존 오브젝트도 하나의 빈이므로 이름이 있을 것이고, 그 이름에 해당하는 메소드를 호출해서 의존 오브젝트를 가져온다. 의존 오브젝트는 하나 이상일 수도 있다.
+
+### connectionMaker() 전환
+DaoFactory의 connectionMaker() 메소드에 해당하는 빈을 XML로 정의해보자.
+connectionMaker()로 정의되는 빈은 의존하는 다른 오브젝트가 없으니 DI 정보 세가지 중 두가지만 있으면 된다.
+DI 정의 세 가지 중에서 빈의 이름과 빈 클래스 두 가지를 <bean> 태그의 id와 class 애트리뷰트를 이용해 정의할 수 있다.
+
+다음은 클래스 설정과 XML 설정의 대응항목이다.
+|           | 자바 코드 설정 정보         | XML 설정정보                  |
+|-----------|------------------------|-----------------------------|
+| 빈 설정파일 | @Configuration          | <beans>                     |
+| 빈의 이름   | @Bean methodName()     | <bean id="methodName"       |
+| 빈의 클래스 | return new BeanClass(); | class="a.b.c... BeanClass"> |
+
+DaoFactory의 @Bean 메소드에 담긴 정보를 1:1로 XML의 태그와 애트리뷰트로 전환 해주기만 하면 된다.
+<bean> 태그의 class 애트리뷰트에 지정하는 것은 자바 메소드에서 오브젝트를 만들 때 사용하는 클래스 이름이라는 점을 주의해야 한다.(import문을 대신하여 패키지까지 포함해서 써야한다.)
+
+다음은 connectionMaker()메소드의 <bean> 태그 전환의 내용이다.
+~~~
+@Bean                               // <bean
+public ConnectionMaker
+connectionMaker() {                 // id="connectionMaker"
+    return new DConnectionMaker();  // class="springbook...DConnectionMaker" />
+}
+~~~
