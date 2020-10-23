@@ -230,3 +230,33 @@ connectionMaker() {                 // id="connectionMaker"
     return new DConnectionMaker();  // class="springbook...DConnectionMaker" />
 }
 ~~~
+
+### userDao()의 전환
+자바 빈에서 수정자의 메소드는 프로퍼티가 된다.
+프로퍼티 이름은 메소드 이름에서 set을 제외한 나머지 부분을 사용한다.
+ex) setConnectionMaker()라는 이름의 메소드가 있다면, connectionMaker라는 프로퍼티를 갖는다고 할 수 있다.
+
+XML에서는 <property> 태그를 사용해 의존 오브젝트와의 관계를 정의한다.
+<property> 태그는 name과 ref라는 두 개의 애트리뷰트를 갖는다.
+* name : 프로퍼티 이름, 수정자 메소드를 알 수 있음
+* ref  : 수정자 메소드를 통해 주입해줄 오브젝트의 빈 이름
+
+~~~
+userDao.setConnectionMaker(connectionMaker());
+~~~
+여기서 userDao.setConnectionMaker()는 userDao 빈의 connectionMaker 프로퍼티를 이용해 의존관계 정보를 주입한다는 뜻이다.
+메소드의 파라미터로 넣는 connectionMaker()는 connectionMaker()메소드를 호출해서 리턴하는 오브젝트를 주입하라는 의미이다.
+
+각 정보를 <property> 태그에 대응하면 다음과 같이 전환 가능하다.
+~~~
+userDao.setConnectionMaker(connectionMaker());
+<property name="connectionMaker" ref="connectionMaker" />
+~~~
+
+마지막으로 이 <property> 태그를 userDao 빈을 정의한 <bean> 태그 안에 넣어주면 된다.
+다음은 userDao 빈을 설정한 XML 정보이다.
+~~~
+<bean id="userDao" class="springbook.dao.UserDao">
+    <property name="connectionMaker" ref="connectionMaker" />
+</bean>
+~~~
