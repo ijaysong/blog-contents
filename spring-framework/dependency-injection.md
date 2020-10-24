@@ -260,3 +260,51 @@ userDao.setConnectionMaker(connectionMaker());
     <property name="connectionMaker" ref="connectionMaker" />
 </bean>
 ~~~
+
+### XML의 의존관계 주입 정보
+다음은 완성된 XML 설정 정보이다.
+~~~
+<beans>
+    <bean id="connectionMaker" class="springbook.user.dao.DConnectionMaker" />
+    <bean id="userDao" class="springbook.dao.UserDao">
+        <property name="connectionMaker" ref="connectionMaker" />
+    </bean>
+</beans>
+~~~
+
+<property> 태그의 name과 ref는 그 의미가 다르다.
+* name : DI에 사용할 수정자 메소드의 프로버티 이름이다.
+* ref  : 주입할 오브젝트를 정의한 빈의 ID이다.
+
+보통 프로퍼티 이름과 DI되는 빈의 이름이 같은 경우가 많다.
+프로퍼티 이름은 주입할 빈 오브젝트의 인터페이스를 따르는 경우가 많다.
+하지만 프로퍼티 이름이나 빈의 이름은 인터페이스 이름과 다르게 정해도 상관없다.
+단, 빈의 이름을 바꾸는 경우, 그 이름을 참조하는 다른 빈의 <property> ref 애트리뷰트의 값도 함께 변경해줘야 한다.
+
+만약, connectionMaker 빈을 myConnectionMaker라는 이름으로 변경했다면 다음과 같이 userDao 빈의 connectionMaker 프로퍼티 ref 값도 바꾸어줘야 한다.
+connectionMaker 빈을 DI하는 DAO가 여러개라면 모두 변경해야 한다.
+~~~
+<beans>
+    <bean id="myConnectionMaker" class="springbook.user.dao.DConnectionMaker" />
+    <bean id="userDao" class="springbook.dao.UserDao">
+        <property name="myConnectionMaker" ref="connectionMaker" />
+    </bean>
+</beans>
+~~~
+
+혹은, 같은 인터페이스를 구현한 의존 오브젝트를 여러 개 정의해두고 그중에서 원하는 걸 골라서 DI하는 경우도 있다.
+이때는 각 빈의 이름을 독립적으로 만들어두고 ref 애트리뷰트를 이용해 DI 받을 빈을 지정해주면 된다.
+(같은 인터페이스를 구현한 빈이 여러개이므로 빈의 이름을 의미있게 구분해서 정해줄 필요가 있다!)
+
+다음은 같은 인터페이스 타입의 빈을 여러개 정의한 경우이다.
+~~~
+<beans>
+    <bean id="localDBConnectionMaker" class="...LocalDBConnectionMaker" />
+    <bean id="testDBConnectionMaker" class="...TestDBConnectionMaker" />
+    <bean id="productDBConnectionMaker" class="...ProductionDBConnectionMaker" />
+
+    <bean id="userDao" class="springbook.user.dao.UserDao">
+        <property name="connectionMaker" ref="localDBConnectionMaker" />
+    </bean>
+</beans>
+~~~
