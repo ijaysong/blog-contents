@@ -308,3 +308,47 @@ connectionMaker 빈을 DI하는 DAO가 여러개라면 모두 변경해야 한�
     </bean>
 </beans>
 ~~~
+
+## XML을 이용하는 애플리케이션 컨텍스트
+XML에서 빈의 의존관계 정보를 이용하는 IoC/DI 작업에는 GenericXmlApplicationContext를 사용한다. 
+GenericXmlAppliCationContext의 생성자 파라미터로 XML파일의 클래스패스를 지정해주면 된다.
+XML 설정파일은 클래스패스 최상단에 두면 편하다.
+클래스패스를 시작하는 /는 넣을 수도 있고 생략할 수도 있다.
+(시작하는 /가 없는 경우에도 항상 루트에서부터 시작하는 클래스패스이다!)
+~~~
+ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+~~~
+
+애플리케이션 컨텍스트가 사용하는 XML 설정파일의 이름은 관례를 따라 applicationContext.xml이라고 만든다.
+다음은 XML 설정정보를 담은 applicationContext.xml 파일 정보이다.
+~~~
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="connectionMaker" class="springbook.user.dao.DConnectionMaker" />
+
+    <bean id="userDao" class="springbook.user.dao.UserDao">
+        <property name="connectionMaker" ref="connectionMaker" />
+    </bean>
+</beans>
+~~~
+
+GenericXmlApplicationContext 외에도 ClassPathXmlApplicationContext를 이용해 XML로부터 설정정보를 가져오는 애플리케이션 컨텍스트를 만들 수 있다.
+ClassPathXmlApplicationContext는 클래스패스의 경로정보를 클래스에서 가져오게 할 수 잉ㅆ다.
+sprirngbook.user.dao 패키지 안에 daoContext.xml이라는 설정파일을 만들었다고 해보자.
+
+GenericXmlApplicationContext는 클래스패스 루트로부터 파일의 위치를 지정해야 하므로 다음과 같이 작성해야 한다.
+~~~
+new GenericXmlApplicationContext("springbook/user/dao/daoContext.xml");
+~~~
+
+반면에 ClassPathXmlApplicationContext는 XML 파일과 같은 클래스패스에 있는 클래스 오브젝트를 넘겨서 클래스패스에 대한 힌트를 제공할 수 있다.
+UserDao는 springbook.user.dao 패키지에 있으므로 daoContext.xml과 같은 클래스 패스위에 있다.
+이 UserDao를 함께 넣어주면 XML 파일의 위치를 UserDao의 위치로부터 상대적으로 지정할 수 있따.
+~~~
+new ClassPathXmlApplicationContext("daoContext.xml", UserDao.class);
+~~~
+
+이 방법으로 클래스패스를 지정해야 할 경우가 아니라면 GenericXmlApplicationConext를 사용하는 편이 무난하다.
