@@ -352,3 +352,36 @@ new ClassPathXmlApplicationContext("daoContext.xml", UserDao.class);
 ~~~
 
 이 방법으로 클래스패스를 지정해야 할 경우가 아니라면 GenericXmlApplicationConext를 사용하는 편이 무난하다.
+
+## DataSource 인터페이스로 변환
+### DataSource 인터페이스 적용
+ConnectionMaker는 DB 커넥션을 생성해주는 기능 하나만 정의한 매우 단순한 인터페이스다.
+지금까지는 ConnectionMaker를 사용했지만 DataSource 인터페이스로 변환하려한다.
+자바에서는 DB 커넥션을 가져오는 오브젝트의 기능을 추상화해서 비슷한 용도로 사용할 수 있게 만들어진 DataSource라는 인터페이스가 존재한다.
+DAO에서 DataSource의 getConnection() 메소드를 사용해 DB 커넥션을 가져오면 된다.
+DataSource의 getConnection()은 SQLException만 던지기 때문에 makeConnection()메소드의 throws 에 선언했던 ClassNotFoundException은 제거해도 된다.
+
+다음은 DataSource를 사용하는 UserDao 이다.
+~~~
+import javax.sql.DataSource;
+
+public class UserDao {
+    private DataSource dataSource;
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void add(User user) throws SQLException {
+        Connection c = dataSource.getConnection();
+        ...
+    }
+    ...
+}
+~~~
+
+### 자바 코드 설정 방식
+
+
+### XML 설정 방식
+
