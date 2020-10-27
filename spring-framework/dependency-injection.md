@@ -381,7 +381,45 @@ public class UserDao {
 ~~~
 
 ### 자바 코드 설정 방식
+다음은 SimpleDriverDataSource를 사용하도록 만든 DataFactory의 dataSource()메소드 이다.
+DataSource 타입의 dataSource 빈을 정의하는 메소드이다.
+~~~
+@Bean
+public DataSource dataSource() {
+    SimpleDriverDataSoure dataSource = new SimpleDriverDataSource();
 
+    // DB 연결정보를 수정자 메소드를 통해 넣어준다. 이렇게 하면 오브젝트 레벨에서 DB 연결 방식을 변경할 수 있다.
+    dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
+    dataSource.setUrl("jdbc:mysql://localhost/springbook");
+    dataSource.setUsername("spring");
+    dataSource.setPassword("book");
+
+    return dataSource;
+}
+~~~
+
+DaoFactory의 userDao() 메소드를 다음과 같이 수정한다.
+이제 UserDao는 DataSource 타입의 dataSource()를 DI 받는다.
+
+~~~
+@Bean
+public UserDao userDao() {
+    UserDao userDao = new UserDao();
+    userDao.setDataSource(datdaSource);
+    return userDao;
+}
+~~~
 
 ### XML 설정 방식
+XML 설정방식으로 변경해보자면, 먼저 id가 connectionMaker인 <bean>을 없애도 dataSource라는 이름의 <bean>을 등록한다.
+그리고 클래스를 SimpleDriverDataSource로 변경하면 다음과 같이 된다.
+~~~
+<bean id="dataSource"
+    class="org.springframework.jdbc.datasource.SimpleDriverDataSource" />
+~~~
 
+문제는 이 <bean>설정으로 SimpleDriverDataSource의 오브젝트를 만드는 것까지는 가능하지만, dataSource() 메소드에서 SimpleDriverDataSource 오브젝트의 수정자로 넣어준 DB 접속 정보는 나타나 있지 않다는 점이다.
+UserDao처럼 다른 빈에 의존하는 경우에는 <property> 태그와 ref 애트리뷰트로 의존할 빈 이름을 넣어주면 된다.
+
+하지만 SimpleDriverDataSource 오브젝트의 경우, 단순 Class 타입의 오브젝트나 텍스트 값이다.
+그렇다면 XML에서는 어떻게 해서 dataSource()메소드에서처럼 DB 연결정보를 넣도록 설정을 만들 수 있을까?
