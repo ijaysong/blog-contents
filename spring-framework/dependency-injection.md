@@ -423,3 +423,51 @@ UserDao처럼 다른 빈에 의존하는 경우에는 <property> 태그와 ref �
 
 하지만 SimpleDriverDataSource 오브젝트의 경우, 단순 Class 타입의 오브젝트나 텍스트 값이다.
 그렇다면 XML에서는 어떻게 해서 dataSource()메소드에서처럼 DB 연결정보를 넣도록 설정을 만들 수 있을까?
+
+## 프로퍼티 값의 주입
+### 값 주입
+수정자 메소드에는 다른 빈이나 오브젝트뿐 아니라 스트링 같은 단순 값을 넣어줄 수도 있다.
+이렇게 다른 빈 오브젝트의 레퍼런스가 아닌 단순 정보도 오브젝트를 초기화하는 과정에서 수정자 메소드에 넣을 수 있다.
+이때는 클래스 외부에서 DB 연결정보와 같이 변경 가능한 정보를 설정해줄 수 있도록 만들기 위해서이다.
+예를 들어 DB 접속 아이디가 바뀌었더라도 클래스 코드는 수정해줄 필요가 없게 해주는 것이다.
+
+텍스트나 단순 오브젝트 등을 수정자 메소드에 넣어주는 것을 스프링에서는 '값을 주입한다'라고 한다.
+이것도 성격은 다르지만 일종의 DI라고 볼 수 있다.
+사용할 오브젝트 자체를 바꾸진 않지만 오브젝트의 특성은 외부에서 변경할 수 있기 때문이다.
+
+스프링의 빈으로 등록될 클래스에 수정자 메소드가 정의되어 있다면 <property>를 사용해 주입할 정보를 지정할 수 있다는 점에서는 <property ref="">와 동일하다.
+하지만 다른 빈 오브젝트의 레퍼런스(ref)가 아니라 단순 값(value)을 주입해주는 것이기 때문에 ref 애트리뷰트 대신 value 애트리뷰트를 사용한다.
+
+다음은 dataSource() 메소드를 통해 DB 연결정보를 주입한 코드이다.
+~~~
+dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
+dataSource.setUrl("jdbc:mysql://localhost/springbook");
+dataSource.setUsername("spring");
+dataSource.sestPassword("book");
+~~~
+
+다음은 XML을 이용한 DB 연결정보 설정이다.
+~~~
+<property name="driverClass" value="com.mysql.jdbc.Driver" />
+<property name="url" value="jdbc:mysql://localhost/springbook" />
+<proeprty name="username" value="spring" />
+<property name="password" value="book" />
+~~~
+
+ref 대신에 value를 사용했을 뿐이지 기존의 <proeprty> 태그를 사용했던 것과 내용과 방법은 동일하다.
+value 애트리뷰트에 들어가는 것은 다른 빈의 이름이 아니라 실제로 수정자 메소드의 파라미터로 전달되는 `스트링` 그 자체이다.
+
+### value 값의 자동 변환
+XML을 이용한 DB 연결정보 설정을 보면 driverClass를 java.lang.Class 타입이 아닌 스트링타입으로 지정해주고 있다.
+스프링이 프로퍼티의 값을 수정자 메소드의 파라미터 타입을 참고해서 적절한 형태로 변환해주기 때문이다.
+setDriverClass() 메소드의 파라미터 타입이 Class 임을 확인하고 "com.mysql.jdbc.Driver"라는 텍스트값을 com.mysql.jdbc.Driver.class 오브젝트로 자동 변경해주는 것이다.
+내부적으로 다음과 같은 변환작업이 일어난다고 생각하면 된다.
+
+~~~
+Class driverClass = Class.forName("com.mysql.jdbc.Driver");
+dataSource.setDriverClass(driverClass);
+~~~
+
+스프링은 value에 지정한 텍스트 값을 적절한 자바 타입으로 변환해준다.
+Integer, Double, String, Boolean 같은 기본타입은 물론이고, Class, URL, File, Charset 같은 오브젝트로 변환할 수도 있다.
+또한 값이 여러개라면 List, Map, Set, Properties나 배열 타입으로도 값의 주입이 가능하다.
