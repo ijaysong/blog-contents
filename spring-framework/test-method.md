@@ -101,3 +101,43 @@ is()는 매처의 일종으로 equals()로 비교해주는 기능을 가지고 �
 
 JUnit은 예외가 빌생하거나 assertThat()에서 실패하지 않고 테스트 메소드의 실행이 완료되면 테스트가 성공했다고 인식하므로, "테스트 성공"이라는 메세지를 굳이 출력할 필요는 없다.
 JUnit이 테스트를 실행하고 나면 테스트 결과를 다양한 방법으로 알려주기 때문이다.
+
+#### JUnit 테스트 실행
+스프링 컨테이너와 마찬가지로 JUnit 프레임워크도 자바 코드로 만들어진 프로그램이다.
+어디선가 한번은 JUnit 프레임워크를 시작시켜 줘야 한다.
+
+어디에든 main()메소드를 추가하고, 그 안에 JUnitCore 클래스의 main 메소드를 호출해주는 간단한 코드를 넣어주면 된다.
+메소드 파라미터에는 @Test 테스트 메소드를 가진 클래스의 이름을 넣어준다.
+
+~~~
+public static void main(String[] args) {
+    JUnitCore.main("springbook.user.dao.UserDaoTest");
+}
+~~~
+
+테스트를 실행하면 테스트를 실행하는데 걸린 시간과 테스트 결과, 그리고 몇개의 테스트 코드가 실행됐는지 알려준다.
+테스트를 실행하면 다음과 같은 메시지가 출력될 것이다.
+
+~~~
+Junit version 4.7
+Time : 0.578
+OK (1 test)
+~~~
+
+만약에 테스트에 실패하면 OK 대신 FAILURES!!!라는 내용이 출력되고, 총 수행한 테스트 중에서 몇개의 테스트가 실패했는지 보여준다.
+출력된 메시지를 잘 살펴보면 실패한 원인이 무엇이고, 테스트 코드 검증에 실패한 위치는 어디인지도 확인할 수 있다.
+테스트 수행중에 일반 예외가 발생한 경우에도 마찬가지로 테스트 수행은 중단되고 테스트는 실패한다.
+테스트가 실패하면 다음과 같은 메시지가 출력될 것이다.
+
+~~~
+Time : 1.094
+There was 1 failure :
+1) addAndGet(springbook.dao.UserDaoTest)
+java.lang.AssertionError:
+Expected: is "박성철"
+     got: null
+          ...
+            at springbook.dao.UserDaoTest.main(UserDaoTest.java:36)
+FAILURES!!!
+Tests run: 1, Failures: 1
+~~~
