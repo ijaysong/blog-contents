@@ -581,3 +581,470 @@ function plus(x = 0, y = 0) {
 console.log(plus());
 console.log(plus(1, 2));
 ```
+### 3.5. Rest 파라미터
+
+ 
+
+#### 3.5.1. 기본 문법
+
+ 
+
+Rest 파라미터는 Spread 연산자(...)를 사용하여 파라미터를 정의한 것을 의미한다.
+
+Rest 파라미터를 사용하면 인수 리스트를 함수 내부에서 배열로 전달받을 수 있다.
+
+ 
+
+```
+
+function foo(...rest) {
+
+    console.log(Array.isArray(rest)); // true
+
+    console.log(rest); // [1, 2, 3, 4, 5]
+
+}
+
+ 
+
+foo(1, 2, 3, 4, 5);
+
+```
+
+ 
+
+인수는 순차적으로 파라미터와 Rest 파라미터에 할당된다.
+
+ 
+
+```
+
+function foo(param, ...rest) {
+
+    console.log(param); // 1
+
+    console.log(rest); // [2, 3, 4, 5]
+
+}
+
+ 
+
+foo(1, 2, 3, 4, 5);
+
+ 
+
+function bar(param1, param2, ...rest) {
+
+    console.log(param1); // 1
+
+    console.log(param2); // 2
+
+    console.log(rest); // [3, 4, 5]
+
+}
+
+ 
+
+bar(1, 2, 3, 4, 5);
+
+```
+
+ 
+
+Rest 파라미터는 반드시 마지막 파라미터여야 한다.
+
+ 
+
+```
+
+function foo(...rest, param1, param2) { }
+
+ 
+
+foo(1, 2, 3, 4, 5); // SyntaxError: Rest parameter must be last formal parameter
+
+```
+
+ 
+
+#### 3.5.2. arguments와 rest 파라미터
+
+ 
+
+ES5에서는 인자의 개수를 사전에 알 수 없는 `가변 인자 함수의 경우, arguments 객체를 통해 인수를 확인한다.`
+
+arguments 객체는 함수 호출 시 전달된 인수들의 정보를 담고 있는 순회 가능한 유사 배열 객체이며 함수 내부에서 `지역 변수`처럼 사용할 수 있다.
+
+ 
+
+```
+
+// ES5
+
+var foo = function() {
+
+    console.log(arguments);
+
+};
+
+foo(1, 2); // {'0': 1, '1': 2}
+
+```
+
+ 
+
+`화살표 함수에는 함수 객체의 arguments 프로퍼티가 없다.`
+
+따라서 화살표 함수로 가변 인자 함수를 구현해야 할 때는 반드시 rest 파라미터를 사용해야 한다.
+
+ 
+
+```
+
+var normalFunc = function() {};
+
+console.log(normalFunc.hasOwnProperty('arguments')); // true
+
+ 
+
+const arrowFunc = () => {};
+
+console.log(arrowFunc.hasOwnProperty('arguments')); // false
+
+```
+
+ 
+
+### 3.6. Spread 연산자
+
+ 
+
+#### 3.6.1. 함수의 인자로 사용하는 경우
+
+ 
+
+배열을 함수의 인자로 사용하고, 배열의 각 요소를 개별적인 파라미터로 전달하고 싶은 경우, Function.prototype.apply를 사용하는 것이 일반적이다.
+
+ 
+
+```
+
+// ES5
+
+function foo(x, y, z) {
+
+    console.log(x); // 1
+
+    console.log(y); // 2
+
+    console.log(z); // 3
+
+}
+
+ 
+
+// 배열을 foo 함수의 인자로 전달하려고 한다.
+
+const arr = [1, 2, 3];
+
+ 
+
+// apply 함수의 2번째 인자(배열)는 호출하려는 함수(foo)의 개별 인자로 전달된다.
+
+foo.apply(null, arr);
+
+```
+
+ 
+
+ES6의 Spread 연산자(...)를 사용한 배열을 함수의 인수로 사용하면 배열의 요소를 개별적으로 분리하여 순차적으로 파라미터에 할당한다.
+
+ 
+
+```
+
+// ES6
+
+function foo(x, y, z) {
+
+    console.log(x);
+
+    console.log(y);
+
+    console.log(z);
+
+}
+
+ 
+
+// 배열을 foo 함수의 인자로 전달하려고 한다.
+
+const arr = [1, 2, 3];
+
+ 
+
+// apply 함수의 2번째 인자(배열)는 호출하려는 함수(foo)의 개별 인자로 전달된다.
+
+foo(...arr);
+
+```
+
+ 
+
+#### 3.6.2. 배열에서 사용하는 경우
+
+ 
+
+##### 3.6.2.1. concat
+
+ 
+
+ES5에서 기존 배열의 요소를 새로운 배열 요소의 일부로 만들고 싶은 경우, 배열 리터럴만으로 해결할 수 없고 concat 메소드를 사용해야 한다.
+
+ 
+
+```
+
+// ES5
+
+var arr = [1, 2, 3];
+
+console.log(arr.concat([4, 5, 6])); // [1, 2, 3, 4, 5, 6]
+
+```
+
+ 
+
+Spread 연산자를 사용하면 배열 리터럴만으로 기존 배열의 요소를 새로운 배열 요서의 일부로 만들 수 있다.
+
+ 
+
+```
+
+// ES6
+
+const arr = [1, 2, 3];
+
+// ...arr은 [1, 2, 3]을 개별 요소로 분리한다
+
+console.log([...arr, 4, 5, 6]); // [1, 2, 3, 4, 5, 6]
+
+```
+
+ 
+
+##### 3.6.2.2. push
+
+ 
+
+ES5에서 기존 배열에 다른 배열의 개별 요소를 각각 push하려면 아래와 같은 방법을 사용한다.
+
+ 
+
+```
+
+// ES5
+
+var arr1 = [1, 2, 3];
+
+var arr2 = [4, 5, 6];
+
+ 
+
+// apply 메소드의 2번째 인자는 배열이다. 이건은 개별인자로 push 메소드에 전달된다.
+
+Array.prototype.push.apply(arr1, arr2);
+
+console.log(arr1); // [1, 2, 3, 4, 5, 6]
+
+```
+
+ 
+
+spread 연산자를 사용하면 아래와 같이 보다 간편하게 표현할 수 있다.
+
+ 
+
+```
+
+// ES6
+
+const arr1 = [1, 2, 3];
+
+const arr2 = [4, 5, 6];
+
+ 
+
+// ...arr2sms [4, 5, 6]을 개별요소로 분리한다.
+
+arr1.push(...arr2);
+
+console.log(arr1); // [1, 2, 3, 4, 5, 6]
+
+```
+
+ 
+
+##### 3.6.2.3. splice
+
+ 
+
+Spread 연산자를 사용하면 아래와 같이 보다 간편하게 표현할 수 있다.
+
+ 
+
+```
+
+const arr1 = [1, 2, 3, 6];
+
+const arr2 = [4, 5];
+
+ 
+
+// ...arr2는 [4, 5]를 개별 요소로 분리한다.
+
+arr1.splice(3, 0, ...arr2); // arr1.splice(3, 0, 4, 5); 와 같다.
+
+ 
+
+console.log(arr1); // [1, 2, 3, 4, 5, 6]
+
+```
+
+ 
+
+##### 3.6.2.4. copy
+
+ 
+
+ES5에서 기존 배열을 복사하려면 splice 메소드를 사용한다
+
+ 
+
+```
+
+// ES5
+
+var arr = [1, 2, 3];
+
+ 
+
+var copy = arr.slice();
+
+console.log(copy); // [1, 2, 3]
+
+ 
+
+// copy를 변경한다
+
+copy.push(4);
+
+console.log(copy); // [1, 2, 3, 4]
+
+ 
+
+// arr은 변경되지 않는다.
+
+console.log(arr); // [1, 2, 3]
+
+```
+
+ 
+
+Spread 연산자를 사용하면 아래와 같이 보다 간편하게 표현할 수 있다.
+
+ 
+
+```
+
+const arr = [1, 2, 3];
+
+ 
+
+const copy = [...arr];
+
+console.log(copy); // [1, 2, 3]
+
+ 
+
+// copy를 변경한다.
+
+copy.push(4);
+
+console.log(copy); // [1, 2, 3, 4]
+
+ 
+
+// arr은 변경되지 않는다.
+
+console.log(arr); // [1, 2, 3]
+
+```
+
+ 
+
+#### 3.6.3. 객체에서 사용하는 경우
+
+ 
+
+Spread 연산자를 사용하면 객체를 손쉽게 병합 또는 변경할 수 있다.
+
+ 
+
+```
+
+// 객체의 병합
+
+const merged = {...{ x: 1, y: 2 }, ...{ y: 10, z: 3 }};
+
+console.log(merged); // { x: 1, y: 10, z: 3 }
+
+ 
+
+// 특정 프로퍼티 변경
+
+const changed = { ...{ x: 1, y: 2 }, y: 100 };
+
+console.log(changed); // { x: 1, y: 100 }
+
+ 
+
+// 프로퍼티 추가
+
+const added = { ...{ x: 1, y: 2}, z: 0 };
+
+console.log(added); // { x: 1, y: 2, z: 0 }
+
+```
+
+ 
+
+Object.assign 메소드를 사용해도 동일한 작업을 할 수 있다.
+
+ 
+
+```
+
+// 객체의 병합
+
+const merged = Object.assign({}, { x: 1, y: 2 }, { y: 10, z: 3 });
+
+console.log(merged); // { x: 1, y: 10, z: 3 }
+
+ 
+
+// 특정 프로퍼티 변경
+
+const changed = Object.assign({}, { x: 1, y: 2 }, {y: 100});
+
+console.log(changed); // { x: 1, y: 100 }
+
+ 
+
+// 프로퍼티 추가
+
+const added = Object.assign({}, { x: 1, y: 2 }, {z: 0 });
+
+console.log(added); // { x: 1, y: 2, z: 0 }
+
+```
