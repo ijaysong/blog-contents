@@ -1608,3 +1608,731 @@ const { address: { city } } = person;
 console.log(city); // 'Seoul'
 
 ```
+
+### 3.9. 클래스
+
+ 
+
+자바스크립트는 `프로토타입 기반` 객체지향 언어다.
+
+프로토타입 기반 프로그래밍은 클래스가 필요없는 객체지향 프로그래밍 스타일로 프로토타입 체인과 클로저 등으로 객체지향 언어의 상속, 캡슐화(정보 은닉) 등의 개념을 구현할 수 있다.
+
+ 
+
+ES5에서는 생성자 함수와 프로토타입을 사용하여 객체지향 프로그래밍을 구현하였다.
+
+ 
+
+```
+
+// ES5
+
+var Person = (function() {
+
+    // 생성자
+
+    function Person(name) {
+
+        this._name = name;
+
+    }
+
+ 
+
+    // 메소드
+
+    Person.prototype.sayHi = function() {
+
+        console.log('Hi! ' + this._name);
+
+    };
+
+ 
+
+    // 생성자 반환
+
+    return Person;
+
+}());
+
+ 
+
+var me = new Person('Lee');
+
+me.sayHi(); // Hi! Lee
+
+console.log(me instanceof person); // true
+
+```
+
+ 
+
+#### 3.9.1. 클래스 정의
+
+ 
+
+ES6 클래스는 class 키워드를 사용하여 정의한다. 앞에서 살펴본 Person 생성자 함수를 클래스로 정의해보자.
+
+ 
+
+```
+
+class Person {
+
+    constructor(name) {
+
+        this._name = name;
+
+    }
+
+    sayHi() {
+
+        console.log(`Hi! ${this._name}`);
+
+    }
+
+}
+
+ 
+
+const me = new Person('Lee');
+
+me.sayHi(); // Hi! Lee
+
+console.log(me instanceof Person);
+
+```
+
+ 
+
+일반적이지는 않지만 표현식으로도 클래스를 정의할 수 있다.
+
+함수와 마찬가지로 클래스는 이름을 가질 수도 있고 갖지 않을 수도 있다.
+
+이때 클래스가 할당된 변수를 사용해 클래스를 생성하지 않고 기명 클래스의 이름을 사용해 생성하면 에러가 발생한다.
+
+이는 함수와 마찬가지로 클래스 표현식에서 사용한 클래스 이름은 외부 코드에서 접근할 수 없기 때문이다.
+
+ 
+
+```
+
+const Foo = class MyClass {};
+
+ 
+
+const foo = new Foo();
+
+console.log(foo); // MyClass {}
+
+ 
+
+new MyClass(); // ReferenceError: MyClass is not defined
+
+```
+
+ 
+
+#### 3.9.2. 인스턴스의 생성
+
+ 
+
+클래스의 인스턴스를 생성하려면 new 연산자와 함께 constructor(생성자)를 호출한다.
+
+ 
+
+```
+
+class Foo {}
+
+const foo = new Foo();
+
+```
+
+ 
+
+위 코드에서 new 연산자와 함께 호출한 FOO는 클래스 이름이 아니라 constructor이다.
+
+표현식이 아닌 선언식으로 정의한 클래스의 이름은 constructor와 동일하다.
+
+ 
+
+```
+
+console.log(Foo == Foo.prototype.constructor); // true
+
+```
+
+ 
+
+new 연산자를 사용하지 않고 constructor를 호출하면 타입 에러가 발생한다.
+
+constructor는 new 연산자 없이 호출할 수 없다.
+
+ 
+
+```
+
+class Foo {}
+
+const foo = Foo(); // TypeError: Class constructor Foo cannot be invoked without 'new'
+
+```
+
+ 
+
+#### 3.9.3. constructor
+
+ 
+
+constructor는 인스턴스를 생성하고 클래스 프로퍼티를 초기화하기 위한 특수한 메소드이다.
+
+constructor는 클래스 내에 한 개만 존재할 수 있으며, 만약 클래스가 2개 이상의 constructor를 포함하면 문법 에러가 발생한다.
+
+인스턴스를 생성할 때 new 연산자와 함께 호출한 것이 바로 constructor이며 constructor의 파라미터에 전달한 값은 클래스 프로퍼티에 할당한다.
+
+ 
+
+```
+
+class Foo {}
+
+ 
+
+const foo = new Foo();
+
+console.log(foo); // Foo{};
+
+ 
+
+// 클래스 프로퍼티의 동적 할당 및 초기화
+
+foo.num = 1;
+
+console.log(foo); // Foo { num: 1 }
+
+```
+
+ 
+
+#### 3.9.4. 클래스 프로퍼티
+
+ 
+
+클래스 몸체에는 메소드만 선언할 수 있다.
+
+클래스 몸체에 클래스 프로퍼티(멤버변수)를 선언하면 문법 에러가 발생한다.
+
+ 
+
+```
+
+class Foo {
+
+    name = ''; //Syntax Error
+
+ 
+
+    constructor() {}
+
+}
+
+```
+
+ 
+
+클래스 프로퍼티의 선언과 초기화는 반드시 constructor 내부에서 실시한다.
+
+ 
+
+```
+
+class Foo {
+
+    constructor(name = '') {
+
+        this.name = name;
+
+    }
+
+}
+
+ 
+
+const foo = new Foo('Lee');
+
+console.log(foo); // Foo {name: 'Lee'}
+
+}
+
+```
+
+ 
+
+constructor 내부에서 선언한 클래스 프로퍼티는 클래스의 인스턴스를 가리키는 this에 바인딩한다.
+
+이로써 클래스 프로퍼티는 클래스가 생성할 인스턴스의 프로퍼티가 되며, 클래스의 인스턴스를 통해 클래스 외부에서 언제나 참조할 수 있다.
+
+즉, 언제나 public이다.
+
+ES6의 클래스는 다른 객체지향 언어처럼 private, public, protected 키워드와 같은 접근제한자를 지원하지 않는다.
+
+ 
+
+```
+
+class Foo {
+
+    constructor(name = '') {
+
+        this.name = name; // public 클래스 프로퍼티
+
+    }
+
+}
+
+ 
+
+const foo = new Foo('Lee');
+
+console.log(foo.name); // 클래스 외부에서 참조할 수 있다.
+
+```
+
+ 
+
+#### 3.9.5. 호이스팅
+
+ 
+
+class 선언문 이전에 클래스를 참조하면 참조 에러가 발생한다.
+
+클래스는 스코프의 선두에서 class의 선언문에 도달할 때까지 `일시적 사각지대`에 빠진다.
+
+따라서 class 선언문 이전에 클래스를 참조하면 참조 에러가 발생한다.
+
+ 
+
+```
+
+const foo = new Foo(); // ReferenceError : Foo is not defined
+
+class Foo {}
+
+```
+
+ 
+
+#### 3.9.6. getter, setter
+
+ 
+
+##### 3.9.6.1 getter
+
+ 
+
+getter는 클래스 프로퍼티에 접근할 때마다 클래스 프로퍼티의 값을 조작하는 행위가 필요할 때 사용한다.
+
+getter는 메소드 이름 앞에 get 키워드를 사용해 정의한다.
+
+이때 메소드 이름은 클래스 프로퍼티 이름처럼 사용된다.
+
+다시말해 getter는 호출하는 것이 아니라 프로퍼티처럼 참조하는 형식으로 사용하며 참조 시에 메소드가 호출된다.
+
+ 
+
+##### 3.9.6.2. setter
+
+ 
+
+setter는 클래스 프로퍼티에 값을 할당할 때마다 클래스 프로퍼티의 값을 조작하는 행위가 필요할 때 사용한다.
+
+setter는 메소드 이름 앞에 set 키워드를 사용해 정의한다.
+
+이때 메소드 이름은 프로퍼티 이름처럼 사용된다.
+
+다시 말해 setter는 호출하는 것이 아니라 프로퍼티처럼 값을 할당하는 형식으로 사용하며 할당 시에 메소드가 호출된다.
+
+ 
+
+```
+
+class Foo {
+
+    consturctor(arr = []) {
+
+        this._arr = arr;
+
+    }
+
+ 
+
+    // getter : get 키워드 뒤에 오는 메소드 이름 firstElem은 프로퍼티 이름처럼 사용된다.
+
+    get firstElem() {
+
+        // getter는 반드시 무언가를 반환해야 한다.
+
+        return this._arr.length ? this._arr[0] : null;
+
+    }
+
+ 
+
+    // setter : set 키워드 뒤에 오는 메소드 이름 firstElem은 프로퍼티 이름처럼 사용된다.
+
+    set firstElem(elem) {
+
+        this._arr = [elem, ...this._arr];
+
+    }
+
+}
+
+ 
+
+const foo = new Foo([1, 2]);
+
+ 
+
+// 프로퍼티 firstElm에 값을 할당하면 setter가 호출된다.
+
+foo.firstElem = 100;
+
+ 
+
+// 프로퍼티 firstElm에 접근하면 getter가 호출된다.
+
+console.log(foo.firstElem); // 100
+
+```
+
+ 
+
+#### 3.9.7. 정적 메소드
+
+ 
+
+클래스의 정적 메소드를 정의할 때 static 키워드를 사용한다.
+
+정적 메소드는 클래스의 인스턴스가 아닌 클래스 이름으로 호출한다.
+
+따라서 클래스의 인스턴스를 생성하지 않아도 호출할 수 있다.
+
+ 
+
+```
+
+class Foo {
+
+    constructor(prop) {
+
+        this.prop = prop;
+
+    }
+
+ 
+
+    static staticMethod() {
+
+        return 'staticMethid';
+
+    }
+
+ 
+
+    prototypeMethod() {
+
+        return this.prop;
+
+    }
+
+}
+
+ 
+
+// 정적 메소드는 클래스 이름으로 호출한다.
+
+console.log(Foo.staticMethod());
+
+ 
+
+const foo = new Foo(123);
+
+// 정적 메소드는 인스턴스로 호출할 수 없다.
+
+console.log(foo.staticMethod()); // Uncaught TypeError : foo.staticMethod is not a function
+
+```
+
+ 
+
+클래스의 정적 메소드는 인스턴스로 호출할 수 없다.
+
+이것은 `정적 메소드는 this를 사용할 수 없다는 것을 의미한다.`
+
+`일반 메소드 내부에서 this는 클래스의 인스턴스를 가리키며, 메소드 내부에서 this를 사용한다는 것은 클래스의 인스턴스 생성을 전제로 하는 것이다.`
+
+정적 메소드는 클래스 이름으로 호출하기 때문에 클래스의 인스턴스를 생성하지 않아도 사용할 수 있다.
+
+달리 말하면 메소드 내부에서 this를 사용할 필요가 없는 메소드는 정적 메소드로 만들 수 있다.
+
+정적 메소드는 Math 객체의 메소드처럼 애플리케이션 전역에서 사용할 유틸리티 함수를 생성할 때 주로 사용한다.
+
+ 
+
+#### 3.9.8. 클래스 상속
+
+ 
+
+##### 3.9.8.1. extends 키워드
+
+ 
+
+extends 키워드는 부모 클래스를 상속받는 자식 클래스를 정의할 때 사용한다.
+
+ 
+
+```
+
+// 부모 클래스
+
+class Circle {
+
+    constructor(radius) {
+
+        this.radius = radius; // 반지름
+
+    }
+
+ 
+
+    // 원의 지름
+
+    getDiameter() {
+
+        return 2 * this.radius;
+
+    }
+
+ 
+
+    // 원의 둘레
+
+    getPerimeter() {
+
+        return 2 * Matho.PI * this.radius;
+
+    }
+
+ 
+
+    // 원의 넓이
+
+    getArea() {
+
+        return Math.PI * Math.pow(this.radius, 2);
+
+    }
+
+}
+
+ 
+
+// 자식 클래스
+
+class Cylinder extends Circle {
+
+    constructor(radius, height) {
+
+        super(radius);
+
+        this.height = height;
+
+    }
+
+ 
+
+    // 원통의 넒이: 부모 클래스의 getArea 메소드를 오버라이딩하였다.
+
+    getArea() {
+
+        // (원통의 높이 * 원의 둘레) + (2 * 원의 넒이)
+
+        return (this.height * super.getPerimeter()) + (2 * super.getArea());
+
+    }
+
+ 
+
+    // 원통의 부피
+
+    getVolume() {
+
+        return super.getArea() * this.height;
+
+    }
+
+}
+
+ 
+
+// 반지름이 2, 높이가 10인 원통
+
+const cylinder = new Cylinder(2, 10);
+
+ 
+
+// 원의 지름
+
+console.log(cylinder.getDiameter()); // 4
+
+// 원의 둘레
+
+console.log(cylinder.getPerimeter()); // 12.563...
+
+// 원통의 넒이
+
+console.log(cylinder.getArea()); // 150.796...
+
+// 원통의 부피
+
+console.log(cylinder.getVolume()); // 125.663...
+
+// cylinder는 Cylinder 클래스의 인스턴스이다.
+
+console.log(cylinder instanceof Cylinder); // true
+
+// cylinder는 Circle 클래스의 인스턴스이다.
+
+console.log(cylinder instanceof Circle); // true
+
+```
+
+ 
+
+프로토타입 체인은 특정 객체의 프로퍼티나 메소드에 접근하려고 할 때 프로퍼티 또는 메소드가 없다면 [[prototype]] 프로퍼티가 가리키는 링크를 따라 자신의 부모 역할을 하는 프로토타입 객체의 프로퍼티나 메소드를 차례대로 검색한다.
+
+그리고 그 검색에 성공하면 그 프로퍼티나 메소드를 사용한다.
+
+ 
+
+##### 3.9.8.2. super 키워드
+
+ 
+
+super 키워드는 부모 클래스를 참조할 때 또는 부모 클래스의 constructor를 호출할 때 사용한다.
+
+super가 메소드로 사용될 때, 그리고 객체로 사용될 때 다르게 동작하는 것을 알 수 있다.
+
+ 
+
+- super 메소드
+
+  super 메소드는 자식 class의 constructor 내부에서 부모 클래스의 constructor를 호출한다.
+
+  즉, 부모 클래스의 인스턴스를 생성한다.
+
+  자식 클래스의 constructor에서 super()를 호출하지 않으면 this에 대한 참조 에러가 발생한다.
+
+ 
+
+```
+
+class Parent {}
+
+ 
+
+class Child extends Parent {
+
+    constructor(){} // ReferenceError: this is not defined
+
+}
+
+ 
+
+const child = new Child();
+
+```
+
+ 
+
+- super 키워드
+
+  super 키워드는 부모 클래스에 대한 참조이다.
+
+  부모 클래스의 프로퍼티 또는 메소드를 참조하기 위해 사용한다.
+
+ 
+
+```
+
+getVolume() {
+
+    return super.getArea() * this.height;
+
+}
+
+```
+
+ 
+
+##### 3.9.8.3. static 메소드와 prototype 메소드의 상속
+
+ 
+
+프로토타입 관점에서 바라보면 자식 클래스의 [[Prototype]] 프로퍼티가 가리키는 프로토타입 객체는 부모 클래스이다.
+
+ 
+
+```
+
+class Parent {}
+
+ 
+
+class Child extends Parent {}
+
+ 
+
+console.log(Child.__proto__ === parent); // true
+
+console.log(Child.prototype.__proto === Parent.prototype); // true
+
+```
+
+ 
+
+이것은 프로토타입 체인에 의해 부모 클래스의 정적 메소드도 상속됨을 의미한다.
+
+ 
+
+```
+
+class Parent {
+
+    static staticMethod() {
+
+        return 'staticMethod';
+
+    }
+
+}
+
+ 
+
+class Child extneds Parent {};
+
+ 
+
+console.log(Parent.staticMethod()); // 'staticMethod'
+
+console.log(child.staticMethod()); // 'staticMethod'
+
+```
+
+ 
+
+자식 클래스의 정적 메소드 내부에서도 super 키워드를 사용하여 부모 클래스의 정적 메소드를 호출할 수 있다.
+
+이는 자식 클래스는 프로토타입 체인에 의해 부모 클래스의 정적 메소드를 참조할 수 있기 때문이다.
