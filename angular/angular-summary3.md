@@ -2750,3 +2750,403 @@ Promise 객체를 반환한 비동기 함수는 프로미스 후속 처리 메�
 </html>
 
 ```
+
+### 3.11. 이터레이션 프로토콜과 for-of 루프
+
+ 
+
+#### 3.11.1. 이터레이션 프로토콜
+
+ 
+
+- 이터러블(iterable) : 이터러블은 순회 가능한 자료구조이다. Symbol.iterator를 프로퍼티 키로 사용한 메소드를 구현하는 것에 의해 순회 가능한 자료구조인 이터러블이 된다.
+
+- 이터레이터(iterator) : Symbol.iterator를 프로퍼티 키로 사용한 메소드는 이터레이터를 반환한다. 이터레이터는 순회 가능한 자료구조인 이터러블 요소를 탐색하기 위한 포인터로서 next() 메소드를 갖는 객체이다. next()메소드는 value, done 프로퍼티를 갖는 객체를 반환하며 이 메소드를 통해 이터러블 객체를 순회할 수 있다.
+
+ 
+
+이터레이션 프로토콜은 이터레이터의 next()메소드를 통해 다양한 데이터 소스에 순차적으로 접근할 수 있는 일관된 방법을 제시한다.
+
+ 
+
+```
+
+const iterable = ['a', 'b', 'c'];
+
+const iterator = iterable[Symbol.iterator]();
+
+ 
+
+console.log(iterator.next()); // {value: 'a', done: false}
+
+console.log(iterator.next()); // {value: 'b', done: false}
+
+console.log(iterator.next()); // {value: 'c', done: false}
+
+console.log(iterator.next()); // {value: undefined, done: true}
+
+```
+
+ 
+
+아래는 for문을 사용하여 이터레이터의 next() 메소드로 이터러블 객체를 순회하는 예이다.
+
+ 
+
+```
+
+// 이터러블
+
+const iterable = ['a', 'b', 'c'];
+
+ 
+
+// 이터레이터
+
+const iterator = iterable[Symbol.iterator]();
+
+ 
+
+// 이터레이터의 next() 메소드를 통해 이터러블 객체를 순회
+
+for (;;) {
+
+    const res = iterator.next();
+
+    console.log(res);
+
+    if(res.done) break;
+
+}
+
+```
+
+ 
+
+#### 3.11.2. for-of 루프
+
+ 
+
+for-of 루프는 이터러블 객체를 순회한다. for-of 루프는 이터레이터의 next()메소드를 호출하고 next() 메소드가 반환하는 객체의 done 프로퍼티가 true가 될때까지 반복한다.
+
+ 
+
+```
+
+// 배열
+
+for (const val of ['a', 'b', 'c']) {
+
+    console.log(val);
+
+}
+
+// 문자열
+
+for (const val of 'abc') {
+
+    console.log(val);
+
+}
+
+// Map
+
+for(const [key, value] of new Map([['a', '1'], ['b', '2'], ['c', '3']])) {
+
+    console.log(`key : ${key} value : ${value}`); // key : a value : 1 ...
+
+}
+
+// Set
+
+for (const val of new Set([1, 2, 3])) {
+
+    console.log(val);
+
+}
+
+```
+
+ 
+
+#### 3.11.3. 커스텀 이터러블
+
+ 
+
+객체는 이터러블이 아니지만 이터레이션 프로토콜을 준수하면 순회할 수 있는 이터러블 객체를 만들 수 있다.
+
+피보나치 수열을 간단히 구현해보겠다.
+
+Symbol.iterator를 프로퍼티 키로 사용하는 메소드를 구현하면 순회 가능한 자료구조인 이터러블이 된다.
+
+ 
+
+```
+
+const fibonacci = {
+
+    [Symbol.iterator]() {
+
+        let [prev, curr] = [0, 1];
+
+        // 순회 카운터
+
+        let step = 0;
+
+        // 최대 순회 수
+
+        const maxStep = 10;
+
+        return {
+
+            // fibonacci 객체가 순회할 때마다 next 함수가 호출된다.
+
+            next() {
+
+                [prev, curr] = [curr, prev + curr];
+
+                return { value: curr, done: step++ >= maxStep };
+
+            }
+
+        };
+
+    }
+
+};
+
+ 
+
+for (const num of fibonacci) {
+
+    console.log(num);
+
+}
+
+ 
+
+// Spread 연산자
+
+const arr = [...fibonacci];
+
+console.log(arr); // [1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+
+ 
+
+// 디스트럭처링
+
+const [first, second, ...rest] = fibonacci;
+
+console.log(first, second, rest); // 1 2 [3, 5, 8, 13, 21, 34, 55, 89]
+
+ 
+
+```
+
+ 
+
+Symbol.iterator를 프로퍼티 키로 사용한 메소드는 next() 함수를 프로퍼티로 가지는 객체를 반환하여야 한다.
+
+그리고 next()함수는 done과 value 프로퍼티를 가지는 객체를 반환한다.
+
+for-of는 done 프로퍼티가 true가 될 때까지 반복하며 done 프로퍼티가 true가 되면 반복을 중지한다.
+
+ 
+
+### 3.12. Symbol
+
+ 
+
+1997년 자바 스크립트가 ECMAScript로 처음 표준화된 이래로, 자바 스크립트는 6개의 타입(자료형)을 가지고 있었다.
+
+ 
+
+- 기본 자료형 : Boolean, null, undefined, Number, String
+
+- 객체형 : Object
+
+ 
+
+Symbol은 ES6에서 새롭게 추가된 7번째 타입이다.
+
+Symbol은 애플이케이션 전체에서 유일하며 변경 불가능한 기본 자료형 값이다.
+
+주로 객체의 프로퍼티 키로 사용한다.
+
+ 
+
+#### 3.12.1. Symbol 생성
+
+ 
+
+Symbol은 Symbol() 함수로 생성한다. 이때 생성된 Symbol은 객체가 아니라 값이다.
+
+ 
+
+```
+
+let mySymbol = Symbol();
+
+ 
+
+console.log(mySymbol); // Symbol()
+
+console.log(typeof mySymbol); // symbol
+
+```
+
+ 
+
+Symbol() 함수는 String(), Number(), Boolean()과 같이 래퍼 객체를 생성하는 생성자 함수와는 달리 new 연산자를 사용하지 않는다.
+
+ 
+
+```
+
+new Symbol(); // TypeError: Symbol is not a constructor
+
+```
+
+ 
+
+symbol은 변경 불가능한 기본 자료형이다.
+
+ 
+
+```
+
+let mySymbol = Symbol();
+
+console.log(mySymbol + 's'); // TypeError: Cannot convert a Symbol value to a string
+
+```
+
+ 
+
+Symbol() 함수는 인자로 문자열을 전달할 수 있다. 이 문자열은 Symbol 생성에 어떠한 영향을 주지 않는다. 다만, 생성된 Symbol에 대한 설명으로 디버깅 용도로만 사용된다.
+
+ 
+
+```
+
+let symbolWithDesc = Symbol('ungmo2');
+
+console.log(symbolWithDesc);        // Symbol(ungmo2)
+
+console.log(typeof symbolWithDesc); // symbol
+
+```
+
+ 
+
+Symbol() 함수가 생성한 Symbol 값은 애플리케이션 전체에서 유일하다
+
+ 
+
+```
+
+let mySymbol = Symbol('ungmo2');
+
+console.log(mySymbol === Symbol('ungmo2')); // false
+
+```
+
+ 
+
+#### 3.12.2. Symbol 사용
+
+ 
+
+객체의 프로퍼티 키는 빈 문자열을 포함하는 문자열과 숫자로 만들 수 있다.
+
+ 
+
+```
+
+const obj = {};
+
+obj.prop = 'myProp';
+
+obj[123] = 123; // NG: obj.123 = 123
+
+obj['prop' + 123] = false;
+
+console.log(obj); // {'123' : 123, prop: 'myProp', prop123: false}
+
+```
+
+ 
+
+Symbol 값도 객체의 프로퍼티 키로 사용할 수 있다.
+
+Symbol 값은 애플리케이션 전체에서 유일한 값이므로 Symbol 값을 키로 갖는 프로퍼티는 다른 어떠한 프로퍼티와도 충돌하지 않는다.
+
+ 
+
+```
+
+const obj = {};
+
+const mySymbol = Symbol('mySymbol');
+
+ojb([mySymbol]) = 123;
+
+ 
+
+console.log(obj); // { [Symbol(mySymbol)]: 123 }
+
+console.log(obj[mySymbol]); // 123
+
+```
+
+ 
+
+#### 3.12.3. Symbol 객체
+
+ 
+
+Symbol() 함수로 Symbol 값을 생성할 수 있다.
+
+이것은 Symbol이 함수 객체라는 의미이다.
+
+Symbol 객체의 프로퍼티 중 length와 prototype을 제외한 프로퍼티를 'Well-Known Symbol'이라 부른다.
+
+ 
+
+##### 3.12.3.1. Symbol.iterator
+
+ 
+
+Well-Known Symbol은 자바스크립트 엔진에 상수로 존재하며 자바스크립트 엔진은 Well-Known Symbol을 참조하여 일정한 처리를 한다.
+
+예를 들어, 어떤 객체가 Symbol.iterator를 프로퍼티 키로 사용한 메소드를 가지고 있으면 자바스크립트 엔진은 이 객체가 이터레이션 프로토콜을 따르는 것으로 간주하고 이터레이터로 동작하도록 한다.
+
+ 
+
+##### 3.12.3.2. Symbol.for
+
+ 
+
+Symbol.for 메소드는 인자로 전달받은 프로퍼티 키를 통해 Symbol 레지스트리(Symbol들의 리스트)에 존재하는 Symbol을 검색한다.
+
+검색에 성공하면 검색된 Symbol을 반환하고, 검색에 실패하면 새로운 Symbol을 생성한다.
+
+ 
+
+```
+
+// 새로운 전역 Symbol 생성
+
+const s1 = Symbol.for('foo');
+
+// Symbol 레지스트리에서 이미 만들어진 Symbol 검색
+
+const s2 = Symbol.for('foo');
+
+console.log(s1 === s2); // true
+
+```
+
+ 
+
+Symbol()함수는 매번 다른 Symbol 값을 생성하는 것에 반해, Symbol.for는 단 하나의 Symbol을 생성하여 여러 모듈이 공유한다.
