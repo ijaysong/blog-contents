@@ -3472,3 +3472,197 @@ for (const val of foo()) {
 }
 
 ```
+
+### 3.14. 모듈
+
+ 
+
+모듈이란 애플리케이션을 구성하는 개별적 요소로서 재사용 가능한 코드 조각을 말한다.
+
+모듈은 세부 사항을 캡슐화 하고 공개가 필요한 API만을 외부에 노출한다.
+
+일반적으로 모듈은 파일 단위로 분리되어 있으며 애플리케이션은 필요에 따라 명시적으로 모듈을 로드하여 재사용한다.
+
+즉, 모듈은 애플리케이션에 분리되어 개별적으로 존재하다가 애플리케이션의 로드에 의해 비로소 애플리케이션의 일원이 된다.
+
+모듈은 기능별로 분리되어 작성되므로 코드의 단위를 명확히 분리하여 애플리케이션을 구성할 수 있으며 재사용성이 좋아서 개발 효율성과 유지보수성을 높일 수 있다.
+
+ 
+
+#### 3.14.1. export
+
+ 
+
+모듈은 독립적인 파일 스코프를 갖기 때문에 모듈 안에 선언한 모든 것들은 기본적으로 해당 모듈 내부에서만 참조할 수 있다.
+
+만약 모듈 안에 선언한 항목을 외부에 공개하여 다른 모듈들이 사용할 수 있게 하고 싶다면 export 해야 한다.
+
+모듈을 공개하려면 선언문 앞에 export 키워드를 사용한다.
+
+여러개를 export 할 수 있는데 이때 각각의 export는 이름으로 구별할 수 있다.
+
+ 
+
+```
+
+// lib.js
+
+// 변수의 공개
+
+export const pi = Math.PI;
+
+ 
+
+// 힘수의 공개
+
+export function square(x) {
+
+    return x * x;
+
+}
+
+ 
+
+// 클래스의 공개
+
+export class Person {
+
+    constructor(name) {
+
+        this.name = name;
+
+    }
+
+}
+
+```
+
+ 
+
+선언문 앞에 매번 export 키워드를 붙이는 것이 싫다면 export 대상을 모아 하나의 객체로 구성하여 한번에 export 할 수 있다.
+
+ 
+
+```
+
+// lib.js
+
+// 변수의 공개
+
+const pi = Math.PI;
+
+ 
+
+// 힘수의 공개
+
+function square(x) {
+
+    return x * x;
+
+}
+
+ 
+
+// 클래스의 공개
+
+class Person {
+
+    constructor(name) {
+
+        this.name = name;
+
+    }
+
+}
+
+ 
+
+// 변수, 함수 클래스를 하나의 객체로 구성하여 공개
+
+export { pi, quare, Person };
+
+```
+
+ 
+
+#### 3.14.2. import
+
+ 
+
+export 한 모듈을 로드하려면 export한 이름으로 import 한다.
+
+각각의 이름을 지정하지 않고 하나의 이름으로 한꺼번에 import 할 수도 있다. 이때 import 되는 항목은 as 뒤에 지정한 이름의 변수에 할당된다.
+
+이름을 변경하여 import 할 수도 있다.
+
+ 
+
+```
+
+// main.js
+
+// 같은 폴더 내의 lib.js 모듈을 임포트, 확장자 js는 생략 가능
+
+import { pi, square, Person } from './lib';
+
+ 
+
+// 각각의 이름을 지정하지 않고 하나의 이름으로 한꺼번에 import 할 수도 있다.
+
+// import * as lib from './lib';
+
+ 
+
+// 이름을 변경하여 import 할 수도 있다.
+
+// import { pi as PI, square as sq, Person as P } from './lib';
+
+ 
+
+console.log(pi); // 3.141592653589793
+
+console.log(square(10)); // 100
+
+console.log(new Person('Lee')); // Person { name: 'Lee' }
+
+```
+
+ 
+
+모듈에서 하나만을 export 할때는 default 키워드를 사용할 수 있다. 다만, default를 사용하는 경우 var, let, const는 사용할 수 없다.
+
+ 
+
+```
+
+// lib.js
+
+function (x) {
+
+    return x * x;
+
+}
+
+ 
+
+export default;
+
+```
+
+ 
+
+위 코드를 아래와 같이 축약 표현할 수 있다.
+
+ 
+
+```
+
+// lib.js
+
+export default function(x) {
+
+    return x * x;
+
+}
+
+```
