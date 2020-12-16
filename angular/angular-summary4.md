@@ -570,3 +570,298 @@ console.log(typeof foo); // boolean
 
 ```
 
+### 4.4. 클래스
+
+ 
+
+#### 4.4.1. 클래스 정의
+
+ 
+
+ES6 클래스는 클래스 몸체에 메소드만 포함할 수 있다.
+
+클래스 몸체에 클래스 프로퍼티를 선언할 수 없고, 반드시 생성자 내부에서 클래스 프로퍼티를 선언하고 초기화한다.
+
+TypeScript 클래스는 몸체에 클래스 프로퍼티를 사전에 선언해야 한다.
+
+ 
+
+```
+
+class Person {
+
+    // 클래스 프로퍼티를 사전에 선언하여야 한다.
+
+    // ES6에서는 사전에 선언하지 않아도 된다.
+
+    name : string;
+
+ 
+
+    constructor(name: string) {
+
+        // 클래스 프로퍼티에 값을 할당
+
+        this.name = name;
+
+    }
+
+ 
+
+    walk() {
+
+        console.log(`${this.name} is walking.`);
+
+    }
+
+}
+
+ 
+
+const person = new Foo('Lee');
+
+person.walk(); // Lee is walking
+
+```
+
+ 
+
+#### 4.4.2. 접근 제한자
+
+ 
+
+TypeScript 클래스는 클래스 기반 객체지향 언어가 지원하는 접근 제한자 public, private, protected를 지원하며 의미 또한 기본적으로 동일하다.
+
+접근제한자를 명시하지 않았을 때 TypeScript의 클래스 프로퍼티와 메소드는 암묵적으로 public이 선언된다.
+
+ 
+
+#### 4.4.3. readonly 키워드
+
+ 
+
+TypeScript는 readonly 키워드를 사용할 수 있다.
+
+readonly가 선언된 클래스 프로퍼티는 선언 시 또는 생성자 내부에서만 값을 할당할 수 있다.
+
+그 외의 경우에는 값을 할당할 수 없고 오직 읽기만 가능한 상태가 된다.
+
+이를 이용하여 상수 선언에 사용한다.
+
+ 
+
+```
+
+class Foo {
+
+    private readonly MAX_LEN: number = 5;
+
+    private readonly MSG: string;
+
+ 
+
+    constructor() {
+
+        this.MSG = 'hello';
+
+    }
+
+ 
+
+    log() {
+
+        // readonly가 선언된 프로퍼티는 재할당이 금지된다.
+
+        this.MAX_LEN = 10; /* Cannot assign to 'MAX_LEN' because it is a constant or a read-only property. */
+
+        this.MSG = 'Hi'; /* Cannot assign to 'MSG' because it is a constant or a read-only property. */
+
+        console.log(`MAX_LEN: ${this.MAX_LEN}`); // MAX_LEN: 5
+
+        console.log(`MSG: ${this.MSG}`); // MSG: hello
+
+    }
+
+}
+
+ 
+
+new Foo().log();
+
+```
+
+ 
+
+#### 4.4.4. static 키워드
+
+ 
+
+static 키워드는 클래스의 정적 클래스를 정의한다.
+
+정적 메소드는 클래스의 인스턴스가 아닌 클래스 이름으로 호출한다.
+
+따라서 클래스의 인스턴스를 생성하지 않아도 호출할 수 있다.
+
+ 
+
+```
+
+class Foo {
+
+    constructor(prop) {
+
+        this.prop = prop;
+
+    }
+
+ 
+
+    static staticMethod() {
+
+        /*
+
+            정적 메소드는 this를 사용할 수 없다.
+
+            정적 메소드 내부에서 this는 클래스의 인스턴스가 아닌 클래스 자신을 가리킨다.
+
+        */
+
+        return 'staticMethod';
+
+    }
+
+ 
+
+    prototypeMethod() {
+
+        return this.prop;
+
+    }
+
+}
+
+ 
+
+// 정적 메소드는 클래스 이름으로 호출한다.
+
+console.log(Foo.staticMethod());
+
+ 
+
+const foo = new Foo(123);
+
+// 정적 메소드는 인스천스로 호출할 수 없다.
+
+console.log(foo.staticMethod()); // Uncaught TypeError: foo.staticMethod is not a function.
+
+```
+
+ 
+
+TypeScript에서는 static 키워드를 클래스 프로퍼티에도 사용할 수 있다.
+
+정적 메소드와 마찬가지로 정적 클래스 프로퍼티는 인스턴스가 아닌 클래스 이름으로 호출하며 클래스의 인스턴스를 생성하지 않아도 호출할 수 있다.
+
+ 
+
+```
+
+class Foo {
+
+    // 생성된 인스턴스의 개수
+
+    static instanceCounter = 0;
+
+ 
+
+    constructor() {
+
+        // 생성자가 호출될 때마다 카운터를 1씩 증가시킨다.
+
+        Foo.instanceCounter++;
+
+    }
+
+}
+
+ 
+
+var foo1 = new Foo();
+
+var foo2 = new Foo();
+
+ 
+
+console.log(Foo.instanceCounter); // 2
+
+console.log(foo2.instanceCounter); // error TS2339: Property 'instanceCounter' does not exist on type 'Foo'.
+
+```
+
+ 
+
+#### 4.4.5. 추상 클래스
+
+ 
+
+추상 클래스는 하나 이상의 추상 메소드를 포함하며 일반 메소드도 포함할 수 있다.
+
+추상 메소드는 내용이 없이 메소드 이름과 타입만 선언된 메소드를 말하며, 선언할 때 abstract 키워드를 사용한다.
+
+추상 클래스를 선언할 때는 abstract 키워드를 사용하며, 직접 인스턴스를 생성할 수 없고 상속만을 위해 사용된다.
+
+추상 클래스를 상속한 클래스는 추상 클래스의 추상 메소드를 반드시 구현해야 한다.
+
+ 
+
+```
+
+abstract class Animal {
+
+    // 추상 메소드
+
+    abstract makeSound(): void;
+
+ 
+
+    // 일반 메소드
+
+    move(): void {
+
+        console.log('roaming the earth...');
+
+    }
+
+}
+
+ 
+
+// 직접 인스턴스를 생성할 수 없다.
+
+// new Animal();
+
+// error TS2511: Cannot create an instance of the abstract class 'Animal'.
+
+ 
+
+class Dog extends Animal {
+
+    // 추상 클래스를 상속한 클래스는 추상 클래스의 추상 메소드를 반드시 구현하여야 한다.
+
+    makeSound() {
+
+        console.log('bowwow~');
+
+    }
+
+}
+
+ 
+
+const myDog = new Dog();
+
+myDog.makeSound();
+
+myDog.move();
+
+```
