@@ -1259,3 +1259,299 @@ const userInfo: UserInfo = {
 console.log(userInfo);
 
 ```
+
+### 4.6. 제네릭
+
+ 
+
+Java와 같은 정적 타입 언어의 경우, 함수 또는 클래스를 정의하는 시점에 매개변수나 반환값의 타입을 선언하여야 한다.
+
+TypeScript 또한 정적 타입 언어이기 때문에 함수 또는 클래스를 정의하는 시점에 매개변수나 반환값의 타입을 선언해야 한다.
+
+ 
+
+```
+
+class Queue {
+
+    protected data = []; // data: any[]
+
+ 
+
+    push(item) {
+
+        this.data.push(item);
+
+    }
+
+ 
+
+    pop() {
+
+        return this.data.shift();
+
+    }
+
+}
+
+ 
+
+const queue = new Queue();
+
+queue.push(0);
+
+queue.push('1'); // 의도하지 않은 실수!
+
+ 
+
+console.log(queue.pop().toFixed()); // 0
+
+console.log(queue.pop().toFixed()); // Runtime Error
+
+```
+
+ 
+
+Queue 클래스의 data 프로퍼티는 타입 선언을 생략하였기 때문에 any[] 타입이 된다.
+
+any[] 타입은 어떤 타입의 요소도 가질 수 있는 배열을 의미한다.
+
+ 
+
+위 예제의 경우, data 프로퍼티는 number 타입만을 포함하는 배열이라는 기대 하에 각 요소에 대해 `Number.prototype.toFixed()` 함수를 사용하였다.
+
+따라서 number 타입이 아닌 요소의 경우 런타임 에러가 발생한다.
+
+ 
+
+위와 같은 문제를 해결하기 위해 Queue 클래스를 상속하여 number 타입 전용 NumberQueue 클래스를 정의할 수 있다.
+
+number 타입 이외의 요소가 추가(push) 되었을 때, 아래와 같이 런타임 이전에 에러를 감지할 수 있다.
+
+ 
+
+```
+
+class Queue {
+
+    protected data = []; // data: any[]
+
+ 
+
+    push(item) {
+
+        this.data.push(item);
+
+    }
+
+ 
+
+    pop() {
+
+        return this.data.shift();
+
+    }
+
+}
+
+ 
+
+// Queue 클래스를 상속하여 number 타입 전용 NumberQueue 클래스를 정의
+
+class NumberQueue extends Queue {
+
+    // numver 타입의 요소만 push 한다.
+
+    push(item: number) {
+
+        super.push(item);
+
+    }
+
+ 
+
+    pop() : number {
+
+        return super.pop();
+
+    }
+
+}
+
+ 
+
+const queue = new NumberQueue();
+
+queue.push(0);
+
+queue.push('1'); // 의도하지 않은 실수를 사전에 검출 가능
+
+// [ts] Argument of type '"1"' is not assignable to parameter of type
+
+number'.
+
+ 
+
+console.log(queue.pop().toFixed()); // 0
+
+console.log(queue.pop().toFixed()); // 1
+
+```
+
+ 
+
+다양한 타입을 지원해야 한다면, 제네릭을 사용하여 문제를 해결할 수 있다.
+
+ 
+
+```
+
+class Queue<T> {
+
+   protected data : Array<T> = [];
+
+ 
+
+    push(item: T) {
+
+        this.data.push(item);
+
+    }
+
+ 
+
+    pop() : T {
+
+        return this.data.shift();
+
+    }
+
+}
+
+ 
+
+// number 전용 Queue
+
+const numberQueue = new Queue<number>();
+
+numberQueue.push(0);
+
+numberQueue.push('1'); // 실수를 사전에 인지하고 수정할 수 있다.
+
+console.log(numberQueue.pop().toFixed()); // 0
+
+console.log(numberQueue.pop().toFixed()); // 1
+
+ 
+
+// string 전용 Queue
+
+const stringQueue = new Queue<string>();
+
+stringQueue.push('Hello');
+
+stringQueue.push('World');
+
+console.log(stringQueue.pop().toUpperCase()); // Hello
+
+console.log(stringQueue.pop().toUpperCase()); // World
+
+ 
+
+// 커스텀 객체 전용 Queue
+
+const myQueue = new Queue<{name: string, age: number}>();
+
+myQueue.push({name: 'Lee', age: 10});
+
+myQueue.push({name: 'Kim', age: 20});
+
+console.log(numberQueue.pop()); // {name: 'Lee', age: 10})
+
+console.log(numberQueue.pop()); // {name: 'Kim', age: 20}
+
+ 
+
+```
+
+ 
+
+`제네릭은 선언시점이 아니라 생성 시점에 타입을 명시하여 하나의 타입만이 아닌 다양한 타입을 사용`할 수 있도록 한 기법이다.
+
+T는 제네릭을 선언할 때 관용적으로 사용되는 식별자로 `타입 파라미터`라 한다.
+
+ 
+
+또한 함수에도 제네릭을 사용할 수 있따.
+
+제네릭을 사용하면 하나의 타입만이 아닌 다양한 타입의 매개변수와 반환값을 사용할 수 있다.
+
+ 
+
+```
+
+function reverse<T>(items: T[]): T[] {
+
+    return items.reverse();
+
+}
+
+```
+
+ 
+
+reverse 함수는 매개변수의 타입에 의해 타입 매개변수가 결정된다.
+
+예를 들어 number 타입의 요소를 갖는 배열을 전달받으면 타입 매개변수는 number가 된다.
+
+ 
+
+```
+
+function reverse<T>(items: T[]): T[] {
+
+    return items.reverse();
+
+}
+
+ 
+
+const arg = [1, 2, 3, 4, 5];
+
+ 
+
+// 인수에 의해 타입 매개변수가 결정된다.
+
+const reversed = reverse(arg);
+
+console.log(reversed); // [5, 4, 3, 2, 1]
+
+```
+
+ 
+
+만약 { name: string } 타입의 요소를 갖는 배열을 전달받으면 매개변수는 { name: String }이 된다.
+
+ 
+
+```
+
+function reverse<T>(items: T[]): T[] {
+
+    return items.reverse();
+
+}
+
+ 
+
+const arg = [{ name: 'Lee' }, { name: 'Kim' }];
+
+ 
+
+// 인수에 의해 타입 매개변수가 결정된다.
+
+const reversed = reverse(arg);
+
+console.log(reversed); // [{ name: 'Lee' }, { name: 'Kim' }]
+
+```
