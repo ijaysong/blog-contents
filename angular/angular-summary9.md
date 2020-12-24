@@ -335,3 +335,163 @@ abcdefghij
 `AsyncPipe`
 
 998
+
+### 9.3. 체이닝 파이프
+
+
+
+여러개의 파이프를 조합하여 결과를 출력하는 것을 체이닝 파이프라고 한다.
+
+예를 들어 슬라이스 파이프와 대문자 파이프를 체이닝 해보자.
+
+
+
+```
+
+// app.component.ts
+
+import { Component } from '@angular/core';
+
+
+
+@Component({
+
+   selector: 'app-root',
+
+   template: `
+
+       <h3>SlicePipe + UpperCasePipe</h3>
+
+       <p>{{ name | slice:4 | uppercase }}</p>
+
+   `
+
+})
+
+export class AppComponent {
+
+   name = 'Lee ung-mo';
+
+}
+
+```
+
+
+
+실행결과
+
+`SlicePipe + UpperCasePipe`
+
+UNG-MO
+
+
+
+### 9.4. 커스텀 파이프
+
+
+
+사용자가 입력한 문자열을 반전하는 커스텀 파이프를 작성해보자.
+
+Angular CLI를 사용하여 프로젝트를 생성하고 파이프를 추가한다.
+
+
+
+```
+
+$ ng new pipe-custom -t -s -S
+
+$ cd pipe-custom
+
+$ ng generate pipe reverse
+
+```
+
+
+
+생성된 파이프를 다음과 같이 수정한다.
+
+
+
+```
+
+// reverse.pipe.ts
+
+import {{ Pipe, PipeTransform }} from '@angular/core';
+
+
+
+@Pipe({
+
+   name: 'reverse'
+
+})
+
+export class ReversePipe implements PipeTransform {
+
+   transform(value = ''): string {
+
+       return value.split('').reverse().join('');
+
+   }
+
+}
+
+```
+
+
+
+파이프는 @Pipe 데코레이터가 장식된 클래스이다.
+
+@Pipe 메타데이터 객체의 name 프로퍼티에 파이프의 식별자를 지정한다.
+
+파이프 클래스는 PipeTransform 인터페이스의 추상 메소드 transform을 구현해야 한다.
+
+
+
+```
+
+transform(value:any, ...args: any[]): any
+
+```
+
+
+
+커스텀 파이프는 모듈의 declarations에 등록해야 하지만, Angular CLI를 사용해서 파이프를 생성하면 모듈에 자동으로 등록된다.
+
+
+
+```
+
+// app.module.ts
+
+import { NgModule } from '@angular/core';
+
+import { BrowserModule } from '@angular/platform-browser';
+
+import { FormsModule } from '@angular/forms';
+
+
+
+import { AppComponent } from './app.component';
+
+import { ReversePipe } from './reverse.pipe';
+
+
+
+@NgModule({
+
+   declarations: [ AppComponent, ReversePipe ],
+
+   imports: [ BrowserModule, FormsModule ],
+
+   bootstrap: [AppComponent]
+
+})
+
+export class AppModule{}
+
+```
+
+
+
+커스텀 파이프는 빌트인 파이프와 동일한 방법으로 탬플릿에서 사용한다.
