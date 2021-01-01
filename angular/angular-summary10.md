@@ -173,3 +173,52 @@ ngDoCheck는 모든 상태 변화가 발생할 때마다 매번 호출되기 때
 
 
 ngOnChanges는 입력 프로퍼티에 바인딩된 값이 초기화 또는 변경되었을 때만 반응하여 호출되지만, ngDoCheck는 모든 상태의 변경에 의해 호출된다.
+
+#### 10.2.4. ngAfterContentIint
+
+
+
+ngContent 디렉티브를 사용하여 외부 컨텐츠를 컴포넌트의 뷰에 콘텐츠 프로젝션한 이후 호출된다.
+
+첫번째 ngDoCheck 호출 이후에 한번만 호출되며 컴포넌트에서만 동작하는 컴포넌트 전용 훅 메소드이다.
+
+
+
+#### 10.2.5. ngAfterContentChecked
+
+
+
+콘텐츠 프로덕션에 의해 부모 컴포넌트가 전달한 부모 컴포넌트의 템플릿 조각을 체크한 후 호출된다,
+
+ngAfterContentInit 호출 이후, ngDoCheck가 호출된 이후에 호출되며 컴포넌트에서만 동작하는 컴포넌트 전용 훅 메소드이다.
+
+
+
+#### 10.2.6. ngAfterViewLint
+
+
+
+컴포넌트의 뷰와 자식 컴포넌트의 뷰를 초기화한 이후 호출된다.
+
+첫번째 ngAfterContentChecked 호출 이후 한 번만 호출되며 컴포넌트에서만 동작하는 컴포넌트 전용 훅 메소드이다.
+
+
+
+#### 10.2.7. ngAfterViewChecked
+
+
+
+컴포넌트의 뷰와 자식 컴포넌트의 뷰를 체크한 이후 호출된다.
+
+첫번째 ngAfterViewInit 호출 이후, ngAfterContentChecked 호출 이후 호출되며 컴포넌트에서만 동작하는 컴포넌트 전용 훅 메소드이다.
+
+
+
+#### 10.2.8. ngOnDestroy
+
+
+
+컴포넌트와 디렉티브가 소멸하기 이전에 호출된다.
+
+RxJS의 unsubscribe 등 메모리 누수를 방지하기 위한 코드 등을 정의한다.
+
