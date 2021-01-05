@@ -108,3 +108,21 @@ sha1으로 변환된 이름의 첫번째 두자리(aa)는 디렉토리로 생성
 ~~~
 objects/aa/f4c61ddcc5e8a2dabede0f3b482cd9aea9434d
 ~~~
+
+## commit의 원리
+~~~bash
+git commit
+~~~
+
+커밋도 내부적으로는 objects 파일 안에 저장된다.
+tree, parent, 누가 저장했는지, 내용 등이 저장된다.
+blob은 파일의 내용을 담는다.
+tree 구조로 이전에 커밋한 내용과 새롭게 커밋한 내용들이 담긴다.
+
+## status의 원리
+~~~bash
+git status
+~~~
+objects 파일 안의 tree와 인덱스 파일이 일치한다면, git status를 실행했을 때 커밋할 사항이 없다고 알려준다.
+스테이징 되었고 커밋할 파일에 대해선, index에서 가리키고 있는 파일과 objects 파일이 연결되었으므로 index에 add 되어 커밋할 파일이 있음을 파악한다.
+인덱스 파일에 등록된 파일이 local repository에 등록된다. = working directory의 파일을 git add 하여 staging area에 올라간다. (용어가 다양) 
