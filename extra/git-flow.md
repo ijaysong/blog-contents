@@ -126,3 +126,41 @@ git status
 objects 파일 안의 tree와 인덱스 파일이 일치한다면, git status를 실행했을 때 커밋할 사항이 없다고 알려준다.
 스테이징 되었고 커밋할 파일에 대해선, index에서 가리키고 있는 파일과 objects 파일이 연결되었으므로 index에 add 되어 커밋할 파일이 있음을 파악한다.
 인덱스 파일에 등록된 파일이 local repository에 등록된다. = working directory의 파일을 git add 하여 staging area에 올라간다. (용어가 다양) 
+
+# git의 혁신 - branch
+
+## branch 만들기
+어떤 기능을 추가할 때 branch를 생성하여 관리한다.
+
+~~~bash
+// 브랜치의 목록을 볼 때
+git branch
+
+// 브랜치를 생성할 때 
+git branch {새로운 브랜치 이름}
+
+// 브랜치를 삭제할 때
+git branch -d
+
+// 병합하지 않은 브랜치를 강제 삭제할 때 
+git branch -D
+
+// 브랜치를 전환(체크아웃)할 때
+git checkout {전환하려는 브랜치 이름}
+
+// 브랜치를 생성하고 전환까지 할 때 
+git checkout -b {생성하고 전환할 브랜치 이름}
+~~~
+
+## branch 정보확인
+~~~bash
+// 브랜치 간에 비교할 
+// 어떤 파일이 포함되어 있고 아닌지 보여줌
+git log {비교할 브랜치 명 1}..{비교할 브랜치 명 2}
+
+// 브랜치 간의 코드를 비교 할 때 
+git diff {비교할 브랜치 명 1}..{비교할 브랜치 명 2}
+
+// 로그에 모든 브랜치를 표시하고, 그래프로 표현하고, 브랜치 명을 표시하고, 한줄로 표시할 때 
+git log --branches --graph --decorate --oneline 
+~~~
