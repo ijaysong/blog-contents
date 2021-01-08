@@ -164,3 +164,33 @@ git diff {비교할 브랜치 명 1}..{비교할 브랜치 명 2}
 // 로그에 모든 브랜치를 표시하고, 그래프로 표현하고, 브랜치 명을 표시하고, 한줄로 표시할 때 
 git log --branches --graph --decorate --oneline 
 ~~~
+
+## branch 병합 (merge)
+~~~bash
+// A 브랜치로 B 브랜치를 병합할 때 (A ← B)
+// 먼저 A 브랜치로 체크아웃 한다.
+git checkout A
+// B 브랜치를 병합한다
+git merge B
+~~~
+위와 같은 경우에는 A를 부모로 하여 B 브랜치가 합쳐진다.
+
+## branch 수련
+### fast-forward
+A 브랜치로 B 브랜치를 병합한다고 해보자.(A ← B)
+
+`fast-forward`는 영어로 빨리 감기이다.
+git에서 fast-forward는 다음과 같은 상황을 뜻한다.
+A 브랜치보다 B 브랜치가 작업을 추가로 수행했을 때, 추가로 수행한 내용에 맞춰서 A 브랜치를 빨리감아 B브랜치와 병합한다.
+커밋을 생성하지 않는다는 특징이 있다.
+
+### recursive strategy
+B 브랜치를 머지한 A 브랜치로 C 브랜치를 병합한다고 해보자. (A <- C)
+
+`recursive strategy` 는 직역하자면 재귀적인 전략을 뜻한다.
+A 브랜치와 C 브랜치는 공통의 작업을 수행하다가 두 갈래로 나뉘었다.
+마지막으로 수행한 공통 작업을 Common Ancestor라고 한다.
+Common Ancestor 포인트에서 A 브랜치와 C 브랜치는 각각 추가로 더 작업을 수행하였다.
+이 두 브랜치가 합쳐지면서 하나의 커밋을 생성한다.
+이를 merge commit이라 한다.
+(머지 시, 커밋이 수행되는 점이 fast-forward와 다른 점이다.)
