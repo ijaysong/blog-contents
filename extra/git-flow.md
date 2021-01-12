@@ -242,6 +242,26 @@ ex) 이전 브랜치에서 커밋하지 않는 변경 내용을 커밋하거나,
 이런 경우 stash를 이용하면 작업중이던 파일을 임시로 저장해두고 현재 브랜치의 상태를 마지막 커밋의 상태로 초기화 할 수 있다. 
 그 후에 다른 브랜치로 이동하고 작업을 끝낸 후에 작업 중이던 브랜치로 복귀한 후에 이전에 작업하던 내용을 복원할 수 있다. 
 
+~~~bash
+// staging에 올라간 파일을 stash한다.
+git stash
+
+// stash 이력을 출력한다. (최근에 stash한 파일이 위에 올라간다.)
+git stash list
+
+// stash에 올라가 있는 파일을 불러온다. (list의 윗쪽부터 하나씩)
+git stash apply
+
+// stash에 올라가 있는 파일을 삭제한다. (list의 윗쪽부터 하나씩)
+git stash drop
+
+// stash에 올라가 있는 파일을 불러오며, list에서 삭제한다.
+git stash apply; git stash drop;
+// 다음과 같이 쓸 수도 있다.
+git stash pop
+~~~
+
+
 ## branch의 종류
 
 ### 메인 브랜치 (Main branch)
