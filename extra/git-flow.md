@@ -317,3 +317,17 @@ head 파일은 master 파일을 가리키며, master 파일은 최신의 커밋 
 ~~~
 .git/refs/heads/exp
 ~~~
+
+## reset과 checkout의 원리
+reset이란 지정한 커밋 id의 상태로 돌아가기 위한 git 커맨드이며,
+해당 브랜치가 가리키고 있는 최신 로그 파일을 커밋 id 상태로 바꾸는 것을 의미한다.
+~~~
+git reset --hard {커밋 id}
+~~~
+
+ORIG_HEAD라는 파일은 기존에 수행한 최신 커밋 id를 가지고 있다. 
+그러므로 방금 실행한 reset을 취소하고 원래 커밋으로 돌아가고 싶을 때 커밋 id 대신 ORIG_HEAD를 지정할 수 있다.
+~~~
+git reset --hard ORIG_HEAD
+~~~
+
