@@ -261,6 +261,11 @@ git stash apply; git stash drop;
 git stash pop
 ~~~
 
+## SourceTree에 표시되는 커밋 위치에 대해서
+
+- origin/master : 원격 저장소 'origin' 브랜치인 'master'의 위치를 나타내고 있다,
+- origin/HEAD : 원격 저장소 'origin'을 복제해 올 때 다운로드 되는 커밋의 위치를 나타내고 있습니다. 일반적으로 'origin/master'와 동일한 위치를 가리킵니다.
+- master : 로컬 저장소 브랜치인 'master'의 위치를 나타내고 있습니다.
 
 ## branch의 종류
 
