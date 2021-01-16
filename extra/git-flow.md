@@ -331,3 +331,18 @@ ORIG_HEAD라는 파일은 기존에 수행한 최신 커밋 id를 가지고 있�
 git reset --hard ORIG_HEAD
 ~~~
 
+## reset으로 알아보는 working copy, index, repository
+git reset 옵션에 따라서 리셋되는 범위가 다르다.
+해당 내용은 다음과 같다.
+
+|working directory,  working tree,  working copy| index,  staging area,  cache | repository,  history,  tree|
+|-----|-----|-----|
+|||git reset --soft |
+||git reset --mixed|git reset --mixed|
+|git reset --hard|git reset --hard|git reset --hard|
+
+~~~
+git reset --soft
+git reset --mixed
+git reset --hard
+~~~
