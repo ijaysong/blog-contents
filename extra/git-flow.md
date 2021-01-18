@@ -351,3 +351,19 @@ git reset --soft
 git reset --mixed
 git reset --hard
 ~~~
+
+## 3 way merge
+| case 분류 |Me (현재 브랜치) | Base | Other(다른 사람의 브랜치) | 2 way merge | 3 way merge |
+|---|---|---|---|---|---|
+|ohter만 내용이 다른 경우 | A | A |   |  conflict 발생시킴 |
+|모두 내용이 같은 경우 | B | B | B | B | B |  |
+|모두 내용이 다른 경우 | 1 | C | 2 | conflict 발생시킴 | conflict 발생시킴 |
+|me만 내용이 다른 경우 |   | D | D | conflict 발생시킴 |  |
+
+* 2 way merge
+- 병합하고자 하는 두 브랜치를 비교하여 병합하는 것 (Me, Other 브랜치)
+- 내용이 다른면 conflict를 발생시켜 내용을 조정하고자 함.
+
+* 3 way merge
+- base를 기준으로 두 브랜치를 비교하여 병합하는 것
+- 내용이 다르다면 base로부터 수정한 것으로 이해해 수정된 내용을 반영한다. 
