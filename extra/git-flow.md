@@ -366,4 +366,26 @@ git reset --hard
 
 * 3 way merge
 - base를 기준으로 두 브랜치를 비교하여 병합하는 것
-- 내용이 다르다면 base로부터 수정한 것으로 이해해 수정된 내용을 반영한다. 
+- 내용이 다르다면 base로부터 수정한 것으로 이해해 수정된 내용을 병합 시 반영한다. 
+
+# 원격 저장소
+로컬 저장소와 대비되는 개념
+
+## 원격저장소의 기초
+~~~
+// 원격저장소 생성
+git init --bare remote
+
+// 로컬 저장소에 원격 저장소를 add한다.
+git remote add origin /home/git/git/remote
+
+// 로컬저장소와 원격저장소를 연결
+git push —set-upstream origin master
+~~~
+bare 옵션은 작업은 할 수 없고 저장소로서의 역할만 수행한다.
+수정이 불가능하며 원격 저장소를 만들 때 사용하는 옵션이다.
+
+원격 저장소 추가 시, 
+origin 뒤에 저렇게 주소를 쓰면, origin을 저 주소의 별명으로 쓰겠음을 나타낸다.
+
+현재 master브랜치를 push할 때 origin의 master브랜치로 푸쉬한다.
