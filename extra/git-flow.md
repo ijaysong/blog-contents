@@ -389,3 +389,24 @@ bare 옵션은 작업은 할 수 없고 저장소로서의 역할만 수행한�
 origin 뒤에 저렇게 주소를 쓰면, origin을 저 주소의 별명으로 쓰겠음을 나타낸다.
 
 현재 master브랜치를 push할 때 origin의 master브랜치로 푸쉬한다.
+
+## Github
+
+### 원격 저장소를 지역 저장소로 복제 (Github)
+~~~
+// git의 소스코드를 지역저장소로 가져오기
+git clone https://github.com/git/git.git {저장하고자 하는 디렉토리 명}
+
+// 로그를 거꾸로 출력하기
+git log --reverse
+
+// git의 특정 커밋으로 체크아웃하기
+git checkout {커밋 ID : e83c5163316f89bfbde7d9ab23ca2e25604af290}
+~~~
+
+Fork : 해당 프로젝트를 가져와서 내 저장소에 그대로 가져와서 소스코드 수정 등 라이선스에 맞춰서 마음껏 사용할 수 있는 것 (프로젝트 복제)
+
+github의 git 프로젝트의 첫 로그를 찍어보니 Linux의 창시자 'Linus Torvalds'가 첫 커밋을 했음을 확인했다. (리눅스 버전관리가 어려워 깃을 직접 만들게 되었다고!)
+그의 첫 커밋 메세지는...
+
+`Initial revision of "git", the information manager from hell`
