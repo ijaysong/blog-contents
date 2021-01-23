@@ -410,3 +410,42 @@ github의 git 프로젝트의 첫 로그를 찍어보니 Linux의 창시자 'Lin
 그의 첫 커밋 메세지는...
 
 `Initial revision of "git", the information manager from hell`
+
+### 원격 저장소 만들기(Github)
+~~~
+// 로컬 저장소에 원격 저장소 연결하기
+git remote add origin https://github.com/ejsong/git-flow.git
+
+// 현재 연결된 원격 저장소가 무엇인지 알려줌
+git remote
+
+// 원격저장소 보기
+git remote -v
+
+// 원격 저장소 삭제하기
+git remote remove origin
+
+// 앞으로 현재 브랜치를 원격저장소 origin의 master에 동기화하겠다
+git push -u origin master
+~~~
+
+1)
+로컬에 원격 저장소를 연결하는 커맨드를 해석해보자면, 
+git : 내 로컬 저장소 깃에
+remote : 원격저장소를
+add : 더하겠다, 연결하겠다
+origin : 원격 저장소 path의 별칭 (원격 저장소 path가 너무 기니까 이름을 지정해준 것임)
+https://github.com/ejsong/git-flow.git : 해당 url의 원격저장소를
+
+별칭으로 다른 것을 지정할 수도 있지만, 
+기본 브랜치가 master인것 처럼 기본 원격 브랜치는 origin이다.
+
+2)
+현재 브랜치를 원격저장소 origin의 master에 동기화하는 커맨드를 해석해보자면,
+git : 로컬로부터 
+push : 푸쉬하겠다. 동기화하겠다.
+-u : 푸쉬하면 origin의 master 브랜치에 자동으로 푸쉬도록 자동화 하겠다.
+origin : origin이라는 원격저장소의
+master : origin 원격저장소의 master 브랜치에
+
+동기화 했기 때문에 다음부터는 `git push` 만 해도 됨.
