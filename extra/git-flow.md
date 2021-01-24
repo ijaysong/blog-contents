@@ -414,7 +414,7 @@ github의 git 프로젝트의 첫 로그를 찍어보니 Linux의 창시자 'Lin
 ### 원격 저장소 만들기(Github)
 ~~~
 // 로컬 저장소에 원격 저장소 연결하기
-git remote add origin https://github.com/ejsong/git-flow.git
+git remote add origin https://github.com/ijsong/git-flow.git
 
 // 현재 연결된 원격 저장소가 무엇인지 알려줌
 git remote
@@ -427,6 +427,9 @@ git remote remove origin
 
 // 앞으로 현재 브랜치를 원격저장소 origin의 master에 동기화하겠다
 git push -u origin master
+
+// 현재 디렉토리로 해당 원격저장소를 복제(클론)함.
+git clone https://github.com/ijaysong/git-flow.git .
 ~~~
 
 1)
@@ -449,3 +452,25 @@ origin : origin이라는 원격저장소의
 master : origin 원격저장소의 master 브랜치에
 
 동기화 했기 때문에 다음부터는 `git push` 만 해도 됨.
+
+### 원격 저장소와 지역 저장소의 동기화 방법 (Github)
+~~~
+원격 저장소를 두개로 복제
+git clone https://www.github.com/ijaysong/git-flow.git git_home
+git clone https://www.github.com/ijaysong/git-flow.git git_office
+
+// 이전 커밋의 메세지 변경 
+git commit --amend 
+
+// 내려받아 최신화
+git pull
+~~~
+
+동일한 원격 저장소를 두대의 컴퓨터로 작업한다고 생각해보자. (home, office)
+다음과 같은 방법으로 무리 없이 소스 코드를 공유하며 개발할 수 있다.
+
+1) git_home에서 작업을 하고 commit -> push 한다.
+2) git_office에서 작업 내용을 pull 받는다.
+3) git_office에서 새롭게 작업한 내용을 commit -> push 한다.
+4) git_home에서 작업 내용을 pull 받는다.
+5) 위의 내용 반복
