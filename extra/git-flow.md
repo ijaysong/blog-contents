@@ -474,3 +474,31 @@ git pull
 3) git_office에서 새롭게 작업한 내용을 commit -> push 한다.
 4) git_home에서 작업 내용을 pull 받는다.
 5) 위의 내용 반복
+
+### 로그인 없이 원격 저장소 이용하기 (Github)
+SSH (Secure Shell)을 이용해 원격 저장소에 접근하는 방법에 대한 것이다.
+
+git에서 Web Url로 리포지토리를 클론해오면 매번 로그인 정보를 입력해야 하는 불편함이 있다. (Clone with HTTPS)
+ssh 통신 방법을 이용하면 할 때마다 로그인을 하지 않아도 되는 장점이 있다. (Clone with SSH)
+
+~~~
+// ssh 키 생성
+ssh -keygen
+~~~
+
+ssh 키를 생성하면 다음 두개의 파일이 생성된다.
+id_rsa : private key
+id_rsa.pub : public key
+
+id_rsa(private key)는 내 컴퓨터에 저장이 되고, 
+id_rsa.pub(public key)는 접속하고자 하는 리모트 컴퓨터에 넣어주면 됨.
+그러면 로컬 컴퓨터가 퍼블릭키를 가지고 있는 컴퓨터에 자동 로그인 한다.
+
+프라이빗 키는 외부에 절대 노출되면 안된다!
+
+그렇다면 어떻게 퍼블릭 키를 리모트 컴퓨터에 저장할 것인가? github에서 서비스를 제공하고 있기 때문에 방법은 쉬움.
+깃헙 settings 메뉴 -> SSH and GPG keys : 공개키를 저장할 수 있음
+New SSH key 클릭 -> title:지역저장소의 이름 입력, key : 카피한 내용을 붙여넣기함
+
+id_rsa.pub(public key)와 id_rsa(private)는 한 쌍이다.
+id_rsa(private)를 가지고 있는 사람은 id_rsa.pub(public key)가 있는 원격 저장소에 접속할 수 있도록 되어 있기 때문에 로그인이 없이 접속할 수 있는 것이다.
