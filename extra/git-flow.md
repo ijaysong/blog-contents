@@ -502,3 +502,17 @@ New SSH key 클릭 -> title:지역저장소의 이름 입력, key : 카피한 �
 
 id_rsa.pub(public key)와 id_rsa(private)는 한 쌍이다.
 id_rsa(private)를 가지고 있는 사람은 id_rsa.pub(public key)가 있는 원격 저장소에 접속할 수 있도록 되어 있기 때문에 로그인이 없이 접속할 수 있는 것이다.
+
+## 원격 저장소의 원리
+원격저장소를 연결시키면 config 파일 내부에서 변경이 발생한다.
+원격 저장소에 대한 내용과 브랜치에 연결된 원격 저장소에 대한 내용이 추가된다.
+
+upstream branch : 직역하자면 상류 브랜치, 로컬 입장에서 원격저장소를 뜻한다.
+~~~
+git push --set-upstream origin master
+~~~
+해당 커맨드를 해석해보자면
+git push : 푸쉬를 할 것이다.
+--set-upstream : upstream을 셋팅하는 (원격저장소를 셋팅하는)
+origin : origin에 해당되는
+master : master 브랜치를
