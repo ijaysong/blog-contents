@@ -516,3 +516,63 @@ git push : 푸쉬를 할 것이다.
 --set-upstream : upstream을 셋팅하는 (원격저장소를 셋팅하는)
 origin : origin에 해당되는
 master : master 브랜치를
+
+## 태그(tag)
+
+태그란 커밋을 참조하기 쉽도록 이름을 붙이는 것을 말한다.
+한번 붙인 태그는 브랜치처럼 위치가 이동하지 않고 고정된다.
+git에서는 이하 두가지의 태그를 사용할 수 있다.
+
+- 일반 태그(Lightweight tag)
+
+* 이름만 붙일 수 있다.
+
+- 주석 태그(Annotated tab)
+
+* 이름을 붙일 수 있다.
+* 태그에 대한 설명도 포함할 수 있다.
+* 서명도 넣을 수 있다.
+* 해당 태그를 만든 사람의 이름, 이메일, 태그를 만든 날짜 정보도 포함시킬 수 있다.
+
+### 태그 추가하기
+
+~~~
+// 태그 추가
+git tag {태그 이름}
+
+// 현재 'HEAD'가 가리키고 있는 커밋에 'apple'이라는 태그 추가
+git tag apple
+
+// 태그 목록 보기
+git tag
+
+// 태그 정보를 포함한 이력 확인
+git log -decorate
+~~~
+
+### 주석 달린 태그를 추가하기
+
+~~~
+// 주석이 달린 태그 추가
+git tag -a {태그명}
+
+// 현재 'HEAD'가 가리키고 있는 커밋에 'banana'라는 주석이 달린 태그를 추가
+git tag -am "first commit" apple
+git tag -am "누구나 쉽게 이해할 수 있는 Git 입문" banana
+
+// 태그 목록과 주석 목록 확인
+git tag -n
+~~~
+
+태그 목록과 주석 목록 확인을 위해 `git tag -n`을 실행하면 다음과 같은 결과가 표시된다.
+~~~
+OUTPUT:
+apple first commit
+banana 누구나 쉽게 이해할 수 있는 Git 입문
+~~~
+
+### 태그 삭제하기
+~~~
+// 태그 삭제
+git tag -d {태그명}
+~~~
