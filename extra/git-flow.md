@@ -576,3 +576,33 @@ banana 누구나 쉽게 이해할 수 있는 Git 입문
 // 태그 삭제
 git tag -d {태그명}
 ~~~
+
+## pull과 fetch의 차이점
+
+~~~
+// pull 받기
+git pull
+
+// fetch 하기
+git fetch
+
+// 로컬 브랜치의 HEAD와 원격저장소의 master의 내용을 비교한다
+git diff HEAD origin/master
+
+// 원격저장소의 내용을 로컬에 병합한다
+git merge origin/master
+~~~
+
+- pull
+  원격 저장소의 내용을 가져와 로컬의 브랜치와 병합한다.
+
+- fetch
+  원격저장소의 내용을 가져오기만 하고, 로컬과 병합하지 않는다.
+  원격저장소와 로컬의 상황을 각각 분리하여 알 수 있다.
+  그러므로 origin/master(원격저장소의 master 브랜치)가 로컬 master를 앞서는 현상이 나타난다.
+  원격저장소로부터 필요한 파일을 다운 받고 끝나기 때문에 꼭 merge를 해주어야 한다.
+  신중하게 병합하고자 할 때 사용할 수 있다.
+
+fetch 후 merge 를 수행하면, pull 명령을 실행했을 때와 같은 이력이 만들어진다.
+사실 pull 이라는 것은 내부적으로 보면 fetch + merge 이다.
+
