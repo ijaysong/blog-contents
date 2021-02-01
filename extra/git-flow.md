@@ -688,3 +688,49 @@ git checkout master
 // 옮기고 싶은 커밋을 체리픽
 git cherry-pick {커밋 id}
 ~~~
+
+### 커밋 이력 편집하기
+
+rebase 명령어에 i 옵션을 지정하면 커밋을 다시 쓰거나 다른 커밋과 바꿔넣을 수 있으며,
+특정 위치의 커밋을 삭제하거나 여러 커밋을 하나로 통합하는 작업을 할 수 있다.
+push 하기 전에 이전 커밋 내용을 정리 하고자 할 때나
+그룹으로 묶을 수 있는 커밋들을 알기 쉽게 하나로 통합하려고 할 때나
+이전 커밋에 누락된 파일들을 나중에 추가하고자 할 때 사용할 수 있다.
+
+예를 들어 다음과 같은 흐름이 가능하다.
+
+#### rebase -i로 커밋 모두 통합하기
+
+다음과 같은 흐름으로 커밋을 통합해본다고 하자.
+A -> B -> C -> D
+A -> B -> C+D
+
+```
+// 커밋 통합하기
+git rebase -i HEAD--
+git rebase -i {커밋 id}
+```
+
+위에 있는 커맨드를 실행하면 텍스트 에디터가 열리고, HEAD에서 HEAD~~까지 커밋이 다음과 같이 표시된다.
+
+```
+pick 9a54fd4 C
+pick 0d4a808 D
+
+# Rebase 326fc9f..0d4a808 onto d286baa
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+# However, if you remove everything, the rebase will be aborted.
+#
+```
+
+두번째 줄의 pick 문자를 `squash`로 변경하고 저장 종료한다.
+이를 통해 두개의 커밋이 하나의 커밋으로 통합된다.
