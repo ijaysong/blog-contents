@@ -705,15 +705,15 @@ push 하기 전에 이전 커밋 내용을 정리 하고자 할 때나
 A -> B -> C -> D
 A -> B -> C+D
 
-```
+~~~
 // 커밋 통합하기
 git rebase -i HEAD--
 git rebase -i {커밋 id}
-```
+~~~
 
 위에 있는 커맨드를 실행하면 텍스트 에디터가 열리고, HEAD에서 HEAD~~까지 커밋이 다음과 같이 표시된다.
 
-```
+~~~
 pick 9a54fd4 C
 pick 0d4a808 D
 
@@ -730,7 +730,69 @@ pick 0d4a808 D
 # If you remove a line here THAT COMMIT WILL BE LOST.
 # However, if you remove everything, the rebase will be aborted.
 #
-```
+~~~
 
 두번째 줄의 pick 문자를 `squash`로 변경하고 저장 종료한다.
 이를 통해 두개의 커밋이 하나의 커밋으로 통합된다.
+
+#### rebase -i로 커밋 수정하기
+
+다음과 같은 흐름으로 커밋을 수정해본다고 하자.
+A -> B -> C -> D
+A -> B -> C -> D`(다시 쓰기)
+
+~~~
+// 커밋 수정하기
+git rebase -i HEAD--
+git rebase -i {커밋 id}
+~~~
+
+위에 있는 커맨드를 실행하면 텍스트 에디터가 열리고, HEAD에서 HEAD~~까지 커밋이 다음과 같이 표시된다.
+
+~~~
+pick 9a54fd4 C
+pick 0d4a808 D
+
+# Rebase 326fc9f..0d4a808 onto d286baa
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+# However, if you remove everything, the rebase will be aborted.
+#
+~~~
+
+첫번째 줄의 pick문자를 `edit`으로 변경하여 저장 종료한다.
+그러면 다음과 같이 출력되고 수정할 커밋이 체크아웃된 상태가 된다.
+
+~~~
+Stopped at d286baa... C
+You can amend the commit now, with
+
+       git commit --amend
+
+Once you are satisfied with your changes, run
+
+       git rebase --continue
+~~~
+
+수정하고자 하는 파일을 열어 적당히 변경한다.
+commit --amend를 실행하여 변경한 내용을 저장한다.
+
+~~~
+git add {수정한 파일}
+git commit --amend
+~~~
+
+commit을 실행했다고 해서 rebase 작업이 끝난것은 아니다.
+해당 커밋 작업이 종료했다는 것을 알리려면, --continue 옵션을 지정하여 rebase를 실행해야 한다.
+
+~~~
+git rebase --continue
+~~~
