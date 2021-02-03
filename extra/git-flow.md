@@ -796,3 +796,21 @@ commit을 실행했다고 해서 rebase 작업이 끝난것은 아니다.
 ~~~
 git rebase --continue
 ~~~
+
+#### rebase 중 충돌이 발생한 경우
+
+다른 커밋에서 충돌이 발생할 수도 있다.
+그럴 때에는 충돌부분을 수정하고 add와 rebase --continue를 실행하면 된다.
+이 때 커밋은 필요없으므로 실행하지 않는다.
+만약 도중에 rebase 작업을 중지하고자 하는 경우에는 rebase --abort를 실행하면 된다.
+
+~~~
+// 충돌 수정 후 add
+git add {수정한 파일}
+
+// 커밋 작업이 종료 알림
+git rebase --continue
+
+// rebase 종료
+git rebase --abort
+~~~
