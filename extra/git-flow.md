@@ -814,3 +814,13 @@ git rebase --continue
 // rebase 종료
 git rebase --abort
 ~~~
+
+#### rebase 전의 커밋으로 되돌리고 싶을 때
+
+rebase 전의 커밋은 `ORIG_HEAD`라는 이름으로 남아있다.
+만약 rebase 한 후 원래대로 되돌리고자 하는 경우에는 ORIG_HEAD로 reset하여 되돌릴 수 있다.
+
+~~~
+// rebase 전의 커밋으로 되돌리기
+git reset --hard ORIG_HEAD
+~~~
