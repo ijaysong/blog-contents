@@ -825,6 +825,49 @@ rebase 전의 커밋은 `ORIG_HEAD`라는 이름으로 남아있다.
 git reset --hard ORIG_HEAD
 ~~~
 
+#### merge와 rebase의 차이점
+merge는 master 브랜치에서 파생된 feature 브랜치를 합칠 때 머지커밋이 하나 생긴다.
+
+~~~
+// feature 브랜치로 체크아웃
+git checkout feature
+// master 브랜치로 병합
+git merge master
+~~~
+
+master:  A ---> B ---> C ---> E
+feature:           |-> D -|
+
+반면에 rebase는 feature 브랜치의 내용이 master로 이동하여 
+feature 브랜치의 입장에서 base가 B가 된다. (feature 브랜치의 뿌리가 생성된 위치)
+rebase라는 것은 base를 다시 생성하겠다는 뜻인데,
+master 브랜치의 최신 커밋인 C를 base로 바꾸겠다는 뜻이다.
+
+~~~
+// feature 브랜치로 체크아웃
+git checkout feature
+
+// master 브랜치를 rebase
+git rebase master
+~~~
+
+rebase 커맨드를 사용하면
+feature 브랜치의 내용은 임시 저장소에 저장이 되고,
+master 브랜치와 병렬로 존재하던 feature 브랜치와 그 내용은 사라진다.
+임시 저장소에 저장해 두었던 커밋과 변경사항들은 master 브랜치에 저장이 되고,
+임시 저장소의 내용은 삭제가 된다.
+feature 브랜치는 master브랜치의 최신 커밋과 병합하여 일렬로 표현된다.
+
+master:  A ---> B ---> C ---> D
+feature:           |-> D(이동함)
+
+
+merge는 히스토리가 병렬로 나아가기 때문에 히스토리를 알아보기가 힘들지만,
+rebase에 비해서 쉽고, 충돌이 발생해도 해결하기가 쉽다.
+
+rebase는 일렬 정렬이 되기 때문에 한눈에 알아보기가 쉽다는 장점이 있다.
+하지만, rebase는 위험하고 조심히 수행해야 한다.
+
 ### 브랜치 상의 커밋을 하나로 모아 병합하기
 
 병합(merge) 할 때 사용할 수 있는 옵션 중에 `--squash`가 있다.
