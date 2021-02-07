@@ -831,6 +831,7 @@ merge는 master 브랜치에서 파생된 feature 브랜치를 합칠 때 머지
 ~~~
 // feature 브랜치로 체크아웃
 git checkout feature
+
 // master 브랜치로 병합
 git merge master
 ~~~
@@ -840,8 +841,7 @@ feature:           |-> D -|
 
 반면에 rebase는 feature 브랜치의 내용이 master로 이동하여 
 feature 브랜치의 입장에서 base가 B가 된다. (feature 브랜치의 뿌리가 생성된 위치)
-rebase라는 것은 base를 다시 생성하겠다는 뜻인데,
-master 브랜치의 최신 커밋인 C를 base로 바꾸겠다는 뜻이다.
+rebase라는 것은 base를 다시 생성하겠다는 뜻인데, master 브랜치의 최신 커밋인 C를 base로 바꾸겠다는 뜻이다.
 
 ~~~
 // feature 브랜치로 체크아웃
@@ -852,10 +852,8 @@ git rebase master
 ~~~
 
 rebase 커맨드를 사용하면
-feature 브랜치의 내용은 임시 저장소에 저장이 되고,
-master 브랜치와 병렬로 존재하던 feature 브랜치와 그 내용은 사라진다.
-임시 저장소에 저장해 두었던 커밋과 변경사항들은 master 브랜치에 저장이 되고,
-임시 저장소의 내용은 삭제가 된다.
+feature 브랜치의 내용은 임시 저장소에 저장이 되고, master 브랜치와 병렬로 존재하던 feature 브랜치와 그 내용은 사라진다.
+임시 저장소에 저장해 두었던 커밋과 변경사항들은 master 브랜치에 저장이 되고, 임시 저장소의 내용은 삭제가 된다.
 feature 브랜치는 master브랜치의 최신 커밋과 병합하여 일렬로 표현된다.
 
 master:  A ---> B ---> C ---> D
@@ -891,3 +889,11 @@ git checkout master
 // 스쿼시 실행
 git merge --squash issue
 ~~~
+
+#### git-flow
+master : 태그를 사용하여 릴리즈 버전을 기록, 서버에 배포
+- hotfix 브랜치 : 긴급하게 발생한 버그를 해결하고 해결한 내용을 master 브랜치 뿐만 아니라 develop 브랜치에도 반영
+- release 브랜치 : develop 브랜치를 병합 (유저들에게 기능을 배포), release 브랜치에서 발생한 bug fix 건은 release 브랜치 뿐만 아니라 develop 브랜치에도 반영
+
+develop 브랜치 : feature 브랜치를 develop 브랜치에 병합
+- feature 브랜치 : 새로운 기능을 만들 때 
