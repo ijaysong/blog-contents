@@ -88,3 +88,18 @@ EC2(Elastic Compute Cloud)는 독립된 컴퓨터를 임대해주는 서비스�
 - 인스턴스 일시 중지 및 삭제 방법
  아주 간단하게 인스턴스를 일시 중지 혹은 삭제할 수 있으며, 과금이 되지 않는다.
  EC2 > 삭제할 인스턴스 선택 > 오른쪽 클릭 > instance status > stop / terminate 선택
+ 
+ ### EC2 인스턴스 타입
+
+EC2 인스턴스는 가격과 관련이 있기 때문에 중요한 요소 중 하나이다.
+
+- 운영체제 선택
+ 인스턴스를 생성할 때 지정하는 운영체제는 크게 두가지로 나뉜다.
+
+* unix계열 : amazon linux, redhat , buse Linux, Ubuntu
+* window : Windows Server 2012 R2 Base
+ 1년간 무료로 사용 가능하며, 이외의 것들은 유료이다.
+
+- 인스턴스 타입 선택
+ 컴퓨터의 사양을 선택하는 것이라고 이해하면 된다.
+ freetier만 1년간 무료로 사용할 수 있는 스펙이며, vCpus, Memory, Network Performance 등을 지정할 수 있다.
