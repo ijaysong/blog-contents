@@ -144,3 +144,35 @@ aws 초보자들이 실수를 많이 해서 생성할 수 있는 컴퓨터 갯�
   Delete on Termination : 만든 인스턴스가 삭제가 되면 해당 저장장치도 함께 삭제 or not
   체크 시, 인스턴스가 삭제가 되면 저장장치도 함께 삭제 (내장하드)
   체트 해제 시, 인스턴스가 삭제되어도 저장장치는 남아있다 (외장하드) / 저장장치가 남아있어서 과금이 될 수도 있으므로 유의!
+
+### EC2 태그와 보안그룹
+
+- EC2 태그
+  key-value 형식으로 기입한다.
+  해당 인스턴스가 어떤 역할인지, 누가 관리하는지 등을 태그에 기록할 수 있다.
+
+  ex)
+  | key | value |
+  |----|-------|
+  | Name | Web Server |
+  | 관리자 | Eunji Song |
+  | Type | real |
+
+- EC2 보안그룹
+  어떤 방식의 접속만 허용할 것인지, 방화벽과 같은 역할을 한다.
+  자신이 어떤 인스턴스를 만들지에 따라 보안 정책이 달라진다.
+  시큐리티 그룹 내 그룹 명과 설명이 중복되면 안된다!
+
+Assing a security group (택 1) : Create new security group(선택) / Select an existing security group
+security group name : web
+Description : for web server
+Type :
+
+- SSH(Secure Shell) : 리눅스계열의 원격제어 방식
+- HTTP : 웹 브라우저를 통해서 접속하는 방식
+
+Port :
+Source :
+
+- My IP (내가 현재 접속한 IP로만 접속이 됨)
+- Anywhere (어떤 IP라도 접속이 됨)
