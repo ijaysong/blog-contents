@@ -206,3 +206,17 @@ chmod 400 {파일 path}
 // 인스턴스 접속
 ssh -i "aws_password.pem" ubuntu@{인스턴스가 위치하고 있는 ip}
 ```
+
+### 리눅스 인스턴스에서 웹서버 사용
+
+apt-get: osx homebrew 같이 어떤 프로그램을 설치하도록 도와주는 프로그램
+
+```
+// apache2 설치
+sudo apt-get install apache2
+```
+
+인스턴스를 누르면 페이지 아래쪽에 인스턴스에 대한 상세 내용과 함께 DNS가 표시됨.
+해당 DNS로 접속하면 페이지(./var/www/html/index.html)가 보여짐.
+
+security group에 web이 설정되어 있음. (방화벽 설정)
