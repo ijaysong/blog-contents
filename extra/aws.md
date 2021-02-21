@@ -220,3 +220,13 @@ sudo apt-get install apache2
 해당 DNS로 접속하면 페이지(./var/www/html/index.html)가 보여짐.
 
 security group에 web이 설정되어 있음. (방화벽 설정)
+
+### EC2 AWS Marketplace (Wordpress)
+
+AMI란, 아마존 머신 이미지(Amazon Machine Image)의 약자로, 소프트웨어 환경설정 내용, OS, 애플리케이션 서버, 애플리케이션 등이 포함된 템플릿이다.
+
+- My AMIs : 내가 만든 인스턴스를 이미지화 한 것
+- AWS Marketplace, Community AMIs : 다른 사람이 작성한 인스턴스 이미지를 다운받을 수 있는 곳
+
+<AWS Marketplace에서 다운받은 이미지로 인스턴스 만들기 >
+AWS Marketplace에서 Wordpress(HVM)을 선택 > region 선택 후 continue 클릭 > 상세 조건 선택(region, instance type, security group) > Launch with 1 click 클릭
