@@ -276,3 +276,15 @@ ab -n 400 -c 1 {접속 주소}/
 ```
 
 부하가 커질 수록(트래픽이 높아질수록) 처리속도가 느려지는 것이 확인 되었다. (프로그램의 퀄리티가 떨어짐)
+
+#### Elastic IP
+
+AWS에서 Public IP는 인스턴스를 껐다 다시 켜면 변화한다.
+
+Elastic IP란, 고정 아이피를 말한다.
+Elastic IP를 부여받으면 IP가 변화하는 문제를 해결할 수 있다.
+Elastic IP는 유료임!!
+
+- Elastic IP 생성 : Elastic IPs > Allocate New Address
+- Elastic IP 부여 : Elastic IPs 오른쪽 클릭 > Associate Address > 인스턴스 선택 > Associate
+- Elastic IP 해제 : Elastic IPs 오른쪽 클릭 > Release Addresses
