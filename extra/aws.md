@@ -288,3 +288,30 @@ Elastic IP는 유료임!!
 - Elastic IP 생성 : Elastic IPs > Allocate New Address
 - Elastic IP 부여 : Elastic IPs 오른쪽 클릭 > Associate Address > 인스턴스 선택 > Associate
 - Elastic IP 해제 : Elastic IPs 오른쪽 클릭 > Release Addresses
+
+### EC2 Scalability - Scale Out (ELB)
+
+#### Scale Out 이란?
+
+Scale Out 이란, 여러 대의 컴퓨터가 서로 협력해서 목표를 달성하는 것을 말한다.
+
+#### Scale Out의 흐름
+
+일반적인 웹 애플리케이션은 다음과 같은 흐름으로 진행된다.
+Web Server -> Middle Ware(웹 애플리케이션이 동작하는 logical한 부분을 담당) -> Database
+
+Scale Out에서는 이러한 흐름 가운데 일부를 떼어내 다른 컴퓨터에서 수행한다.
+예를 들어, 다음과 같이 말이다.
+
+- 컴퓨터 A : Web Server -> Middle Ware
+- 컴퓨터 B : Database
+
+사용자의 입장에서는 바뀐 점이 없지만, 이렇게 함으로서 컴퓨터의 입장에서는 Scalabiltiy가 좋아졌다.
+협동해서 일하기 때문에 성능상으로 더 좋아졌지만 복잡해졌다는 단점이 있다.
+
+ex) Database의 속도가 느려졌다면, Database Server를 더 늘리면 된다.
+
+- 컴퓨터 A : Web Server
+- 컴퓨터 B : Middle Ware
+- 컴퓨터 C : Database
+- 컴퓨터 D : Database
