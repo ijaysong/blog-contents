@@ -315,3 +315,28 @@ ex) Database의 속도가 느려졌다면, Database Server를 더 늘리면 된�
 - 컴퓨터 B : Middle Ware
 - 컴퓨터 C : Database
 - 컴퓨터 D : Database
+
+ex) 이번엔 Middle Ware에서 속도가 느려졌다면, Middle Ware를 더 늘리면 된다.
+
+- 컴퓨터 A : Web Server
+- 컴퓨터 B : Middle Ware
+- 컴퓨터 C : Middle Ware
+- 컴퓨터 D : Database
+- 컴퓨터 E : Database
+
+다만 Web Server는 여러개로 늘릴 수 없다.
+단일 DNS, 단일 IP로 이용자가 접속할 수 없기 때문이다. (DNS는 전화번호부와 같아서 DNS로 검색하여 연결되어 있는 IP를 찾아내 접속한다.)
+하지만, DNS 서버의 설정을 변경해서 특정 이용자가 접속했을 때는 특정 IP로 접속하게끔 해서 Web Server를 확장할 수 있다.
+
+ex) DNS 서버의 설정을 변경해 복수개의 IP와 연결을 했다면
+
+- DNS 두개의 IP와 연결
+- 컴퓨터 A : Web Server / 첫번째 IP (UserId : ~5000)
+- 컴퓨터 B : Web Server / 두번째 IP (UserId : 5001 ~)
+- 컴퓨터 C : Middle Ware
+- 컴퓨터 D : Middle Ware
+- 컴퓨터 E : Database
+- 컴퓨터 F : Database
+
+Load Balancer를 사용해서 복수의 Web Server에 부하를 분산시킬 수 있다.
+이때 유저가 접속하는 IP는 Load Balancer의 IP임.
