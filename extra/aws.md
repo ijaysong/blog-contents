@@ -340,3 +340,22 @@ ex) DNS 서버의 설정을 변경해 복수개의 IP와 연결을 했다면
 
 Load Balancer를 사용해서 복수의 Web Server에 부하를 분산시킬 수 있다.
 이때 유저가 접속하는 IP는 Load Balancer의 IP임.
+
+#### ELB 사용시 주의 사항
+
+ELB란, Elastic Load Balancer의 약자이다.
+
+예를 들어 ELB를 통해 다음과 같은 흐름으로 작업이 수행된다고 해보자.
+ex)
+ELB -> 컴퓨터 A (Web Server -> Middle Ware -> Database)
+ELB -> 컴퓨터 B (Web Server -> Middle Ware -> Database)
+
+유저 A는 ELB에 의해 컴퓨터 A에 접속하여 글을 남겼고,
+유저 B는 ELB에 의해 컴퓨터 B에 접속하여 글을 남겼다.
+
+여기서 문제는 컴퓨터 A와 B는 같은 애플리케이션인데 입력한 값이 각기 달리 표시된다는 점이다. (다른 Database를 가지고 있기 때문에)
+Scale Out을 사용하여 Database를 따로 분리하여 컴퓨터 A와 B가 단일 Database를 바라보도록 하면 문제는 해결된다!
+
+ex)
+ELB -> 컴퓨터 A (Web Server -> Middle Ware) -> 컴퓨터 C (Database)
+ELB -> 컴퓨터 B (Web Server -> Middle Ware) -> 컴퓨터 C (Database)
