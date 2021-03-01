@@ -359,3 +359,24 @@ Scale Out을 사용하여 Database를 따로 분리하여 컴퓨터 A와 B가 �
 ex)
 ELB -> 컴퓨터 A (Web Server -> Middle Ware) -> 컴퓨터 C (Database)
 ELB -> 컴퓨터 B (Web Server -> Middle Ware) -> 컴퓨터 C (Database)
+
+### EC2 Scalability - Auto Scaling
+
+#### Amazon EC2 AutoScaling 소개
+AutoScaling은 트래픽이 늘어나면 자동으로 컴퓨터를 생성해서 사용하다가, 트래픽이 낮아지면 컴퓨터를 삭제하여 과금이 물리지 않도록 하는 기능이다.
+
+ELB에 인스턴스를 붙일 때도 이미지를 인스턴스화 해서 붙였듯이 AutoScaling도 동일하게 이미지를 인스턴스화 하여 붙인다.
+
+* Launch Configurations : 인스턴스를 이미지로 생성하는 기능
+* Auto Scaling Groups : Auto Scaling 정책에 의해서 컴퓨터를 생성하는 기능
+
+AWS 내에서 다음과 같은 흐름으로 AutoScaling을 수행한다.
+
+1. Create Launch Configuration 클릭
+2. Auto Scaling에 사용할 이미지를 선택한다. (My AMIs : 내가 생성한 이미지들) 
+3. Name 지정 
+4. 저장장치 크기 지정 
+5. Security Group 지정 (해당 컴퓨터에 접속할 수 있는 네트워크 그룹) 
+6. 지정한 내용 review 
+7. 비밀번호 지정
+8. Create Auto Scaling Group 클릭 (앞서 설정한 인스턴스를 어떠한 조건에서 자동으로 생성할 것인지 지정한다.)
