@@ -370,7 +370,7 @@ ELB에 인스턴스를 붙일 때도 이미지를 인스턴스화 해서 붙였�
 * Launch Configurations : 인스턴스를 이미지로 생성하는 기능
 * Auto Scaling Groups : Auto Scaling 정책에 의해서 컴퓨터를 생성하는 기능
 
-AWS 내에서 다음과 같은 흐름으로 AutoScaling을 수행한다.
+AWS 내에서 다음과 같은 흐름으로 Launch Configurations을 지정한다.
 
 1. Create Launch Configuration 클릭
 2. Auto Scaling에 사용할 이미지를 선택한다. (My AMIs : 내가 생성한 이미지들) 
@@ -379,4 +379,42 @@ AWS 내에서 다음과 같은 흐름으로 AutoScaling을 수행한다.
 5. Security Group 지정 (해당 컴퓨터에 접속할 수 있는 네트워크 그룹) 
 6. 지정한 내용 review 
 7. 비밀번호 지정
-8. Create Auto Scaling Group 클릭 (앞서 설정한 인스턴스를 어떠한 조건에서 자동으로 생성할 것인지 지정한다.)
+
+#### AutoScaling(Launch Configuration) 생성
+
+AutoScaling에서는 두가지의 핵심 설정이 있다.
+첫번째, 자동으로 만들어지는 인스턴스는 어떤 이미지를 기반으로 하여 만들어지는가 (Launch Configurations)
+두번째, 언제 자동으로 만들어질 것인가 (Auto Scaling Groups)
+
+다음과 같은 흐름으로 Auto Scaling Groups 지정한다.
+
+1. Create Auto Scaling Group 클릭 (앞서 설정한 인스턴스를 어떠한 조건에서 자동으로 생성할 것인지 지정한다.)
+2. Group name 지정
+3. Group size 지정 (처음에 몇개의 인스턴스로 시작할 것인가)
+4. Subnet 지정 (특정 지역 내 가용구역을 지정하는 것인다. 인스턴스를 생성하면 해당 가용구역 내에 생성된다.)
+5. Advanced Details > Load Balancing (어떤 ELB에 붙여서 사용할 것인지 지정)
+6. Next: Configure Scaling Group 클릭
+7. 인스턴스의 숫자 유지 방법 선택
+
+- Keep this group at its initial size
+  ex) Group size를 10으로 지정했는데, 인스턴스 10개 중에서 1, 2개가 죽어버렸다.
+  Keep this group at its initial size를 선택하면 Group size에서 지정한 인스턴스 갯수 10개를 유지한다.
+
+- Using scaling policies to adjust the capacity of this group
+  컴퓨팅의 필요에 따라서 인스턴스를 늘리고 줄인다. (지정한 스케일 범위 내에서)
+
+* Increase Group Size : Auto Scailing을 사용할 때 어떤 때에 인스턴스를 증가시킬 것인가를 지정하는 정책
+  create alarm : 특정 상황에서 알람이 울리도록 설정. ex) CPU 점유율이 60% 이상일 때, 알람 설정
+  take the action : 특정 상황에서 실행하도록 설정. ex) CPU 점유율이 60% 이상일 때, 인스턴스 1개 더 생성
+
+* Decrease Grop Size : 어떤 때에 인스턴스를 감소시킬 것인가를 지정하는 정책
+  create alarm : 특정 상황에서 알람이 울리도록 설정. ex) CPU 점유율이 30% 이하일 때, 알람 설정
+  take the action : 특정 상황에서 실행하도록 설정. ex) CPU 점유율이 30% 이하일 때, 인스턴스 1개 삭제
+
+8. Next : Configure Scaling Notifications 클릭
+
+- Send a notification for : 알람 목적?을 기재
+- With these recipients : 어디로 알람을 받을 것인지 이메일 지정
+- Whenever instances : 언제 이 상태를 통보받을 것인지
+
+9. Create Auto Scailing Group 클릭
