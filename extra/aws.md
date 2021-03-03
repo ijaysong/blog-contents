@@ -418,3 +418,20 @@ AutoScaling에서는 두가지의 핵심 설정이 있다.
 - Whenever instances : 언제 이 상태를 통보받을 것인지
 
 9. Create Auto Scailing Group 클릭
+
+## AWS를 제어하는 방법
+
+AWS 컴퓨터를 제어하는 방법에 다음과 같은 것들이 있다.
+Console, CLI, SDK, API
+
+- Management Console : GUI(Graphical User Interface) 방식, 직관적이고 눈에 보이는 대로 사용하면 됨.
+
+- CLI (Command Line Interface) : 명령어를 사용해 terminal에서 컴퓨터를 제어
+
+- SDK (Software Development Kit) : AWS를 프로그래밍적으로 제어하기 편리하도록 제공되는 라이브러리들을 의미함.
+  언어별로 다양한 라이브러리를 제공하고 있기 때문에 자신에게 맞는 라이브러리를 선택해서 사용하면 된다.
+  JavaScript, Python, Java, Ruby 등등 다양한 프로그래밍 언어로 AWS 인프라 제어가 가능하다.
+
+- API (Application Programming Interface) : 웹을 통해서 AWS를 제어하는 방식. 특정 언어를 가리지 않고 수행할 수 있음.
+  AWS 서버를 켜두고 API(AWS에서 제공함)를 실행시키면 XML 형태로 값이 반환됨. 해당 값을 분석하여 사용할 수 있음.
+  직접 이용하기에는 상당히 복잡하고 불편함.
