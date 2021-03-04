@@ -435,3 +435,25 @@ Console, CLI, SDK, API
 - API (Application Programming Interface) : 웹을 통해서 AWS를 제어하는 방식. 특정 언어를 가리지 않고 수행할 수 있음.
   AWS 서버를 켜두고 API(AWS에서 제공함)를 실행시키면 XML 형태로 값이 반환됨. 해당 값을 분석하여 사용할 수 있음.
   직접 이용하기에는 상당히 복잡하고 불편함.
+
+## AWS S3
+
+S3는 AWS의 파일서버 서비스로, Simple Storage Serivce의 약자이다.
+파일을 저장하는 서비스라고 간단하게 이해해도 된다.
+
+### S3 콘솔을 통한 기본 조작 방법
+
+Bucket 생성
+
+1. Create Bucket 클릭 (버킷은 컴퓨터의 하드디스크나 SSD와 같은 저장장치를 말한다.)
+2. Bucket Name, Region을 설정
+   - Bucket Name : AWS 전체에서 지정하지 않은 이름을 사용해야 함.
+   - Region : 서비스 하고자 하는 지역과 가까운 곳에 지정하는 것이 좋음.
+
+Bucket에 파일 업로드
+
+1. Update 클릭
+2. Add Files 클릭
+
+업로드 된 파일을 클릭하면 오른쪽에 파일의 상세 정보가 표시된다.
+Link : 외부에서 해당 파일에 접속가능한 URL이다. (접속가능 권한을 주어야 접속이 가능함.)
