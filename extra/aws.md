@@ -505,3 +505,23 @@ Link : 외부에서 해당 파일에 접속가능한 URL이다. (접속가능 �
 
 4. 재해 복구
   백업 저장장치로도 사용할 수 있다.
+  
+## AWS RDS
+
+RDS는 관계형 데이터베이스를 제공하는 서비스로, Relational Database Service의 약자이다.
+MySQL, MariaDB, PostgreSQL, SQL Server, ORACLE 등을 직접 운영하지 않고 AWS에 대행할 수 있다.
+
+### RDS 소개
+
+Relational Database를 직접 설치해서 사용하는 것은 그렇게 어렵지 않을 수도 있다.
+하지만 데이터가 늘어나고, 사용량이 늘어나면 DB를 안정적으로 유지하고 관리하는 것이 어려워진다.
+AWS에서는 이러한 기능을 위임하여 관리해 주는 서비스를 제공하는데 이를 RDS라고 한다.
+
+대표적인 관계형 데이터 베이스
+
+- MySQL : 무료, Oracle에서 유지보수
+- MariaDB : MySQL 창업자가 만든 DB, MySQL과 호환 됨
+- Aurora : AWS에서 직접 만든 DB, MySQL과 호환 됨, 개발된 기간이 길지 않음
+- PostgreSQL
+- Oracle
+- SQL Server : 마이크로소프트 사에서 개발
