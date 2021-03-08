@@ -525,3 +525,23 @@ AWS에서는 이러한 기능을 위임하여 관리해 주는 서비스를 제�
 - PostgreSQL
 - Oracle
 - SQL Server : 마이크로소프트 사에서 개발
+
+### RDS 서버 생성
+
+지역을 선택을 하고 서버를 생성하는 것임.
+
+1. Launch DB Instance 클릭
+2. DB 선택 (MariaDB)
+3. DB Purpose 선택
+
+비용의 차이가 있음.
+
+- Production : 배포용, 데이터가 서로다른 데이터 센터에 저장됨. 어느 한쪽 가용구역이 문제가 생겨도 다른 쪽의 데이터 센터를 통해 서비스를 제공할 수 있음
+- Dev/Test : 개발용, 가용구역 서비스를 제공하지 않음
+
+4. Specify Database Details 지정
+5. Configure Advanced Settings 지정
+6. Database Options, Backup 지정
+7. Launch DB Instance 클릭
+
+DB Instance는 일반 EC2보다 생성되는데 시간이 좀 걸림
