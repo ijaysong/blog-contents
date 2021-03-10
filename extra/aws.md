@@ -561,3 +561,26 @@ DB Instance는 일반 EC2보다 생성되는데 시간이 좀 걸림
 - Restore to Point in Time
  snapshot을 오른쪽 클릭하여 실행.
  어떤 특정한 시점으로 복원하는 기능이다. 특정 시점의 백업 데이터를 불러오는 것이다.
+
+### RDS Scale up & out
+
+Scailablity 는 두가지 전략을 가지고 있다.
+
+- Scale Up : 데이터 베이스에 접속이 늘었을 때 컴퓨터의 성능을 강력하게 만들어 처리할 수 있도록 하는 것.
+- Scale Out : 접속이 너무 많이 늘다보면 컴퓨터 한대로 처리하기에 한계에 도달하는 경우가 있음. 이럴 때 여러 대의 컴퓨터에 처리를 분산하여 수행하도록 함.
+
+데이터베이스는 두가지 작업을 한다.
+읽기 : select (데이터에 변화가 없음)
+쓰기 : insert, update, delete (데이터에 변화가 있음)
+
+Slave 1 : 읽기 , 많은 경우 쓰기보다 읽기를 더 많이 수행하므로, 여러 Slave DB에서 읽기 작업을 수행하는 것이 속도가 빠름.
+Slave 2 : 읽기
+Slave 3 : 읽기
+Master : 쓰기, Master의 데이터가 변화하면 Slave에 해당 내용을 반영하는 동기화의 속성을 가지고 있음.
+
+Sharding
+id가 1~100번까지는 A 데이터를 제공, 100~200번까지는 B 데이터를 제공... 등등 데이터를 쪼개서 제공하는 기능을 말한다.
+상당히 복잡하고 어려운 개념임.
+
+DB Instance를 클릭하고 Instance Actions를 선택.
+Create Read Replica를 선택.
