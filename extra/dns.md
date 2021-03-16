@@ -69,3 +69,16 @@ IP : 93.184.216.34
 3~6번의 과정은 인터넷을 통해 모두 순식간에 이루어진다.
 DNS Server를 사용함으로서 IP가 변경되거나, DNS가 추가 삭제 되어도 전세계 모든 컴퓨터에 공통적으로 적용될 수 있으며,
 꼭 운영시간이 아니더라도 언제든지, 쉽고 간단한게 사용할 수 있다는 장점이 있다.
+
+## public DNS의 사용
+
+컴퓨터를 인터넷에 연결하는 즉시 인터넷 통신사들이 자동으로 특정 DNS 서버의 IP를 셋팅하는 메커니즘을 가지고 있다.
+하지만 internet service provider가 제공하는 DNS를 사용하고 싶지 않을 수도 있다.
+ex) internet service provider가 내가 접속한 ip주소를 어딘가에 기록하여 마케팅에 활용할 수도 있고, 보안 및 프라이버시에 취약...
+
+public DNS server : 누구나 무료로 사용할 수 있는 도메인 네임 서비스
+
+구글 public DNS Service는 8.8.8.8이라는 IP를 가짐.
+개인 컴퓨터의 DNS 설정을 8.8.8.8이라고 설정하면 internet service provider가 제공하는 DNS가 아닌, 구글의 DNS Server를 사용할 수 있음.
+
+osx에서는 네트워크 > 고급 > DNS에 들어가서 설정하면 된다!
