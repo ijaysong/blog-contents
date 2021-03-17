@@ -82,3 +82,34 @@ public DNS server : 누구나 무료로 사용할 수 있는 도메인 네임 �
 개인 컴퓨터의 DNS 설정을 8.8.8.8이라고 설정하면 internet service provider가 제공하는 DNS가 아닌, 구글의 DNS Server를 사용할 수 있음.
 
 osx에서는 네트워크 > 고급 > DNS에 들어가서 설정하면 된다!
+
+## 도메인 이름의 구조
+
+DNS 서버는 전세계에 수천대, 수만대가 존재하고, 서로가 협력하여 전세계인들이 IP를 외우지 않아도 인터넷을 사용할 수 있도록 돕고 있다.
+
+ex) blog.example.com.
+blog : sub
+.example : Second-level
+.com : Top-level
+. : Root
+
+도메인의 각각의 부분을 담당하는 독자적인 서버 컴퓨터가 있다.
+각각의 컴퓨터가 전담하는 파트가 다른 것이다.
+ex) A 컴퓨터는 Root만 담당,
+B 컴퓨터는 Top-level 만 담당...
+
+각각의 컴퓨터는 상위가 직속 하위 파트의 내용을 알고 있어야 한다.
+ex) A 컴퓨터 : Root 만 담당하지만 Top-level의 내용을 알고 있어야 한다. Second-level과 sub 파트의 내용은 모른다.
+B 컴퓨터 : Top-level 만 담당하지만 Second-level의 내용을 알고 있어야 한다. Root와 sub 파트의 내용은 모른다.
+
+sub를 전담하는 서버가 IP 주소를 가지고 있다.
+
+DNS 내부에서 IP를 알아내는 과정은 다음과 같다.
+다음의 도메인 네임으로 접속했다고 해보자.
+ex) blog.example.com.
+
+1. Root를 담당하는 서버 내부에서 .을 검색하며 IP를 묻는다.
+2. Root를 담당하는 서버에 IP 주소가 없어 Top-level을 담당하는 서버에 .com.을 검색하며 IP를 묻는다.
+3. Top-level을 담당하는 서버에 IP 주소가 없어 Second-level을 담당하는 서버에 .example.com.을 검색하며 IP를 묻는다.
+4. Second-level을 담당하는 서버에 IP 주소가 없어 sub을 담당하는 서버에 blog.example.com.를 검색하며 IP를 묻는다.
+5. sub를 담당하는 서버에 IP가 존재했다. 해당 IP를 반환한다.
