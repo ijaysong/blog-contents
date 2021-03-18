@@ -113,3 +113,34 @@ ex) blog.example.com.
 3. Top-level을 담당하는 서버에 IP 주소가 없어 Second-level을 담당하는 서버에 .example.com.을 검색하며 IP를 묻는다.
 4. Second-level을 담당하는 서버에 IP 주소가 없어 sub을 담당하는 서버에 blog.example.com.를 검색하며 IP를 묻는다.
 5. sub를 담당하는 서버에 IP가 존재했다. 해당 IP를 반환한다.
+
+## 도메인 이름 등록 과정과 원리
+
+DNS는 행정적이며 이와 관련해서 자동화 기술들이 뒷받침해주고 있다. (행정적 + 기술)
+등록자가 등록하고자 하는 IP와 도메인을 등록 대행자가 대신 등록소(Top-level domain name server, root name server)에 등록해준다.
+
+1. 등록자 (Registrant)
+  일반적인 서버 컴퓨터이며,
+  다음과 같은 도메인 주소로 IP를 등록하고 싶다고 해보자.
+
+- 도메인 : example.com
+- IP : 93.184.216.34
+
+2. 등록대행자 (Register)
+  등록소에 IP와 도메인을 등록을 대신해주는 등록 대행자이다.
+  일정 수수료를 받고 대신 처리 해준다.
+  개인이 Name Server를 세워서 등록할 수도 있다.
+
+  authoritative name server
+  a.iana-servers.net
+  example.com.
+  example.com A 93.184.216.34
+
+3. 등록소 (Registry)
+  어떤 IP가 어떤 도메인을 사용하는지 권한을 인식한다.
+  대여 기간 동안 다른 사람은 해당 도메인을 사용할 수 없다.
+
+  Top-level domain
+  a.gtld-servers.net
+  .com.
+  example.com NS a.iana-servers.net (example.com의 name server는 a.iana-servers.net이다)
