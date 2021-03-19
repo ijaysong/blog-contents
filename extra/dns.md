@@ -144,3 +144,23 @@ DNS는 행정적이며 이와 관련해서 자동화 기술들이 뒷받침해�
   a.gtld-servers.net
   .com.
   example.com NS a.iana-servers.net (example.com의 name server는 a.iana-servers.net이다)
+  
+  4. ICANN
+  전세계의 IP를 관리하는 거대한 비영리단체이다.
+  Root name server에 대한 관리자이다.
+
+  Root name server
+  a.root-servers.net
+  .
+  com NS a.gtld-servers.net (com의 name server는 a.gtld-servers.net이다)
+
+5. DNS
+  인터넷에 연결되면 internet service provider에 의해서 DNS Server가 자동으로 셋팅된다.
+  DNS Server는 Root name server의 IP를 가지고 있다.
+
+DNS Server
+1.1.1.1
+. NS a.root-servers.net (.의 name server는 a.root-servers.net이다)
+
+- 도메인을 등록할 때 : 등록자 -> 등록 대행자 -> 등록소 -> Root Name Server (ICANN)
+- 도메인을 사용할 때 : 유저 -> DNS Server -> Root Name Server (ICANN) -> 등록소 -> 등록대행자
