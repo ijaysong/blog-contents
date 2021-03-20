@@ -164,3 +164,34 @@ DNS Server
 
 - 도메인을 등록할 때 : 등록자 -> 등록 대행자 -> 등록소 -> Root Name Server (ICANN)
 - 도메인을 사용할 때 : 유저 -> DNS Server -> Root Name Server (ICANN) -> 등록소 -> 등록대행자
+
+## nslookup 사용법
+
+nslookup은 도메인 이름에 대한 정보를 조회하는데 사용되는 대표적인 도구이다.
+
+1. example.com 조회
+
+```
+> nslookup example.com
+> nslookup -type=a example.com (동일)
+
+OUTPUT:
+Server: 168.126.63.1
+Address: 168.126.63.1#53
+
+Non-authoritative answer:
+Name: example.com
+Address: 93.184.216.34
+```
+
+첫 문단에 표시된 Server와 Address는 로컬 컴퓨터에 연결되어 있는 DNS Server의 정보이다.
+
+두번째 문단에 표시된 내용은 DNS Server로부터 반환된 권한 없는 대답에 대한 내용이다.
+example.com에 대한 권한은 등록대행자(authoritative name server)가 가지고 있다.
+DNS 서버가 매번 다음과 같은 흐름으로 IP를 찾는다면 매우 비효율적일 것이다.
+
+DNS Server -> Root Name Server (ICANN) -> 등록소 -> 등록대행자
+
+그래서 DNS Server는 검색한 값을 cache로 저장해놓고 있다.
+Non-authoritative answer는 cache에 저장한 값을 반환한 것이다.
+이렇게 cache를 저장해두면 성능도 높이고, 네트워크 부하도 낮출 수 있다.
