@@ -195,3 +195,22 @@ DNS Server -> Root Name Server (ICANN) -> 등록소 -> 등록대행자
 그래서 DNS Server는 검색한 값을 cache로 저장해놓고 있다.
 Non-authoritative answer는 cache에 저장한 값을 반환한 것이다.
 이렇게 cache를 저장해두면 성능도 높이고, 네트워크 부하도 낮출 수 있다.
+
+2. example.com의 name server 조회
+
+```
+> nslookup -type=ns example.com
+
+OUTPUT:
+Server: 168.126.63.1
+Address: 168.126.63.1#53
+
+Non-authoritative answer:
+example.com nameserver = a.iana-servers.net.
+example.com nameserver = b.iana-servers.net.
+
+Authoritative answers can be found from:
+```
+
+두번째 문단은 example.com의 name server에 대한 정보이다.
+name server 하나가 죽더라도 실행될 수 있도록 두개가 존재하고 있음을 알 수 있다.
