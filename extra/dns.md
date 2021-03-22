@@ -214,3 +214,22 @@ Authoritative answers can be found from:
 
 두번째 문단은 example.com의 name server에 대한 정보이다.
 name server 하나가 죽더라도 실행될 수 있도록 두개가 존재하고 있음을 알 수 있다.
+
+3. 네임서버에 직접 접속하여 example.com 조회
+
+```
+> nslookup example.com a.iana-servers.net.
+
+OUTPUT:
+Server: a.iana-servers.net.
+Address: 199.43.135.53#53
+
+Name: example.com
+Address: 93.184.216.34
+```
+
+첫번째 문단은 지정한 name server에 대한 정보이다.
+
+두번째 문단에선 Non-authoritative answer가 사라졌다.
+a.iana-servers.net.가 authoritative name server이기 때문이다.
+특정 Name Server를 지정해서 IP를 찾을 수 있음
