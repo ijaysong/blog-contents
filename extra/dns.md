@@ -233,3 +233,28 @@ Address: 93.184.216.34
 두번째 문단에선 Non-authoritative answer가 사라졌다.
 a.iana-servers.net.가 authoritative name server이기 때문이다.
 특정 Name Server를 지정해서 IP를 찾을 수 있음
+
+## 나의 도메인 이름 장만하기
+
+freenom.com 을 사용해서 도메인을 지정해보겠다.
+ex) 사용하고 싶은 도메인 주소 : dns4u.ga.
+
+1. 등록대행자 freenom.com에서 dns4u.ga를 할당 받았다.
+
+authoritative name server
+ns01.freenom.com
+dns4u.ga.
+dns4u.ga.52.231.13.171
+
+2. 등록소에 1년간 dns4u.ga 도메인을 사용하겠다는 것을 지정한다.
+  Top-level domain
+  a.ns.ga
+  .ga.
+  dns4u.ga NS ns01.freenom.com
+
+도메인 name을 사용하기 위해선 name server가 구축되어 있어야 하는데, 등록대행자 freenom.com는 name server도 제공한다.
+하지만 내가 name server를 세워서 실행하겠다고 한다면, freenom.com 쪽에 name server 변경에 대한 내용을 전달하여 등록소에 저장된 name server의 주소를 바꾸면 된다.
+
+3. 지정한 도메인에 IP를 등록한다.
+  IP : 도메인에 엮고 싶은 IP 주소를 입력해준다.
+  TTL(Time To Leave) : 캐쉬가 남아있는 시간(초 단위) IP가 자주 바뀌는 도메인이라고 한다면 TTL을 낮은 숫자로 지정해주면 된다. TTL 단위마다 캐쉬를 새로 갱신 함. 그러므로 TTL 값이 크다면 도메인 값이 바로 반영이 안될 수도 있다.
