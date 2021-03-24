@@ -258,3 +258,34 @@ dns4u.ga.52.231.13.171
 3. 지정한 도메인에 IP를 등록한다.
   IP : 도메인에 엮고 싶은 IP 주소를 입력해준다.
   TTL(Time To Leave) : 캐쉬가 남아있는 시간(초 단위) IP가 자주 바뀌는 도메인이라고 한다면 TTL을 낮은 숫자로 지정해주면 된다. TTL 단위마다 캐쉬를 새로 갱신 함. 그러므로 TTL 값이 크다면 도메인 값이 바로 반영이 안될 수도 있다.
+
+## DNS record와 CNAME 레코드의 이해
+
+도메인 이름에 대한 정보 한건 한건을 DNS Record라고 한다.
+ex)
+Register에 등록된 DNS Record : dns4u.ga A 52.231.13.22 => dns4u.ga의 IP는 52.231.13.22이다.
+Registry에 등록된 DNS Record : dns4u.ga NS ns01.freenom.com => dns4u.ga의 Name Server는 ns01.freenom.com이다.
+
+DNS Record의 타입에는 여러가지가 있다.
+
+- A : IPV4 타입
+- NS : Name Server 레코드
+
+타입 명  key  value
+A  example.com.  192.0.1.1
+CNAME  www.example.com.  example.com.
+CNAME  edu.example.com.  lorem-1c6b.kxcdn.com
+
+A 타입은 도메인(example.com.)에 IP 주소를 매핑한 것이다.
+C 타입은 도메인에 대해 별명을 지정하는 방식으로 또 다른 도메인을 지정한 것이다.
+IP 주소가 자주 바뀌는 경우에는 A 타입의 값만 바꿔주면 된다.
+
+ex)
+
+1. 유저가 www.example.com.로 접속하면 example.com.를 반환한다 (CNAME)
+2. example.com.은 IP가 아니기 떄문에 A 타입에서 example.com.로 검색해 IP를 찾아낸다. (A)
+
+ex) 혹은
+
+1. edu.example.com.로 접속을 하면 lorem-1c6b.kxcdn.com을 반환한다(CNAME)
+2. lorem-1c6b.kxcdn.com은 IP가 아니기 때문에 A 타입에서 lorem-1c6b.kxcdn.com로 검색해 IP를 찾아낸다. (A)
