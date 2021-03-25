@@ -289,3 +289,26 @@ ex) 혹은
 
 1. edu.example.com.로 접속을 하면 lorem-1c6b.kxcdn.com을 반환한다(CNAME)
 2. lorem-1c6b.kxcdn.com은 IP가 아니기 때문에 A 타입에서 lorem-1c6b.kxcdn.com로 검색해 IP를 찾아낸다. (A)
+
+## github pages에 도메인 연결하기
+github에 html 파일을 업로드 하거나 하면 서버로서 기능을 제공하기도 한다.
+github에 업로드한 페이지에 도메인을 연결하고 싶다고 해보자.
+
+* github에 업로드한 페이지 = https://web-n.github.io/web1_html_internet/
+* github의 ip 주소 = 192.30.252.153
+* 지정하고자 하는 도메인 주소 = dns4u.ga
+
+1. DNS Server로부터 지정하고자 하는 도메인 주소를 할당 받는다.
+    dns4u.ga으로 접속하면 192.30.252.153 IP로 연결되도록 a record가 DNS Server에 등록된다.
+2. github에도 도메인 주소를 지정해둔다.
+   dns4u.ga으로 접속하면 https://web-n.github.io/web1_html_internet/ 페이지를 표시하도록 한다.
+3. 유저가 dns4u.ga으로 접속한다.
+4. DNS server에서는 IP 주소 192.30.252.153를 반환한다.
+5. IP 주소를 따라 github에 접근한다.
+6. dns4u.ga으로 접속했으므로 github 룰에 따라서 https://web-n.github.io/web1_html_internet/ 페이지를 표시한다.
+
+* github에서 DNS를 설정하는 곳
+Settings > Github Pages > Custom domain
+상세 설정법은 github의 document를 확인하면 됨.
+(Setting up an apex domain, Setting up a www sub domain)
+github은 안정성을 위해 두개의 IP를 DNS Server에 등록하도록 함 (부하 분산)
