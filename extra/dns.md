@@ -312,3 +312,19 @@ Settings > Github Pages > Custom domain
 상세 설정법은 github의 document를 확인하면 됨.
 (Setting up an apex domain, Setting up a www sub domain)
 github은 안정성을 위해 두개의 IP를 DNS Server에 등록하도록 함 (부하 분산)
+
+## DNS 관련 추가 토픽
+1) BIND
+캘리포니아 대학교에서 만든 최초의 DNS server
+DNS server의 표본처럼 여겨짐
+
+2) Dyanamic DNS (DDNS)
+집으로 들어오는 인터넷의 IP는 변경할 수 없는 자원이다
+서버가 설치된 IP 주소가 바뀌었을 때, 해당 내용이 DNS Server로 전달된다.
+동일한 도메인 네임을 사용하면서도 IP와의 연결이 끊기지 않도록 해주며,
+IP가 변경되어도 서비스를 유지할 수 있게 해준다.
+
+3) HTTPS, SSL
+누군가가 교묘하게 도메인 네임을 속여 피싱 하는 것을 차단한다.
+SSL을 사용하기 위해선 인증서를 발급받는데, 해당 인증서를 사용하면 사용자가 위조된 웹 사이트에 접근하면 강력한 경고 메세지와 접속 제한을 해준다.
+최근에는 SSL 인증서가 무료화 되고 있는 추세이기 떄문에 편하게 설치할 수 있는 방향으로 발전되고 있다.
