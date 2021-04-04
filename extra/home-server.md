@@ -153,3 +153,34 @@ IP가 자주 바뀌는 이유로
 반면에, 통신사에게 2-3만원을 더 주면 고정 IP(Static IP Address)를 제공해준다.
 IP를 독점적으로 사용할 수 있는 이러한 방법도 있다.
 (캬 자본주의 세상)
+
+## DHCP
+DHCP(Dynamic Host Configuration Protocol)는 네트워크에 접속한 장치의 ip, subnet mask, gateway address, DNS와 같은 정보를 자동으로 설정해주는 기술이다.
+Mac address(Media Access Control)는 PC의 물리적 주소를 뜻하며, DHCP는 Mac address를 통해 서버와 클라이언트를 식별한다.
+DHCP가 작동하는 방식에 대해서 살펴보자.
+
+ex)
+DHCP Server는 공유기(router)가 되며, 
+DHCP Client는 로컬 네트워크 내부에서 인터넷에 접속하고자 하는 전자기기가 된다.
+
+| 구분 | 장치 | mac address | IP |
+| DHCP Server | 공유기(Router) | 88:36:6C:33:FC:50 | 192.168.0.1 |
+| DHCP Client | 노트북 | 8c:85:90:0c:e3:cc | 192.168.0.4 |
+
+1. DHCP Client -> Server
+8c:85:90:0c:e3:cc(노트북) 입니다. IP주소가 필요합니다.
+
+2. DHCP Server -> Clinet
+88:36:6C:33:FC:50(공유기) 입니다. 192.168.0.4 사용가능합니다.
+(라우터에 이미 다른 기기에 할당된 IP주소가 다 기록되어 있고, 남은것이 XX.4인 것!)
+
+3. DHCP Client -> Server
+8c:85:90:0c:e3:cc(노트북) 입니다. 192.168.0.4 사용하겠습니다.
+
+4. DHCP Server -> Clinet
+88:36:6C:33:FC:50(공유기) 입니다. 네 알겠습니다. 임대시간은 2시간입니다.
+
+위와 같은 과정을 통해 각 기기의 TCP/IP 정보가 자동으로 할당이 된다.
+요즘과 같이 모바일을 빈번하게 사용하는 시대에서
+한 곳에서만 인터넷을 사용하는 것이 아니라, 여러 장소에서, 여러 공유기를 거쳐 와이파이에 접속한다.
+DHCP의 기능이 있었기에 빠르게 IP를 할당 받아 사용하고 있으며, 덕분에 모바일의 발전이 가속화 되지 않았나 생각한다.
