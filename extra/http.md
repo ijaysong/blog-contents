@@ -22,3 +22,23 @@ HTTP는 추상적인 개념이지만,
 * 200 OK : Response 상태
 * Content-Length : 응답 내용의 길이
 * Content-Type: text/html :해당 타입의 내용을 반환하겠다는 것
+
+## HTTP Request message
+Request Header의 형식은 다음과 같다.
+~~~
+// Request Line
+GET /doc/test.html HTTP/1.1
+// Request Headers
+Host : test01.com
+Accept: image/gif, image/jpeg, */*
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0
+Content-Length: 35
+
+// RequestMessage Body
+bookId=12345&author=Hong+gildong
+~~~
+
+* Request Message Header = Request Line + Request Headers
+* Request Message Header와 RequestMessage Body 사이에 한줄을 띄워 header와 body를 구분한다.
