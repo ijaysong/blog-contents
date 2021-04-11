@@ -24,6 +24,8 @@ HTTP는 추상적인 개념이지만,
 * Content-Type: text/html :해당 타입의 내용을 반환하겠다는 것
 
 ## HTTP Request message
+
+### HTTP Request Format
 Request Header의 형식은 다음과 같다.
 ~~~
 // Request Line
@@ -59,3 +61,28 @@ ex) 로봇으로 접속했다거나 하는 특정 방식으로 접속하는 것�
 내가 해당 파일을 언제 다운 받았다는 정보를 전달하게 된다.
 그러면 웹 서버는 자신이 가지고 있는 데이터와 비교해서 어떤 것이 더 최신인지 비교해서 더 최신이면 데이터를 다운 받고, 아니면 받지 않는다.
 이를 통해 속도가 더 빨라질 수 있다.
+
+## HTTP Response message
+
+### HTTP Response Format
+Response Header의 형식은 다음과 같다.
+~~~
+// Status Line
+HTTP/1.1 200 OK
+// Response Headers
+Date: Sun, 08 Feb xxxx 01:11:12 GMT
+Server: Apache/1.3.29 (Win32)
+Last-Modified: Sat, 07 Feb xxxx
+ETag: "0-23-4024c3a5"
+Accept-Ranges: bytes
+Content-Length: 35
+Connection: close
+Content-type: text/html
+
+// Response Message Body
+<h1>My Home Page</h1>
+~~~
+
+* Response Message Header = Status Line + Response Headers
+* Response Message Header와 ResponseMessage Body 사이에 한줄을 띄워 header와 body를 구분한다.
+
