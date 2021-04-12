@@ -86,3 +86,20 @@ Content-type: text/html
 * Response Message Header = Status Line + Response Headers
 * Response Message Header와 ResponseMessage Body 사이에 한줄을 띄워 header와 body를 구분한다.
 
+
+### Status Line
+서버가 동작을 잘했는지, 안됐는지, 안됐다면 왜 안됐는지 등을 표시한다.
+{Version} {status code} {phrase}를 표시한다.
+ex) HTTP/1.1 200 OK
+
+100번대 : 정보
+200번대 : 성공
+300번대 : Redirection(웹 브라우저가 다른 곳으로 바로 이동하는 것)
+400번대 : 클라이언트 에러
+500번대 : 서버 에러
+
+### Response Headers
+* Content-Type: 웹서버가 응답할 때 해당 양식으로 반환
+* Content-Length : 컨텐츠의 사이즈(byte)
+* Content-Encoding : 컨텐츠의 압축을 풀려면 해당 포맷으로
+* Last-Modified : 해당 컨텐츠가 언제 마지막으로 수정되었는지 표시
