@@ -23,3 +23,23 @@ ex) 구글로 로그인 하기, 네이버로 로그인 하기
 oAuth를 사용하면 이러한 과정을 더욱 안전하게 만들 수 있다.
 나의 서비스는 유저의 ID와 PW 정보를 받는 것이 아니라 외부 서비스로 부터 Access Token을 받는다.
 외부 서비스에 접근할 때 Access Token을 사용해 회원을 식별하고, 제한된 기능만 사용할 수 있게 된다.
+
+## 역할
+OAuth의 3가지 주체에 대한 명확한 용어는 다음과 같다.
+
+1. Resource Server
+나의 서비스가 연동하려는 외부 서비스
+즉, 나의 서비스가 제어하고자 하는 자원을 가지고 있는 서버를 뜻한다.
+
+2. Resource Owner
+유저이며, Resource Server의 자원을 가지고 있는 소유자를 뜻한다.
+
+3. Client
+나의 서비스(애플리케이션)이다.
+Resource Server에 접속하여 자원을 사용하려 하는 주체이므로 Client라고 한다.
+
+4. Authorization Server
+OAuth의 공식 메뉴얼을 보면 3가지 주체 이외에 하나가 더 있다.
+Resource Server는 데이터를 가지고 있는 서버이며,
+Authorization Server는 인증과 관련된 처리를 전담하는 서버이다.
+간략하게 Authorization Server를 생략하여 3가지 주체로 표현하곤 한다.
