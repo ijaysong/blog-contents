@@ -43,3 +43,32 @@ OAuth의 공식 메뉴얼을 보면 3가지 주체 이외에 하나가 더 있�
 Resource Server는 데이터를 가지고 있는 서버이며,
 Authorization Server는 인증과 관련된 처리를 전담하는 서버이다.
 간략하게 Authorization Server를 생략하여 3가지 주체로 표현하곤 한다.
+
+## 등록
+OAuth를 이용해서 Resource Server에 접속하기 위해서는 우선 Resource Server에 등록하는 과정이 필요하다.
+Client가 Resource Owner의 정보를 받기 전에 미리 Resource Server에 허가를 받는 것을 등록(register)이라고 한다.
+
+Client를 등록하면 Resource Server에 다음과 같은 정보가 생성된다.
+
+1. Client ID 
+클라이언트를 식별하는 식별자 아이디이다. ex) 1
+
+2. Client Secret 
+Client ID에 대한 비밀번호이다. 절대로 외부에 노출되면 안되는 정보이다. ex)2
+
+3. Authorized redirect URIs 
+Resource Server가 Client에게 권한을 부여하는 과정에서 Authorized Code를 전달하는데, 
+그때 해당 주소로 전달해 달라고 지정한 것이다. 이외의 주소로 접근하면 무시한다.
+ex) https://client/callback
+
+### OAuth로 Facebook 사용하기
+1. Facebook for developer 페이지 우 상단에 MyApps라는 카테고리 클릭
+2. Add New App > Create a new App ID
+3. Facebook Login을 클릭
+4. 연동하려는 Client의 URL주소를 입력한다.
+5. Settings > Redirect URI to Check에 https://client/callback 임시 등록
+
+### OAuth로 Google 사용하기
+1. Google Cloud Platform > select a project > new project
+2. 좌 상단에 있는 햄버거 아이콘 > API Service > Credentials > Create Credentials
+3. Create OAuth ID > Client ID와 Client Secret이 생성된다. (Client Secret은 잊어버리면 안된다!)
