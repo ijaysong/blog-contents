@@ -72,3 +72,41 @@ ex) https://client/callback
 1. Google Cloud Platform > select a project > new project
 2. 좌 상단에 있는 햄버거 아이콘 > API Service > Credentials > Create Credentials
 3. Create OAuth ID > Client ID와 Client Secret이 생성된다. (Client Secret은 잊어버리면 안된다!)
+
+## Resource Owner의 승인
+Client가 Resource Server에 등록을 하게 되면 양쪽 모두 다음과 같은 중요한 정보에 대해 알게 된다.
+
+* Resource Server : Client ID, Client Secret, redirect URL
+* Client : Client ID, Client Secret 
+
+예를 들어,
+Resource Server의 기능으로 A, B, C, D 가 있다고 해보자.
+Client는 모든 기능이 필요한 것이 아니라 B와 C만 필요하다.
+최소한의 기능 B와 C에 대해서 인증을 받는 것이 양쪽에게 현명한 선택이다. 
+(Resource Server의 입장에서 제 3자가 사용하는 것이 달가운 일이 아니므로)
+
+Resource Owner 가 Client를 통해서 Resource Server에 접속하고자 한다고 해보자.
+ex) Client를 통해서 Facebook에 글을 쓰고 싶다던가!
+
+OAuth의 첫번째 절차는 Resource Owner가 Resource Server에게 Client의 접근을 승인한다는 것을 알려줘야 한다.
+ex) Login with Facebook, Login with Twitter, Loin with Google
+버튼을 클릭하면 다음 URL이 실행되도록 한다.
+~~~
+// 승인요청 URL
+https://resource.server?client_id=1&scope=B,C&redirect_uri=https://client/callback
+~~~
+* scope = Resource Server의 기능
+
+1. 승인요청 URL로 Resource Server에 접속을 하는데
+2. Resource Server는 Resource Owner가 로그인이 되어 있는지 아닌지를 확인하고
+3. 로그인이 안되어 있으면, 로그인 화면을 보여주고
+4. 로그인이 되어 있으면, 승인 요청 URL의 파라미터로 넘겨 받은 Client ID가 Resource Server에 등록되어 있는 것인지 확인한다.
+5. 매칭되는 Client ID가 존재 한다면, 해당 Client ID의 redirect URL과 승인 요청 URL의 파라미터로 넘겨받은 redirect URL이 동일한지 확인한다.
+6. 동일하지 않다면, 작업을 종료하고
+7. 동일하다면, 승인 요청 URL의 파라미터로 넘겨받은 scope의 기능을 사용하도록 허가할 것인지 Resource Owner에게 확인을 받는다.
+8. 허용을 받으면, Resource Server는 다음과 같은 정보를 저장한다.
+- (기존 정보) Client ID : 1
+- (기존 정보) Client Secret : 2
+- (기존 정보) redirect URL : https://client/callback
+- (해당 단계에서 새롭게 등록된 정보) user ID : 1
+- (해당 단계에서 새롭게 등록된 정보) scope : b, c
