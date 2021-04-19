@@ -110,3 +110,8 @@ https://resource.server?client_id=1&scope=B,C&redirect_uri=https://client/callba
 - (기존 정보) redirect URL : https://client/callback
 - (해당 단계에서 새롭게 등록된 정보) user ID : 1
 - (해당 단계에서 새롭게 등록된 정보) scope : b, c
+
+## Resource Server의 승인
+Resource Server는 Client가 등록된 Client가 맞는지 확인하기 위해서 
+Resource Owner을 통해서 Client에게 Authorization code를 전달한다. 
+이 값을 받은 Client는 이 값과 Client secret의 값을 Resource Server로 전송해서 Client의 신원을 Resource Owner에게 증명한다.
