@@ -112,6 +112,34 @@ https://resource.server?client_id=1&scope=B,C&redirect_uri=https://client/callba
 - (해당 단계에서 새롭게 등록된 정보) scope : b, c
 
 ## Resource Server의 승인
-Resource Server는 Client가 등록된 Client가 맞는지 확인하기 위해서 
-Resource Owner을 통해서 Client에게 Authorization code를 전달한다. 
+Resource Server는 Client가 등록된 Client가 맞는지 확인하기 위해서 Resource Owner을 통해서 Client에게 Authorization code를 전달한다. 
 이 값을 받은 Client는 이 값과 Client secret의 값을 Resource Server로 전송해서 Client의 신원을 Resource Owner에게 증명한다.
+
+해당 상태에서 Resource Server가 가지고 있는 정보
+- Clinet id : 1
+- Client Secret : 2
+- redirect URL : https://client/callback
+- user id : 1
+- scope : b, c
+- Authorization code : 3
+
+Resource Server는 Resource Owner에게 다음과 같은 정보를 헤더에 담아 request를 보낸다.
+리다이렉드 주소를 헤더에 담은 것이다.
+code=3은 Authorization code가 3이라는 뜻이다.
+- Location : https://client/callback?code=3
+
+해당 request가 Resource Owner에 닿으면, 리다이렉드 주소(Client를 가리킴)에 의해서 Client에 Authorization code가 전달된다.
+해당 상태에서 Client가 가지고 있는 정보
+- Client id : 1
+- Client Secret : 2
+- Authorization code : 3
+
+Client는 다음 주소로 Resource Server에 직접 접속한다.
+~~~
+https://resource.server/token?grant_type=authorization_code&code=3&redirect_uri=https://client/callback&client_id=1&client_secret=2
+~~~
+authorization_code와 client_secret이라는 두개의 비밀번호를 함께 전송한다.
+
+그러면 Resource Server는 건네 받은 Authorization code의 값과 일치하는 정보를 찾아보고 값이 일치하는지 확인한다.
+Clinet id, Client secret, redirect URL 등등...
+해당 정보가 일치하면 Resource Server는 Access Token을 발급한다.
