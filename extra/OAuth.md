@@ -143,3 +143,25 @@ authorization_code와 client_secret이라는 두개의 비밀번호를 함께 �
 그러면 Resource Server는 건네 받은 Authorization code의 값과 일치하는 정보를 찾아보고 값이 일치하는지 확인한다.
 Clinet id, Client secret, redirect URL 등등...
 해당 정보가 일치하면 Resource Server는 Access Token을 발급한다.
+
+## Access Token
+Client로부터 Authorization Code를 넘겨 받으면 Resource Server는 해당 값을 삭제한다.
+동일한 Authorization Code로 인증을 막기 위한 보안상의 이유 때문이다.
+
+Client로 넘겨 받은 값이 모두 일치하면 Resource Server는 Access Token을 생성한다.
+해당 상태에서 Resource Server가 가지고 있는 정보
+- Clinet id : 1
+- Client Secret : 2
+- redirect URL : https://client/callback
+- user id : 1
+- scope : b, c
+- access token: 4
+그리고 해당 Access Token을 Client에게 전달한다.
+
+Clinet는 Access Token을 넘겨 받아 저장한다.
+해당 상태에서 Client가 가지고 있는 정보
+- Client id : 1
+- Client Secret : 2
+- access token: 4
+
+이후에 Client가 Access Token 4로 접속하면, Resource Server는 어떤 Client ID의 어떤 Scope를 제공하면 될지 알 수 있게 된다.
