@@ -165,3 +165,24 @@ Clinet는 Access Token을 넘겨 받아 저장한다.
 - access token: 4
 
 이후에 Client가 Access Token 4로 접속하면, Resource Server는 어떤 Client ID의 어떤 Scope를 제공하면 될지 알 수 있게 된다.
+
+## API 호출
+API (Application Programming Interface)
+Client는 Resource Server를 사용하기 위해서 API를 호출한다.
+
+다음은 google api access token 사용법 예시이다.
+후자의 방식이 일반적이며, 더 안전하다.
+
+1. access token을 api 파라미터로 전송
+~~~
+GET https://www.google.com/drive/v2/files?access_token=<access_token>
+~~~
+
+2. HTTP 헤더에 담아서 전송
+key : Authorization
+value: Bearer xxx
+~~~
+GET /drive/v2/files HTTP/1.1
+Authorization: Bearer <access_token>
+Host: www.googleapis.com
+~~~
