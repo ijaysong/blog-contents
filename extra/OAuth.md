@@ -186,3 +186,30 @@ GET /drive/v2/files HTTP/1.1
 Authorization: Bearer <access_token>
 Host: www.googleapis.com
 ~~~
+
+## Refresh token
+Access token은 수명이 있다. 
+1시간부터 길게는 60일, 90일까지 유지되기도 한다.
+그때마다 Resource Server로부터 새로운 access token을 발급받는 것은 귀찮은 일이기도 하다.
+Access token의 수명이 다했을 때 새로운 access token을 발급 받는 방법이 refresh token이다.
+경우에 따라서 access token만 갱신되는 경우가 있고, refresh token도 함께 갱신되는 경우가 있다.
+
+구글의 경우 다음과 같은 방법으로 refresh token을 실행할 수 있다.
+~~~
+POST /oauth2/v4/token HTTP/1.1
+Host: www.googleapis.com
+Content-Type: application/x-www-form-urlencoded
+
+client_id=<your_client_id>&
+client_secret=<your_client_secret>&
+refresh_token=<refresh_token>&
+grant_type=refresh_token
+~~~
+
+그러면 다음과 같은 response를 보내준다.
+새로 발급된 토큰과 얼마나 유효한지를 알려준다.
+~~~
+"access_token" : "1/fFAGRNJru1FTz700zhT3Zg",
+"expires_in" : 3920,
+"token_type" : "Bearer"
+~~~
