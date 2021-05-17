@@ -44,3 +44,32 @@ public String solution(String str) {
     return answer;
 }
 ~~~
+
+### 1-3. 문장 속 단어
+
+Q.
+한 문장 속에서 가장 긴 단어를 구하는 문제.
+가장 길이가 긴 단어가 여러개일 경우, 문장의 가장 앞쪽에 위치한 단어를 답으로 한다.
+
+A.
+문제 풀이 케이스
+(문자의 길이를 비교할 때
+newKeyword.length() > max 이면 뒤에서 같은 길이의 단어가 등장해도 교체되지 않지만,
+newKeyword.length() >= max 로 비교하면 뒷쪽 단어로 교체된다는 점에 주의할 것!)
+
+1. 특정 문장을 white space로 split 한 배열을 for문으로 돌리며 가장 긴 단어인지 확인한다.
+   가장 긴 단어이면 반환한다.
+2. indexOf로 특정 문장의 white space 위치가 반환되면 다음 동작을 실행한다.
+   substring을 사용하여 white space 이전까지의 단어를 뽑아 내어 가장 긴 단어인지 확인한다.
+   마지막 단어는 white space가 포함되어 있지 않아 로직을 타지 않으므로 추가로 꼭 처리를 해주어야 한다.
+
+- 필드 초기화
+  ex)
+
+```
+int max = Integer.MIN_VALUE;
+```
+
+- String[] split(String regex)
+- int indexOf(String str) : 처음 등장하는 위치를 반환한다. 해당 하는 것이 없으면 -1을 반환한다.
+- String substring(int beginIndex, int endIndex) : beginIndex 부터 endIndex 전까지!
