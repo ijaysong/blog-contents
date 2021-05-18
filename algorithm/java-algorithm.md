@@ -73,3 +73,18 @@ int max = Integer.MIN_VALUE;
 - String[] split(String regex)
 - int indexOf(String str) : 처음 등장하는 위치를 반환한다. 해당 하는 것이 없으면 -1을 반환한다.
 - String substring(int beginIndex, int endIndex) : beginIndex 부터 endIndex 전까지!
+
+~~~
+String solution(String str) {
+    String result = "";
+    int max = Integer.MIN_VALUE;
+
+    for(String keyword : str.split(" ")) {
+        if (keyword.length() > max) {
+            max = keyword.length();
+            result = keyword;
+        }
+    }
+    return result;
+}
+~~~
