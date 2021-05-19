@@ -17,6 +17,20 @@ A.
 * char charAt(int index)
 * char[] toCharArray()
 
+~~~
+int Solution (String str, char c) {
+    int answer = Integer.MIN_VALUE;
+    str = str.toUpperCase();
+    c = Character.toUpperCase(c);
+    for (char x : str.toCharArray()) {
+        if (x === c) {
+            answer++;
+        }
+    }
+    return answer;
+}
+~~~
+
 ### 1-2.대소문자 변환
 Q.
 문자열은 영어 알파벳으로만 구성되어 있으며, 문자열의 길이는 100을 넘지 않는다.
