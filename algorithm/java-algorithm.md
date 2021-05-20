@@ -102,3 +102,43 @@ String solution(String str) {
     return result;
 }
 ~~~
+
+### 1-4. 단어 뒤집기
+
+Q.
+N개의 단어가 주어지면 각 단어를 뒤집어 출력하는 문제.
+뒤집은 단어를 한줄 한줄 표시할 것.
+
+A.
+문제풀이 케이스
+
+1. white space로 단어를 구분하여 Array에 저장한다. StringBuilder의 reverse()를 사용하여 문자열의 순서를 뒤집어 출력한다.
+
+- StringBuilder(String str)
+- StringBuilder reverse()
+
+* String 클래스가 있는데 왜 StringBuilder 클래스가 있을까?
+  String 연산을 할때 마다 객체가 새롭게 생긴다.
+  반면에 StringBuilder 클래스는 연산을 하여도 객체가 하나만 생성되기 때문에 메모리 낭비가 적다.
+  그래서 문자열 연산을 많이 할 경우에는 StringBuilder를 사용하는 것이 좋다.
+
+ex)
+
+~~~
+String a = "aa";
+String b = "bb";
+String c = a + b;
+~~~
+
+=> String 객체 a, b, c가 각각 생성된다.
+
+~~~
+void Solution(string str) {
+   String[] keywords = str.split(" ");
+
+   for(string keyword: keywords) {
+      string reversed = new StringBuilder(keyword).reverse().toString();
+      System.out.println(reversed);
+   }
+}
+~~~
