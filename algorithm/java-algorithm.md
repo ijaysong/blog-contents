@@ -142,3 +142,35 @@ void Solution(string str) {
    }
 }
 ~~~
+
+Q.
+단어 안에서 특정 조건(문자 앞뒤 쌍을 이루는 것)에 맞는 문자만 뒤집어 출력하는 문제.
+뒤집은 단어를 한줄 한줄 표시할 것.
+ex) study -> yduts, good -> doog
+
+A.
+문제풀이 케이스
+
+1. white space로 단어를 구분하여 Array에 저장한다. 단어를 Char 타입으로 바꾸어 각 자리의 글자를 바꿔준다.
+
+- char[] toCharArray()
+- static String valueOf(char[] data)
+
+~~~
+void Solution(string str) {
+  String[] keywords = str.split(" ");
+
+  for(string keyword: keywords) {
+     char[] charArr = keyword.toCharArray();
+     int lt = 0, rt = x.length() -1;
+     while (lt < rt) {
+        char tmp = charArr[lt];
+        charArr[lt] = charArr[rt];
+        charArr[rt] = tmp;
+        lt++;
+        rt--;
+     }
+     System.out.println(String.valueOf(charArr));
+  }
+}
+~~~
