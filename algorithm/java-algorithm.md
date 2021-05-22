@@ -174,3 +174,20 @@ void Solution(string str) {
   }
 }
 ~~~
+
+### 1-5. 특정 문자 뒤집기
+Q. 
+길이가 100을 넘지 않는 문자열이 주어진다. 
+알파벳만 뒤집힌 문자열을 출력한다.
+ex)
+a#b!GE*T@S => S#T!EG*b@a
+
+A.
+문제풀이 케이스
+
+1. 문자열의 왼쪽 끝과 오른쪽 끝의 문자가 둘다 알파벳인지 확인한다. 알파벳이면 위치를 교환한다.
+   그리고 왼쪽을 나타내는 지표의 값은 증가, 오른쪽을 나타내는 지표의 값은 감소 시킨다.
+
+- char[] toCharArray()
+- static boolean isAlphabetic(int codePoint)
+- static String valueOf(char[] data)
