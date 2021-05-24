@@ -213,3 +213,30 @@ public String Solution(String str) {
     return answer;
 }
 ~~~
+
+### 1-6. 중복문자제거
+Q.
+소문자로 된 한개의 문자열이 입력되면 중복된 문자를 제거하고 출력한다.
+중복이 제거된 문자열의 각 문자는 원래 문자열의 순서를 유지한다.
+
+ex) ksekkset => kset
+
+A.
+문제풀이 케이스
+
+1. 주어진 문자열을 각 자리별로 돌면서 첫번째 등장하는 위치와 현재 돌고 있는 위치가 일치하는지 판단하여 일치하면 그대로 두고, 일치하지 않는다면 제외시킨다. (문자열의 첫번째 위치만 반환하는 indexOf()의 특성을 활용한 것)
+
+- int indexOf(String str) : 처음 등장하는 위치를 반환한다. 해당 하는 것이 없으면 -1을 반환한다.
+- char charAt(int index)
+
+~~~
+public String solution(String str) {
+    String answer = "";
+    for (int i = 0; i < str.length(); i++) {
+        if (str.indexOf(str.charAt(i)) == i) {
+            answer += str.charAt(i);
+        }
+    }
+    return answer;
+}
+~~~
