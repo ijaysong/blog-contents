@@ -240,3 +240,28 @@ public String solution(String str) {
     return answer;
 }
 ~~~
+
+### 1-7. 회문문자열
+앞에서 읽을 때나 뒤에서 읽을 때나 같은 문자열을 회문 문자열이라고 한다.
+회문 문자열이 입력되면 YES를, 회문 문자열이 아니면 NO를 출력하는 프로그램을 작성하라.
+단, 회문을 검사할 때 대소문자를 구분하지 않는다.
+ex) gooG => YES
+
+A.
+문제풀이 케이스
+
+1. 주어진 문자열을 다 대문자로 만든다. 문자열을 절반으로 나누어 절반은 왼쪽 끝에서, 절반은 오른쪽 끝에서 시작하여 서로의 값이 같은지 비교한다. 
+
+* String toUpperCase()
+
+
+~~~
+public String Solution(String str) {
+    String answer = "YES";
+    str = str.toUpperCase();
+    int len = str.length();
+    for (int i = 0; i < len/2; i++) {
+        if (str.charAt(i) != str.charAt(len - i -1)) return "NO";
+    }
+}
+~~~
