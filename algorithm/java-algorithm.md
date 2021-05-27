@@ -265,3 +265,33 @@ public String Solution(String str) {
     }
 }
 ~~~
+
+### 1-8.유효한 팰린드롬(replaceAll 정규식 이용)
+
+Q.
+앞에서 읽을 때나 뒤에서 읽을 때나 같은 문자열을 팰린드롬이라고 한다.
+입력된 문자열이 팰린드롬이면 "YES", 아니면 "NO"를 출력한다.
+단, 회문을 검사할 때 알파벳만 가지고 회문을 검사하며, 대소문자를 구분하지 않는다.
+알파벳 이외의 문자들은 무시한다.
+
+ex)
+found7, time; study; Yduts; emit, 7Dunof => YES
+
+A.
+문제풀이 케이스
+
+1. 알파벳을 모두 대문자로 바꾼다. 알파벳이 아닌 것들은 지운다. 반대로 출력한 비교군을 준비하여 원래 문자열과 일치하는지 확인한다.
+
+- String toUpperCase()
+- String replaceAll​(String regex, String replacement)
+
+~~~
+public String Solution(String s) {
+   String answer = "NO";
+   s = s.toUpperCase().replaceAll("[^A-Z]", "");
+   tmp = StringBuilder(s).reverse().toString();
+   if (s.equals(tmp)) answer = "YES";
+
+   return answer;
+}
+~~~
