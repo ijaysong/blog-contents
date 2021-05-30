@@ -496,11 +496,14 @@ S3는 AWS의 파일서버 서비스로, Simple Storage Serivce의 약자이다.
 ### S3 콘솔을 통한 기본 조작 방법
 
 Bucket 생성
+* 버킷이란? S3의 최상위 컨테이너이며, 파일을 담는 그릇이라고 생각하면 된다.
 
 1. Create Bucket 클릭 (버킷은 컴퓨터의 하드디스크나 SSD와 같은 저장장치를 말한다.)
 2. Bucket Name, Region을 설정
-   - Bucket Name : AWS 전체에서 지정하지 않은 이름을 사용해야 함.
+   - Bucket Name : AWS 전체에서 지정하지 않은 이름을 사용해야 함. 유니크 해야 함.
    - Region : 서비스 하고자 하는 지역과 가까운 곳에 지정하는 것이 좋음.
+3. 폴더 만들기
+4. 폴더에 파일 업로드 (클라우드 저장소 이기 때문에 자유롭게 파일을 업로드, 다운로드 하면 됨.)
 
 Bucket에 파일 업로드
 
@@ -508,6 +511,7 @@ Bucket에 파일 업로드
 2. Add Files 클릭
 
 업로드 된 파일을 클릭하면 오른쪽에 파일의 상세 정보가 표시된다.
+업로드 한 파일을 public으로 설정을 하면 객체 URL이 제공된다. 해당 URL로 외부에서 해당 파일로 접속이 가능하다.
 Link : 외부에서 해당 파일에 접속가능한 URL이다. (접속가능 권한을 주어야 접속이 가능함.)
 
 ### S3 장점
@@ -636,3 +640,21 @@ id가 1~100번까지는 A 데이터를 제공, 100~200번까지는 B 데이터�
 
 DB Instance를 클릭하고 Instance Actions를 선택.
 Create Read Replica를 선택.
+
+
+## AWS Route 53
+AWS에서 제공해주는 DNS 서비스
+저렴하고 100% 가용성을 보장해준다. (다운되지 않는다!)
+
+CF(Cloud Front) : AWS에서 제공하는 CDN 서비스 중 하나.
+CDN(Content Delivery Network) : 전세계 컨텐츠(동영상, 이미지등)를 제공해주는 서버
+PoP(Point of Presents) : 전세계에 흩어져 있는 작은 인프라 센터들이 CDN을 구성하고 있음.
+
+## AWS VPC(Virtual Private Cloud)
+AWS에서 서비스를 개발 및 제공하기 위한 가상 사설 네트워크
+하나의 서비스에 하나의 VPC로 시작
+VPC는 인터넷과 연결됨
+VPC는 다시 용도에 따라 subnet으로 나눔
+각각의 subnet 에서 웹 서버, DB 등이 연결됨
+Public subnet : 웹 서버, 메일 서버 등
+private subnet : 데이터베이스, 보안 데이터, 백업 데이터 등 
