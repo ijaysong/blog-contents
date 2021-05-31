@@ -658,3 +658,33 @@ VPC는 다시 용도에 따라 subnet으로 나눔
 각각의 subnet 에서 웹 서버, DB 등이 연결됨
 Public subnet : 웹 서버, 메일 서버 등
 private subnet : 데이터베이스, 보안 데이터, 백업 데이터 등 
+
+## AWS 주요 서비스들
+
+* 계정관리
+- IAM : 어떤 이용자에게 어떤 권한을 줄지 설정
+
+* 컴퓨팅
+- EC2 : 서버
+- Lambda : 서버리스 플랫폼, 서버가 없이 서버가 있는 것처럼 사용할 수 있게 해 줌, 서버 관리의 부담을 줄여줌
+- ECS : 도커와 컨테이너를 사용할 수 있게 해주는 플랫폼 
+
+* 네트워크
+- VPC
+- Routee53
+- CloudFront (CDN) : 이미지나 동영상 같은 컨텐츠를 전세계에 빠르게 전송할 수 있도록 하는 기능. ex) 넷플릿스, 왓챠...
+
+* 저장 : S3
+
+* 데이터베이스
+- RDS
+
+* 모니터링
+- CloudWatch
+- CloudTail
+
+* 기타
+- SNS (Simple Notification Service) : SNS 알림 서비스
+- SES (Simple Email Service) : 이메일 알림 서비스 
+- SQS (Simple Queue Service) : 큐 알림 서비스 
+- CloudFormation : DevOps를 쉽게 할 수 있도록 도와주는 서비스
