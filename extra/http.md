@@ -113,6 +113,39 @@ ex) 클라이언트가 1, 2, 3번 패킷을 순서대로 보낸다고 해보자.
 #### 포트란?
 하나의 IP에서 여러 애플리케이션이 사용하기 위해
 
+## URI
+
+Uniform: 리소스 식별하는 통일된 방식
+Resource: 자원, URI로 식별할 수 있는 모든 것(제한 없음)
+Idendifier: 다른 항목과 구분하는데 필요한 정보
+
+리소스 식별자 URI는 로케이터(locator) 또는 이름(name) 크게 두가지로 분류될 수 있다.
+
+- URL(Resource Locator) : 리소스의 위치
+- URN(Resource Name) : 리소스의 이름
+
+### URL
+
+Uniform Resource Locator : 리소스가 있는 위치를 지정
+
+ex)
+foo://example.com:8042/over/there?name=ferret#nose
+
+### URN
+
+Uniform Resource Name : 리소스에 이름을 부여
+위치는 변할 수 있지만, 이름은 변하지 않는다.
+
+ex)
+urn:example:animal:ferret:nose
+
+URN 이름만으로 실제 리소스를 찾을 수 있는 방법이 보편화 되지 않음.
+(URN으로 리소스를 찾을 수 없다고 보면 됨. 거의 사용 X)
+ex)
+urn:isbn:8960777331 (어떤 책의 isbn URN)
+
+=> 그렇기 때문에 URI와 URL을 같은 의미로 봐도 무방하다.
+
 ## Http 소개
 HTTP(HyperText Transfer Protocol)란
 웹브라우저와 웹서버가 컨텐츠(html, 이미지, 오디오, css, javascript 파일등)을 주고 받기 위해서 사용하는 통신규칙이다.
