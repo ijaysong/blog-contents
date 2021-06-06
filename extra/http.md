@@ -146,6 +146,67 @@ urn:isbn:8960777331 (어떤 책의 isbn URN)
 
 => 그렇기 때문에 URI와 URL을 같은 의미로 봐도 무방하다.
 
+### URL 전체 문법
+
+- scheme://[userinfo@]host[:port][/path][?query][#fragment]
+- https://www.google.com:443/search?q=hello&hl=ko
+
+* https: 프로토콜
+* www.google.com : 호스트 명
+* 443 : 포트번호
+* /search : 패스
+* q=hello&hl=ko : 쿼리 파라미터
+
+#### 스키마 (schema)
+
+- 스키마는 주로 프로토콜을 사용
+- 프로토콜 : 어떤 방식으로 자원에 접근할 것인가 하는 약속 규칙
+ ex) http, https, ftp 등등
+- http는 80 포트, https는 443 포트를 주로 사용, 포트는 생략 가능
+- https는 http에 보안 추가 (HTTP Secure)
+
+#### userinfo
+
+- URL에 사용자 정보를 포함해서 인증할 때 사용
+- 거의 사용하지 않음
+
+#### 호스트 (host)
+
+- 도메인 명 or IP 주소를 직접 사용 가능
+
+#### 포트 (port)
+
+- 포트는 생략 가능하다.
+- 일반적으로 생략하며, 생략 시 http는 80, https는 443
+
+#### 패스 (path)
+
+- 리소스 경로이다.
+- 계층적 구조로 되어 있다. (디렉토리처럼!)
+ ex)
+ /home/file1.jpg
+ /members
+ /members/100, /items/iphone12
+
+#### 쿼리 (query)
+
+- key=value의 형태.
+- ?로 시작, &로 추가 가능
+ ex)
+ ?keyA=valueA&keyB=valueB
+- query parameter, query string 등으로 불림.
+ (숫자가 파라미터로 지정이 되어도 다 string으로 넘어가기 때문에 query string이라고 부름)
+- 웹 서버에 제공하는 파라미터로 문자 형태.
+
+#### 프레그먼트(fragment)
+
+ex)
+https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started-introducing-spring-boot
+
+- 웹 페이지 내부에서 특정 위치로 이동하는 북마크를 이용할 때
+- html 내부 북마크 등에 사용
+- 서버에 전송하는 정보 아님
+
 ## Http 소개
 HTTP(HyperText Transfer Protocol)란
 웹브라우저와 웹서버가 컨텐츠(html, 이미지, 오디오, css, javascript 파일등)을 주고 받기 위해서 사용하는 통신규칙이다.
