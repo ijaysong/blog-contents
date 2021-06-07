@@ -207,6 +207,38 @@ https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.h
 - html 내부 북마크 등에 사용
 - 서버에 전송하는 정보 아님
 
+## 웹 브라우저 요청 흐름
+
+ex)
+https://www.google.com:443/search?q=hello&hl=ko 에 접속해본다고 하자.
+
+1. www.google.com의 DNS 서버를 조회하여 IP 주소를 알아낸다. (HTTPS PORT는 생략)
+2. 애플리케이션 계층의 웹 브라우저가 HTTP 요청 메세지 생성
+  ex)
+
+~~~
+GET /search?q=hello&hl=ko HTTP/1.1
+Host: www.google.com
+~~~
+
+3. SOCKET 라이브러리를 통해 전달
+4. OS 계층의 TCP/IP로 데이터를 전달한다.
+  TCP는 3 way handshake로 서버와 연결이 되어 있는지 확인을 한다.
+  확인을 거치면 데이터에 패킷을 씌운다. (출발지, 목적지의 IP와 PORT, 전송제어, 순서)
+5. 네트워크 계층을 통해서 LAN을 통해 서버로 데이터와 http 메세지, 패킷을 보낸다.
+6. 서버에 요청이 잘 도착하면 HTTP 응답 메세지를 클라이언트에게 보내준다.
+  ex)
+
+~~~
+HTTP/1.1 200 OK
+Content-Type: text/html;charset=UTF-8
+Content-Length: 3423
+
+<html>
+ <body>...</body>
+</html>
+~~~
+
 ## Http 소개
 HTTP(HyperText Transfer Protocol)란
 웹브라우저와 웹서버가 컨텐츠(html, 이미지, 오디오, css, javascript 파일등)을 주고 받기 위해서 사용하는 통신규칙이다.
