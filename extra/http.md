@@ -240,7 +240,16 @@ Content-Length: 3423
 ~~~
 
 ## Http 소개
-HTTP(HyperText Transfer Protocol)란
+
+HTTP(HyperText Transfer Protocol)는 HyperText 링크간에 연결이 가능한 html 전송을 목적으로 만들어졌다.
+처음에는 html 전송을 위해 만들어졌지만, http 메세지에 거의 모든 형태의 데이터를 담아서 전송할 수 있게 되었다.
+
+- HTML, TEXT
+- IMAGE, 음성, 영상, 파일
+- JSON, XML(API)
+- 거의 모든 형태의 데이터 전송 가능
+- 서버간에 데이터를 주고 받을 때도 대부분 HTTP 사용
+
 웹브라우저와 웹서버가 컨텐츠(html, 이미지, 오디오, css, javascript 파일등)을 주고 받기 위해서 사용하는 통신규칙이다.
 간단히 말해서 서버와 클라이언트가 서로 주고 받는 Request와 Response를 이해할 수 있는 메세지를 말한다.
 
@@ -249,6 +258,24 @@ HTTP는 추상적인 개념이지만,
 
 서버와 클라이언트는 다음과 같은 형식으로 헤더에 정보를 담아 요청/응답한다.
 브라우저는 해당 내용을 뿌려주는 역할을 한다.
+
+### HTTP 역사
+
+- HTTP/0.9 1991년 : GET 메서드만 지원, HTTP 헤더 X
+- HTTP/1.0 1996년 : 메서드, 헤더 추가
+- HTTP/1.1 1997년 : 가장 많이 사용, 우리에게 가장 중요한 버전
+  - RFC2068 (1997) -> RFC2616(1999) -> RFC7230~7235(2014)
+- HTTP/2 2015년 : 성능 개선
+- HTTP/3 진행 중 : TCP 대신에 UDP 사용, 성능 개선
+
+#### 기반 프로토콜
+
+- TCP : HTTP/1.1, HTTP/2
+- UDP : HTTP/3
+  - 현재 HTTP/1.1 주로 사용
+  - HTTP/2, HTTP/3도 점점 증가
+  - TCP는 3 way handshaking 및 담고 있는 데이터의 양이 많아 처리 속도가 느린 알고리즘
+  - 성능 개선의 목적으로 UDP 도입
 
 ### Request
 * Request Headers : Client가 Server에 요청한 내용
