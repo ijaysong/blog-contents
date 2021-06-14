@@ -702,6 +702,106 @@ Q. 재요청 중간에 다른 곳에서 리소스를 변경해버리면?
  - GET은 URL에 있는 쿼리 파라미터의 내용만 캐시 키로 고려하면 되지만
  - POST, PATCH는 본문 내용까지 캐시 키로 고려해야 하는데, 구현이 쉽지 않음
 
+## HTTP 메서드 활용
+
+### 클라이언트에서 서버로 데이터 전송
+
+데이터 전달 방식은 크게 2가지로 나뉜다.
+
+1. 쿼리 파라미터를 통한 데이터 전송 : GET
+  ex) 정렬 필터(검색어)
+
+2. 메시지 바디를 통한 데이터 전송 : POST, PUT, PATCH
+  ex) 회원가입, 상품주문, 리소스 등록, 리소스 변경
+
+데이터 전송을 4가지 케이스로 나누어 살펴보면
+
+1. 정적 데이터 조회
+  조회는 GET 사용
+  정적 데이터는 일반적으로 쿼리 파라미터 없이 리소스 경로로 단순하게 조회 가능
+  ex) 이미지, 정적 텍스트 문서
+
+2. 동적 데이터 조회
+  조회는 GET 사용
+  GET은 쿼리 파라미터를 사용해서 데이터를 전달
+  ex) 주로 검색, 게시판 목록에서 정렬 필터(검색어)
+
+3. HTML Form을 통한 데이터 전송
+  ex) 회원가입, 상품 주문, 데이터 변경
+
+  1. POST 전송 - 저장
+
+  ```
+  <form action="/save" method="post">
+   <input type="text" name="username" />
+   <input type="text" name="age" />
+   <button type="submit">전송</button>
+  </form>
+  ```
+
+  웹 브라우저가 생성한 요청 HTTP 메시지
+
+  ```
+  POST /save HTTP/1.1
+  Host: localhost:8080
+  Content-Type: application/x-www-form-urlencoded
+
+  username=kim&age=20
+  ```
+
+  form 데이터를 가공하여 request body에 담아 넘김. (쿼리 파라미터 형식으로)
+  한글 같은 데이터가 넘어가는 경우가 있으므로 Content-Type은 urlencoded로 넘긴다.
+  전송 데이터를 url encoding 처리 한다.
+  ex)
+  abc김 => abc%EA%B9%80
+
+  2. GET 전송
+     HTML Form은 GET 전송도 가능하다.
+     form 데이터가 쿼리 파라미터에 담겨 서버로 보내진다.
+
+  3. 첨부파일 전송 (multipart/form-data)
+
+  ```
+  <form action="/save" method="post" enctype="multipart/form-data">
+    <input type="text" name="username" />
+    <input type="text" name="age" />
+    <input type="file" name="file1" />
+    <button type="submit">전송</button>
+  </form>
+  ```
+
+웹 브라우저가 생성한 요청 HTTP 메시지
+
+   ```
+   POST /save HTTP/1.1
+   Host: localhost:8080
+   Content-Type: multipart/form-data; boundary=----XXX
+   Content-Length: 10457
+
+   ------XXX
+   Content-Disposition: form-data; name="username"
+
+   kim
+   ------XXX
+   Content-Disposition: form-data; name="age"
+
+   20
+   Content-Disposition: form-data; name="file1"; filename="intro.png"
+   Content-Type: image/png
+
+   109238a9o0p3eqwokjasd09ou3oirjwoe9u34ouief...
+   ------XXX--
+   ```
+
+   바운더리로 지정한 '----XXX'로 바디의 내용을 잘라서 데이터를 구분한다.
+   다른 종류의 여러 파일과 폼의 내용을 함께 전송 가능하기 때문에 이름이 multipart이다.
+   여러 타입의 데이터를 담아서 보낼 수 있다.(text, image 등등...)
+   주로 바이너리 데이터를 전송할 때 사용한다.
+
+4. HTTP API를 통한 데이터 전송
+  ex) 회원 가입, 상품 주문, 데이터 변경
+  서버 to 서버, 앱 클라이언트, 웹 클라이언트(Ajax)
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
