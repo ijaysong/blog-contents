@@ -802,6 +802,73 @@ Q. 재요청 중간에 다른 곳에서 리소스를 변경해버리면?
   ex) 회원 가입, 상품 주문, 데이터 변경
   서버 to 서버, 앱 클라이언트, 웹 클라이언트(Ajax)
 
+### HTTP API 설계 예시
+
+#### 회원 관리 시스템
+
+1. API 설계 - POST 기반 등록
+
+- 회원 목록 /members -> GET
+- 회원 등록 /members -> POST
+- 회원 조회 /members/{id} -> GET
+- 회원 수정 /members/{id} -> PATCH, PUT, POST
+- 회원 삭제 /members/{id} -> DELETE
+
+POST 신규 자원 등록 특징 (컬렉션)
+
+- 클라이언트는 등록될 리소스의 URI를 모른다.
+ - 회원등록 /members -> POST
+ - POST/members
+- 서버가 새로 등록된 리소스 URI를 생성해준다.
+ - HTTP/1.1 201 Created
+   Location: /members/100
+- 컬렉션(Collection)
+ - 서버가 관리하는 리소스 디렉토리
+ - 서버가 리소스의 URI를 생성하고 관리
+ - 여기서 컬렉션은 /members
+
+2. API 설계 - PUT 기반 등록
+
+- 파일 목록 /files -> GET
+- 파일 조회 /files/{filename} -> GET
+- 파일 등록 /files/{filename} -> PUT
+- 파일 삭제 /files/{filename} -> DELETE
+- 파일 대량 등록 /files -> POST
+
+PUT 신규 자원 등록 특징 (스토어)
+
+- 클라이언트가 리소스 URI를 알고 있어야 한다.
+ - 파일 등록 /files/{filename} -> PUT
+ - PUT /files/star.jpg
+- 클라이언트가 직접 리소스의 URI를 지정한다.
+- 스토어(Store)
+ - 클라이언트가 관리하는 리소스 저장소
+ - 클라이언트가 리소스의 URI를 알고 관리
+ - 여기서 스토어는 /files
+
+대부분 POST 기반의 컬렉션을 많이 사용함.
+
+3. HTML FORM 사용
+
+- 회원 목록 /members -> GET
+- 회원 등록 폼 /members/new -> GET
+- 회원 등록 /members/new, /members -> POST
+ (회원 등록 폼과 같은 URI를 쓰는 것을 추천. 등록 시, validation에서 걸려서 반환하거나 할때 URI가 같으면 깔끔하고 처리가 쉬움.)
+- 회원 조회 /members/{id} -> GET
+- 회원 수정 폼 /members/{id}/edit -> GET
+- 회원 수정 /members/{id}/edit, /members/{id} -> POST
+- 회원 삭제 /members/{id}/delete -> POST
+
+HTML FORM은 GET, POST만 지원
+컨트콜 URI
+
+- GET, POST 만 지원하므로 제약이 있다.
+- 문서, 컬렉션, 스토어로 해결하기 어려운 추가 프로세스 실행
+- 이런 제약을 해결하기 위해 동사로 된 리소스 경로 사용
+- 동사 직접 사용
+- POST의 /new, /edit, /delete가 컨트롤 URI
+- HTTP 메서드로 해결하기 애매한 경우 사용(HTTP API 포함)
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
