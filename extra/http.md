@@ -897,6 +897,126 @@ HTML FORM은 GET, POST만 지원
      save 버튼의 결과로 아무 내용이 없어도 되고, save 버튼을 눌러도 같은 화면을 유지해야 한다.
    - 결과 내용이 없어도 204 메세지(2xx)만으로 성공을 인식할 수 있다.
 
+- 3xx (Redirection) : 요청을 완료하려면 유저 에이전트(웹 브라우저) 추가 행동이 필요
+
+ Redirection이란?
+ 웹 브라우저는 3xx 응답의 결과에 Location 헤더가 있으면, Location 위치로 자동 이동 (리다이렉트)
+ ex)
+ 이벤트 페이지를 다음과 같이 변경했는데 URL: /event => /new-event
+ 기존에 북마크를 해두었거나 공유가 많이 된 상태여서 유저들이 /event로 접속하는 상황이 일어날 가능성이 높으니까
+ 그럴 때 /event로의 접속을 /new-event로 변경하는 것이 리다이렉트이다.
+
+ Redirection의 종류
+
+ 1. 영구 리다이렉션
+    특정 리소스의 URI가 영구적으로 이동
+    원래의 URL을 사용 X, 검색 엔진 등에서도 변경을 인지한다.
+    상태코드: 301, 308
+    ex) /members -> /users
+    ex) /event -> /new-event
+
+ 2. 일시 리다이렉션
+    일시적인 변경
+    따라서 검색 엔진 등에서 URL을 변경하면 안된다.
+    주문 완료 후 주문 내역 화면으로 이동
+    상태코드 : 302, 307, 303
+    PRG : POST/ Redirect / Get
+
+    - 일시적인 리다이렉션
+    - ex) POST로 주문 후, 웹 브라우저를 새로고침 하면?
+      다시 요청이 되어서 POST 요청이 2번 실행, 중복 주문이 될 수 있다.
+      PRG 이후 리다이렉트는 URL이 이미 POST -> GET으로 리다이렉트 된다.
+      새로 고침 해도 GET으로 결과 화면만 조회된다.
+
+    1. PRG 사용 전
+
+    1) 요청
+
+    - POST 사용
+
+    ```
+    POST /order HTTP/1.1
+    Host: localhost:8080
+
+    itemId=mouse&count=1
+
+    ```
+
+    2. 주문 데이터 저장 : mouse 1개
+
+    3. 응답
+
+    ```
+    HTTP/1.1 200 OK
+    <html>주문 완료</html>
+    ```
+
+    4. 결과 화면에서 새로고침
+       URL: /order 주문완료
+
+    5. 요청
+
+    ```
+    POST /order HTTP/1.1
+    Host: localhost:8080
+
+    itemId=mouse&count=1
+    ```
+
+    6. 주문 데이터 저장 : mouse 1개
+
+    7. 응답
+
+    ```
+    HTTP/1.1 200 OK
+    <html>주문 완료</html>
+    ```
+
+    2. PRG 사용 후
+
+    1) 요청
+
+    - POST 사용
+
+    ```
+    POST /order HTTP/1.1
+    Host: localhost:8080
+
+    itemId=mouse&count=1
+
+    ```
+
+    2. 주문 데이터 저장 : mouse 1개
+
+    3. 응답
+
+    ```
+    HTTP/1.1 302 Found
+    Location: /order-result/19
+    ```
+
+    4. 자동 리다이렉트
+
+    5. 요청
+       GET 사용
+
+    ```
+    GET /order-result/19 HTTP/1.1
+    Host: localhost:8080
+    ```
+
+    6. 주문 데이터 조회 : 19번 주문
+
+    7. 응답
+
+    ```
+    HTTP/1.1 200 OK
+    <html>주문 완료</html>
+    ```
+
+    8. 결과 화면에서 새로고침
+       GET /order-result/19 결과 화면만 다시 요청 (5번으로 이동)
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
