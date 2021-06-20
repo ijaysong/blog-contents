@@ -1190,6 +1190,79 @@ ex)
 451 ?? -> 4xx (Client Error)
 599 ?? -> 5xx (Server Error)
 
+## HTTP 헤더
+
+### 일반 헤더 - 표현
+
+표현헤더라고도 한다.
+표현 헤더는 전송, 응답 둘 다 사용한다.
+
+```
+HTTP/1.1 200 OK
+// 표현 헤더
+Content-Type: text/html;charset=UTF-8
+Content-Encoding: gzip
+Content-Length: 3423
+
+// 컨텐츠
+lkj123sdfagwef12lksjflwkehfaglskj
+```
+
+- Content-Type : 표현 데이터의 형식
+
+ - 표현 바디의 형식에 대한 것이다.
+ - 미디어 타입, 문자 인코딩
+   ex) text/html; charset=utf-8
+   application/json
+   image/png
+
+- Content-Encoding : 표현 데이터의 압축 방식
+
+ - 표현 데이터를 압축하기 위해 사용
+ - 데이터를 전달하는 곳에서 압축 후 인코딩 헤더 추가
+ - 데이터를 읽는 쪽에서 인코딩 헤더의 정보로 압축 해제
+   ex) gzip, deflate, identity(압축을 안한 상태, 동일한 상태)
+
+- Content-Language : 표현 데이터의 자연 언어
+
+ - 표현 데이터의 자연 언어를 표현
+   ex) ko, en, en-US
+ - 클라이언트에서 해당 데이터를 보고 언어를 파악해 서비스를 제공하는 것도 가능하다.
+   ex) 응답이 영어(Content-Language: en)로 왔는데 화면에 한국어로 표현하고 싶어!
+
+- Content-Length : 표현 데이터의 길이
+ - 바이트 단위
+ - Transfer-Encoding(전송 코딩)을 사용하면 Content-Length를 사용하면 안됨
+
+### 일반 헤더 - 콘텐츠 협상
+
+- 클라이언트가 선호하는 표현 요청
+- 협상 헤더는 요청시에만 사용한다.
+
+- Accept: 클라이언트가 선호하는 미디어 타입 전달
+- Accept-Charset: 클라이언트가 선호하는 문자 인코딩
+- Accept-Encoding: 클라이언트가 선호하는 압축 인코딩
+- Accept-Language: 클라이언트가 선호하는 자연 언어
+
+ex)
+한국어 브라우저에서 Accept-Language를 ko-KR로 지정하여 보냈다.
+
+```
+GET /event
+Accept-Language: ko-KR
+```
+
+서버는 다중 언어를 지원한다. 기본 언어가 독일어(de)이고, 영어(en)도 지원한다.
+하지만 해당 서버에서 한국어를 지원하지 않아 독일어가 반환되었다.
+
+```
+Content-Language: de
+
+Hallo (독일어)
+```
+
+한국어가 없으면 영어 값을 받고 싶다면 어떻게 해야될까? (우선순위 지정)
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
