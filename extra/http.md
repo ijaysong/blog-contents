@@ -1263,6 +1263,39 @@ Hallo (독일어)
 
 한국어가 없으면 영어 값을 받고 싶다면 어떻게 해야될까? (우선순위 지정)
 
+#### 협상과 우선순위 1
+
+- Quality Values(q) 값 사용
+- 0~1 사이의 값을 표현, 클수록 높은 우선순위를 가진다.
+- 생략하면 1이다.
+ ex)
+ Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+ 1. ko-KR;q=1 (q 생략)
+ 2. ko;q=0.9
+ 3. en-US;q=0.8
+ 4. en;q=0.7
+
+#### 협상과 우선순위 2
+
+- Accept에서 미디어 타입을 지정할 경우, 해당 케이스에선 구체적인 것이 우선한다.
+ ex)
+ Accept: text/_, text/plain, text/plain;format=flowed, _/\*
+
+1. text/plain;format=flowed
+2. text/plain
+3. text/\*
+4. _/_
+
+미디어 타입에 따라서 매치하는 것이 있을 경우 다음 표에 따라서 우선순위를 지정하기도 한다.
+| 미디어 타입 | Quality |
+|----------|---------|
+| text/html;level=1 | 1 |
+| text/html | 0.7 |
+| text/plain | 0.3 |
+| image/jpeg | 0.5 |
+| text/html;level=2 | 0.4 |
+| text/html;level=3 | 0.7 |
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
