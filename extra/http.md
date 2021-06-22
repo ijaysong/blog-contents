@@ -1296,6 +1296,36 @@ Hallo (독일어)
 | text/html;level=2 | 0.4 |
 | text/html;level=3 | 0.7 |
 
+### 전송방식
+1. 단순 전송
+- Content-Length
+- 컨텐츠의 길이를 알때 사용
+- 한번에 요청하고 한번에 받는 것
+~~~
+HTTP/1.1 200 OK
+Content-Type: text/html;charset=UTF-8
+Content-Length: 3423
+
+<html>
+  <body>...</body>
+</html>
+~~~
+
+2. 압축 전송
+- Content-Encoding
+- gzip과 같은 형식으로 컨텐츠를 압축해서 전송하는 것
+~~~
+HTTP/1.1 200 OK
+Content-Type: text/html;charset=UTF-8
+Content-Encoding: gzip
+Content-Length: 521
+
+lkjlglhjajkealitau3po4qk4j
+~~~
+
+1. 분할 전송
+2. 범위 전송
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
