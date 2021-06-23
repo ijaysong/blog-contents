@@ -1323,8 +1323,72 @@ Content-Length: 521
 lkjlglhjajkealitau3po4qk4j
 ~~~
 
-1. 분할 전송
-2. 범위 전송
+3. 분할 전송
+- Transfer-Encoding
+- 컨텐츠를 덩어리로 보내는 것 (chunked)
+- 한번에 보내면 시간이 오래 걸리기 떄문에 5바이트 씩 혹은 특정 바이트 씩 오는 대로 바로 표현하는 것
+- 분할 전송 시에는 컨텐츠가 얼마나 올지 예상이 안되기 때문에 Content-Length 사용 X
+~~~
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Transfer-Encoding: chunked
+
+5
+Hello
+5
+World
+0
+\r\n
+~~~
+
+4. 범위 전송
+- 범위를 지정하여 해당 범위의 컨텐츠만 넘겨받을 수 있도록 하는 것
+- 이미지를 전송 받다가 끊겼을 경우, 다시 처음부터 받는 것이 아니라 끊긴 부분 부터 받을 수 있다.
+~~~
+// 클라이언트 Request
+GET /event
+Range: bytes=1001-2000
+~~~
+
+~~~
+// 서버 Response
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Range: bytes 1001-2000 / 2000
+
+qweretyuio12wasz32wesdxc45rtfgvc67yhbn
+~~~
+
+### 일반 정보
+1. From: 유저 에이전트의 이메일 통보
+- 일반적으로 잘 사용되지 않음
+- 검색 엔진 같은 곳에서 주로 사용
+  ex) 검색엔진을 크롤링 해가는 사람이 있는데 이 사람에게 크롤링 하지 말라고 하고 싶다. 
+  이 사람에게 연락할 수단이 된다.
+- request 시 사용
+
+2. Referer: 이전 웹 페이지 주소
+- 현재 요청된 페이지의 이전 웹 페이지 주소
+- A -> B로 이동하는 경우, B를 요청할 때 Referer: A를 포함해서 요청
+- Referer를 사용해서 유입 경로 분석 가능
+- Request에서 사용
+- cf) referer는 referrer의 오타! (HTTP에 이미 사용되버려서 고치기 힘들어 오타를 그대로 사용하게 되었다고..)
+
+* User-Agent: 유저 에이전트 애플리케이션 정보
+- user-agent: Mozila/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36
+- 클라이언트의 애플리케이션 정보 (웹 브라우저 정보, 등등)
+- 통계 정보
+- 어떤 종류의 브라우저에서 장애가 발생하는지 파악 가능
+- Request에서 사용
+
+* Server: 요청을 처리하는 ORIGIN 서버의 소프트웨어 정보
+- Server: Apache/2.2.22 (Debian)
+- server: nginx
+- Response에서 사용
+
+* Date: 메시지가 생성된 날짜
+- Date: Wed, 23 JUN 2021 08:12:31 GMT
+- Response에서 사용
 
 ## 관련 토픽
 ### HTTPS
