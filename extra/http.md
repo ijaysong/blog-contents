@@ -1390,6 +1390,33 @@ qweretyuio12wasz32wesdxc45rtfgvc67yhbn
 - Date: Wed, 23 JUN 2021 08:12:31 GMT
 - Response에서 사용
 
+### 특별한 정보
+1. Host : 요청한 호스트 정보 (도메인)
+- Request에서 사용
+- 필수 헤더이다.
+- 하나의 서버가 여러 도메인을 처리해야 할 때
+- 하나의 IP 주소에 여러 도메인이 적용되어 있을 때
+ex) 가상 호스트를 통해 여러 도메인을 한번에 처리할 수 있는 서버. 실제 애플리케이션이 여러개 구동 될 수 있다.
+특정 api에 접속을 했을 때 해당 서버의 어떤 애플리케이션에서 api를 구동해야 할지 알 수 없기 때문에 host를 꼭 지정해주어야 한다.
+
+~~~
+GET /search?q=hello&hl=ko HTTP/1.1
+Host: www.google.com
+~~~
+
+2. Location : 페이지 리다이렉션
+- 웹 브라우저는 3xx 응답의 결과에 Location 헤더가 있으면, Location 위치로 자동 이동한다. (리다이렉트)
+- 201 (Created) : Location 값은 요청에 의해 생성된 리소스 URI
+- 3xx (Redirection) : Location 값은 요청을 자동으로 리디렉션하기 위한 대상 리소스를 가리킨다.
+
+3. Allow : 허용 가능한 HTTP 메서드
+- 405 (Method Not Allowed) 에서 응답에 포함해야 한다.
+- Allow : GET, HEAD, PUT
+
+2. Retry-After : 유저 에이전트가 다음 요청을 하기까지 기다려야 하는 시간
+
+
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
