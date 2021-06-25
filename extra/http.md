@@ -1413,9 +1413,19 @@ Host: www.google.com
 - 405 (Method Not Allowed) 에서 응답에 포함해야 한다.
 - Allow : GET, HEAD, PUT
 
-2. Retry-After : 유저 에이전트가 다음 요청을 하기까지 기다려야 하는 시간
+4. Retry-After : 유저 에이전트가 다음 요청을 하기까지 기다려야 하는 시간
+- 503 (Service Unavailable): 서비스가 언제까지 불능인지 알려줄 수 있음
+- Retry-After: Fri, 31 Dec 1999 23:59:59 GMT (날짜 표기)
+- Retry-After: 120 (초단위 표기)
 
+### 인증
+1. Authorization : 클라이언트 인증 정보를 서버에 전달
+- AUthorization: Basic xxxxxxxxxxxxxxx
 
+2. WWW-Authenticate : 리소스 접근시 필요한 인증 방법 정의
+- 리소스 접근 시 필요한 인증 방법 정의
+- 401 Unauthorized 응답과 함께 사용
+- WWW-Authenticate : Newauth realm="apps", type=1, title="Login to \"apps\"", Basic realm="simple"
 
 ## 관련 토픽
 ### HTTPS
