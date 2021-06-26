@@ -1427,6 +1427,47 @@ Host: www.google.com
 - 401 Unauthorized 응답과 함께 사용
 - WWW-Authenticate : Newauth realm="apps", type=1, title="Login to \"apps\"", Basic realm="simple"
 
+### 쿠키
+미 로그인 상태던, 로그인 상태던 GET /main API에 접속을 하면 서버는 해당 유저가 로그인을 했는지 안했는지 알 수가 없다.
+
+HTTP는 무상태(Stateless) 프로토콜이기 때문이다.
+클라이언트와 서버가 요청과 응답을 주고 받으면 연결이 끊어진다.
+클라이언트가 다시 요청하면 서버는 이전 요청을 기억하지 못한다.
+클라이언트와 서버는 서로 상태를 유지하지 않는다.
+
+그 대안으로 쿠키를 사용하여 문제를 해결할 수 있다.
+
+쿠키를 지정할 때 다음 두가지의 헤더를 사용한다.
+1. Set-Cookie: 서버에서 클라이언트로 쿠키 전달(응답)
+2. Cookie: 클라이언트가 서버에서 받은 쿠키를 저장하고, HTTP 요청 시 서버로 전달
+
+~~~
+// 웹 브라우저 => 서버
+POST /login HTTP/1.1
+user=홍길동
+
+// 서버 => 웹 브라우저
+HTTP/1.1 200 OK
+Set-Cookie: user=홍길동
+
+홍길동 님이 로그인했습니다.
+~~~
+
+쿠키 저장소에 저장됨
+user=홍길동
+
+~~~
+// 로그인 이후 welcome 페이지 접근
+// 웹 브라우저 => 서버
+GET /welcome HTTP/1.1
+Cookie: user=홍길동
+
+// 서버 => 웹 브라우저
+HTTP/1.1 200 OK
+안녕하세요. 홍길동 님
+~~~
+
+모든 요청에 쿠키 정보가 자동 포함된다.
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
