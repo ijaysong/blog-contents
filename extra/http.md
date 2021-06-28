@@ -1492,7 +1492,7 @@ ex) set-cookie: sessionId=abcde1234; expires=Sat, 26-Dec 2020 00:00:00 GMT; path
 - 세션 쿠키 : 만료 날짜를 생략하면 브라우저 종료시 까지만 유지
 - 영속 쿠키 : 만료 날짜를 입력하면 해당 날짜까지 유지
 
-#### 쿠키 - 도메인
+#### 쿠키 - 도메인 (domain)
 쿠키가 모든 도메인에서 사용되지 않도록 제한을 지정하는 것이다.
 ex) domain=example.org
 
@@ -1505,7 +1505,7 @@ ex) domain=example.org
     - example.org에서만 쿠키 접근
     - dev.example.org는 쿠키 미접근
 
-#### 쿠키 - 경로
+#### 쿠키 - 경로 (path)
 쿠키가 사용되는 범위를 도메인으로 지정을 하고 경로로 한번 더 필터를 한다.
 ex) path=/home
 
@@ -1516,6 +1516,80 @@ ex) path=/home
 - /home/level1 -> 가능
 - /home/level1/level2 -> 가능
 - /hello -> 불가능
+
+#### 쿠키 - 보안 (Secure, HttpOnly, SameSite)
+- Secure
+  - 쿠키는 http, https를 구분하지 않고 전송
+  - Secure를 적용하면 https인 경우에만 전송
+
+- HttpOnly
+  - XSS 공격 방지
+  - 자바스크립트에서 접근 불가(document.cookie)
+  - HTTP 전송에만 사용
+
+- SameSite
+  - XSRF 공격 방지
+  - 요청 도메인과 쿠키에 설정된 도메인이 같은 경우만 쿠키 전송
+
+### 캐시와 조건부 요청
+#### 캐시 기본 동작
+1. 캐시가 없을 때
+1) 요청 (웹 브라우저 -> 서버)
+~~~
+GET /star.jpg
+~~~
+
+2) 응답 (서버 -> 웹 브라우저)
+~~~
+HTTP/1.1 200 OK
+Content-Type: image/jpeg
+Content-Length: 34012
+
+llkkjhgfuue,hlbhjvghykhlkjhqe92oq8ielwdkmmvfxbo5r9ptd
+~~~
+HTTP 헤더: 0.1MB
+HTTP 바디: 1.0MB
+
+3) 웹 브라우저에 이미지 표시
+4) 두번째 요청이 있을 때, 1)~3)번의 흐름을 다시 되풀이 한다.
+
+- 데이터가 변경되지 않아도 계속 네트워크를 통해서 데이터를 다운로드 받아야 한다.
+- 인터넷 네트워크는 매우 느리고 비싸다.
+- 브라우저 로딩 속도가 느리다.
+- 느린 사용자 경험
+
+2. 캐시 적용
+1) 요청 (웹 브라우저 -> 서버)
+~~~
+GET /star.jpg
+~~~
+
+2) 응답 (서버 -> 웹 브라우저)
+~~~
+HTTP/1.1 200 OK
+Content-Type: image/jpeg
+cache-control: max-age=60
+Content-Length: 34012
+
+llkkjhgfuue,hlbhjvghykhlkjhqe92oq8ielwdkmmvfxbo5r9ptd
+~~~
+cache-control은 캐시를 제어하는 헤더
+응답결과를 캐시에 저장하는데, 최대 60초동안 유효하도록 설정한 것
+
+3) 웹 브라우저에 이미지 표시
+4) 두번째 요청이 있을 때, 60초 이내라면, 캐시에서 데이터를 가져옴 (네트워크를 통할 필요가 없음)
+
+- 캐시 덕분에 캐시 가능 시간 동안 네트워크를 사용하지 않아도 된다.
+- 비싼 네트워크 사용량을 줄일 수 있다.
+- 브라우저 로딩 속도가 매우 빠르다.
+- 빠른 사용자 경험
+
+3. 캐시 적용 / 캐시 시간 초과
+캐시 시간이 초과되면 다시 서버에 요청을 한다.
+캐시를 초기화 하고, 응답결과를 새로 캐시에 저장한다.
+
+- 캐시 유효 시간이 초과하면, 서버를 통해 데이터를 다시 조회하고, 캐시를 갱신한다.
+- 이때 다시 네트워크 다운로드가 다시 발생한다.
 
 ## 관련 토픽
 ### HTTPS
