@@ -1677,6 +1677,61 @@ ex) If-Modified-Since : 이후에 데이터가 수정되었으면?
 - 서버에서 별도의 캐시 로직을 관리하고 싶은 경우
   ex) 스페이스나 주석처럼 크게 영향이 없는 변경에서 캐시를 유지하고 싶은 경우
 
+#### ETag (Entity Tag)
+- 캐시용 데이터에 임의의 고유한 버전 이름을 달아둠
+  ex) ETag: "v1.0", ETag: "a2hgjhk3"
+- 데이터가 변경되면 이 이름을 바꾸어서 변경함 (Hash를 다시 생성)
+  ex) ETag: "aaaaa" => ETag: "bbbbb"
+- 진짜 단순하게 ETag만 보내서 같으면 유지, 다르면 다시 받기
+
+1) 요청 (웹 브라우저 -> 서버)
+~~~
+GET /star.jpg
+~~~
+
+2) 응답 (서버 -> 웹 브라우저)
+~~~
+HTTP/1.1 200 OK
+Content-Type: image/jpeg
+cache-control: max-age=60
+ETag: "aaaaaaaa"
+Content-Length: 34012
+
+llkkjhgfuue,hlbhjvghykhlkjhqe92oq8ielwdkmmvfxbo5r9ptd
+~~~
+캐시에 ETag "aaaaaaaa"를 등록
+
+3) 웹 브라우저에 이미지 표시
+4) 두번째 요청을 보냄
+~~~
+GET /star.jpg
+If-None-Match: "aaaaaaaa"
+~~~
+
+5) 응답 (서버 -> 웹 브라우저)
+- ETag의 값이 일치하는 경우
+~~~
+HTTP/1.1 304 Not Modified
+Content-Type: image/jpeg
+cache-control: max-age=60
+ETag: "aaaaaaaa"
+Content-Length: 34012
+
+
+~~~
+HTTP Body가 없다.
+HTTP Body를 전송하지 않기 때문에 헤더(0.1MB)만 전송된다.
+캐시에서 조회하여 이미지를 화면에 표시한다.
+
+=> Summary
+- 진짜 단순하게 ETag만 서버에 보내서 같으면 유지, 다르면 다시 받기!
+- 캐시 제어 로직을 서버에 완전히 관리
+- 클라이언트는 단순히 이 값을 서버에 제공 (클라이언트는 캐시 메커니즘을 모름)
+  ex) 서버는 배타 오픈 기간인 3일 동안 파일이 변경되어도 ETag를 동일하게 유지
+      애플리케이션 배포 주기에 맞추어 ETag 모두 갱신
+
+#### If-None-Match
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
