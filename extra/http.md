@@ -1777,6 +1777,27 @@ CDS 서비스라고도 한다.
 - Age: 60 (HTTP 헤더)
   - 오리진 서버에서 응답 후 프록시 캐시 내에 머문 시간(초)
 
+#### 캐시 무효화
+개인 정보나 민감한 정보가 포함되어 있는 페이지가 있다.
+해당 페이지에서 캐시를 저장하지 않도록 아래 내용을 모두 지정해주면 절대로 캐시가 저장되지 않는다!
+
+- Cache-Control : no-cache, no-store, must-revalidate
+- Pragma : no-cache
+  - HTTP 1.0 하위 호환
+
+1. Cache-Control: no-cache
+   - 데이터는 캐시해도 되지만, 항상 원 서버에 검증하고 사용 (이름에 주의)
+2. Cache-Control: no-store
+   - 데이터에 민감한 정보가 있으므로 저장하면 안됨
+   - (메모리에서 사용하고 최대한 빨리 삭제)
+3. Cache-Control: must-revalidate
+   - 캐시 만료 후, 최초 조회 시 원 서버에 검증해야 함
+   - 원 서버 접근 실패시 반드시 오류가 발생해야 함 (504 Gateway Timeout)
+   - must-revalidate는 캐시 유효 시간이라면 캐시를 사용함
+4. Pragma: no-cache
+   - HTTP 1.0 하위 호환해서 적용해 줌
+
+
 ## 관련 토픽
 ### HTTPS
 HTTPS의 S는 Secure의 약자로, 안전한 이라는 뜻이다.
