@@ -1797,6 +1797,17 @@ CDS 서비스라고도 한다.
 4. Pragma: no-cache
    - HTTP 1.0 하위 호환해서 적용해 줌
 
+ex) no-cache 기본 동작
+1. 캐시 서버 요청 (웹 브라우저 -> 프록시 캐시): no-cache + ETag
+2. 원 서버 요청 (프록시 캐시 -> 원 서버) : no-cache + ETag
+  - 순간적으로 네트워크가 단절되어 원 서버 접근이 불가한 경우
+    - 옛날 데이터라도 전송할 수 있다. (200 응답 반환)
+    - must-revalidate가 포함되어 있는 경우, 항상 오류를 반환한다. (504 Gateway Timeout을 반환)
+
+3. 원 서버 검증
+4. 응답 (원 서버 -> 프록시 캐시) : 304 Not Modified
+5. 응답 (프록시 캐시 -> 웹 브라우저) : 304 Not Modified
+6. 캐시 데이터 사용 : no-cache / ETag: "aaa"
 
 ## 관련 토픽
 ### HTTPS
