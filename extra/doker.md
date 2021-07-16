@@ -163,3 +163,79 @@ Cgroup과 네임스페이스는 리눅스 환경에서 사용되어지는 것인
 |리눅스 VM |
 | MacOS / Windows |
 | 하드웨어 |
+
+## 도커 이미지 내부 파일 구조 보기
+
+### 도커 이미지 실행
+도커 이미지를 실행하는 커맨드는 다음과 같다.
+~~~
+docker run 이미지 이름
+~~~
+- docker : 도커 클라이언트 언급
+- run : 컨테이너 생성 및 실행
+- 이미지 이름 : 이 컨테이너를 위한 이미지
+
+ex) docker run hello-world 
+
+해당 커멘드를 실행하면 이미지는 두가지를 가지게 된다.
+1. 시작시 실행될 명령어 : run hello-world
+2. 파일 스냅샷 : hello-world
+
+이미지로 컨테이너를 생성하는 순서는 다음과 같다.
+1. 먼저 파일 스냅샷 되어 있는 것을 컨테이너의 하드 디스크 부분에 올린다.
+2. 시작 커맨드를 이용해 애플리케이션을 실행한다.
+
+### 이미지 내부 파일 시스템 구조 보기
+도커 이미지 내부 파일 시스템 구조를 보는 커맨드는 다음과 같다.
+~~~
+docker run 이미지 이름 ls
+~~~
+- docker : 도커 클라이언트 언급
+- run : 컨테이너 생성 및 실행
+- 이미지 이름 : 이 컨테이너를 위한 이미지
+- ls : 이 자리는 원래 이미지가 가지고 있는 시작 명령어를 무시하고 여기에 있는 커맨드를 실행하게 한다.
+        ls 커맨드는 현재 디렉토리의 파일 리스트를 표출한다.
+ex) docker run alpine ls
+
+해당 커멘드를 실행하면 이미지는 두가지를 가지게 된다.
+1. 시작시 실행될 명령어 : ??? (alpine에서 사용될 어떤 시작 명령어)
+2. 파일 스냅샷 : bin,dev, etc...
+
+이미지로 도커를 생성하면
+1. 컨테이너 하드디스크 부분에 bin,dev, etc...를 올린다.
+2. ls를 시작 커맨드로 애플리케이션을 실행한다.
+
+#### 왜 hello-world 이미지로 ls 커맨드를 실행할 수 없을까??
+알파인의 리스트를 출력하는 커맨드를 날리면 결과 값이 출력된다.
+~~~
+// docker run alpine ls
+bin
+dev
+etc
+home
+lib
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+~~~
+
+그런데 hello-world 이미지의 리스트를 출력하는 커맨드를 날리면 결과값이 출력되지 않는다.
+왜 그럴까???
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker run hello-world ls
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:380: starting container process caused: exec: "ls": executable file not found in $PATH: unknown.
+~~~
+
+alpine 컨테이너의 하드디스크에는 ls 커맨드를 서포트 하는 파일이 포함되어 있어 리스트를 출력할 수 있지만,
+hello-world 컨테이너는 간단한 기능을 수행하기 때문에 하드디스크에 ls 기능을 수행하는 파일이 포함되어 있지 않아 동작을 수행할 수 없었다.
+
+=> 이처럼, 컨테이너가 하드디스크에 포함하고 있는 파일에 따라서 커맨드 실행 유무가 결정 된다!!!
