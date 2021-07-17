@@ -239,3 +239,79 @@ alpine 컨테이너의 하드디스크에는 ls 커맨드를 서포트 하는 �
 hello-world 컨테이너는 간단한 기능을 수행하기 때문에 하드디스크에 ls 기능을 수행하는 파일이 포함되어 있지 않아 동작을 수행할 수 없었다.
 
 => 이처럼, 컨테이너가 하드디스크에 포함하고 있는 파일에 따라서 커맨드 실행 유무가 결정 된다!!!
+
+## 컨테이너들 나열하기
+### 현재 실행중인 컨테이너 나열
+현재 실행 중인 컨테이너를 나열하는 커맨드는 다음과 같다.
+~~~
+docker ps
+~~~
+- docker : 도커 클라이언트 언급
+- run : process status
+
+실행 결과 :
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker ps
+CONTAINER ID   IMAGE     COMMAND            CREATED          STATUS         PORTS     NAMES
+c189a32e16d6   alpine    "ping localhost"   10 seconds ago   Up 9 seconds             zealous_germain
+~~~
+
+1. CONTAINER ID
+   컨테이너의 고유한 아이디 해쉬값.
+   실제로는 더욱 길지만 일부분만 표출된다.
+2. IMAGE
+   컨테이너 생성시 사용한 도커 이미지.
+3. COMMAND
+    컨테이너 시작 시 실행될 명령어.
+    대부분 이미지에 내장되어 있으므로 별도 설정이 필요 없다.
+4. CREATED
+   컨테이너가 생성된 시간.
+5. STATUS
+   컨테이너의 상태.
+   실행중은 Up, 종료는 Exited, 일시정지 Paus.
+6. PORTS
+   컨테이너가 개방한 포트와 호스트에 연결한 포트.
+   특별한 설정을 하지 않은 경우 출력되지 않는다.
+7. NAMES
+   컨테이너 고유한 이름.
+   컨테이너 생성시 --name 옵션으로 이름을 설정하지 않으면, 도커 엔진이 임의로 형용사와 명사를 조합해 설정.
+    id와 마찬가지로 중복이 안되고 docker rename 명령어로 이름을 변경할 수 있다.
+    ex) docker rename original-name changed-name
+    
+
+### 원하는 항목만 보기
+원하는 항목만(현재 실행중인 컨테이너만) 지정하여 보는 커맨드는 다음과 같다.
+~~~
+docker ps --format 'table{{.Names}}\table{{.Image}}'
+~~~
+- docker : 도커 클라이언트 언급
+- run : process status
+- --format
+- 'table{{.Names}}
+- \t : 탭
+- table{{.Image}}'
+
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker ps --format 'table{{.Names}}\table{{.Image}}'
+NAMES             ableIMAGE
+zealous_germain   ablealpine
+~~~
+
+### 모든 컨테이너 나열
+실행 중이건, 중지 상태이건 상관 없이 모든 컨테이너를 나열하는 커맨드는 다음과 같다.
+~~~
+docker ps -a
+~~~
+- docker : 도커 클라이언트 언급
+- run : process status
+- a : all
+
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker ps -a
+CONTAINER ID   IMAGE         COMMAND            CREATED          STATUS                      PORTS     NAMES
+c189a32e16d6   alpine        "ping localhost"   4 minutes ago    Up 4 minutes                          zealous_germain
+3146fa293894   hello-world   "ls"               29 minutes ago   Created                               dreamy_yalow
+5dba7f117e66   alpine        "ls"               30 minutes ago   Exited (0) 30 minutes ago             tender_goldstine
+c104efac0dbe   hello-world   "/hello"           5 days ago       Exited (0) 5 days ago                 angry_greider
+b2937496e656   hello-world   "/hello"           5 days ago       Exited (0) 5 days ago                 busy_gould
+~~~
