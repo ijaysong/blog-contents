@@ -315,3 +315,38 @@ c189a32e16d6   alpine        "ping localhost"   4 minutes ago    Up 4 minutes   
 c104efac0dbe   hello-world   "/hello"           5 days ago       Exited (0) 5 days ago                 angry_greider
 b2937496e656   hello-world   "/hello"           5 days ago       Exited (0) 5 days ago                 busy_gould
 ~~~
+
+## 도커 컨테이너의 생명주기
+지금까지 도커를 생성/ 시작하는 커맨드 `run`이 있다.
+~~~
+Docker run <이미지 이름>
+~~~
+
+그런데 이를 도커 생성과 실행으로 각각 나누어 볼 수 있다.
+도커 생성은 `create`를 사용한다.
+~~~
+Docker create <이미지 이름>
+~~~
+
+도커 생성을 하면 도커 컨테이너 아이디가 출력된다.
+ex)
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker create hello-world
+6425b4fd81c7a2d134c3ca9612f01f8b85d623559c253b749a9d5626ba6cc925
+~~~
+도서 실행은 `start`를 사용한다.
+~~~
+docker start -a <컨테이너 아이디/이름>
+~~~
+-a : attach (붙이다), 도커 컨테이너의 아웃풋을 출력해준다.
+
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker start -a 6425b4fd
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+... 생략 ...
+~~~
+
+=> 결론 : Docker run <이미지 이름> = Docker create <이미지 이름> + Docker start <컨테이너 아이디/이름>
