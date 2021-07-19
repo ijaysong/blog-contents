@@ -350,3 +350,29 @@ This message shows that your installation appears to be working correctly.
 ~~~
 
 => 결론 : Docker run <이미지 이름> = Docker create <이미지 이름> + Docker start <컨테이너 아이디/이름>
+
+## Docker Stop vs Docker Kill
+공통점은 둘다 실행중인 컨테이너를 중지시킨다.
+
+`stop`은 천천히 자비롭게 중지시킨다.
+그동한 하던 작업들을 (메세지를 보내고 있었다면 보내고 있던 메세지를) 완료하고 컨테이너를 자비롭게 중지시킨다.
+~~~
+docker stop <중지할 컨테이너 아이디/이름>
+~~~
+
+`kill`의 경우, stop과 달리 어떠한 것도 기다리지 않고, 바로 컨테이너를 중지시킨다.
+~~~
+docker kill <중지할 컨테이너 아이디/이름>
+~~~
+
+cf) 현재 실행 중인 컨테이너의 아이디나 이름을 확인하고자 할때는 `ps`를 사용하면 된다.
+~~~
+docker ps
+~~~
+
+결과 : 
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker ps
+CONTAINER ID   IMAGE     COMMAND            CREATED          STATUS          PORTS     NAMES
+5c7086fe84cf   alpine    "ping localhost"   13 seconds ago   Up 12 seconds             vigorous_tu
+~~~
