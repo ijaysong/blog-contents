@@ -376,3 +376,76 @@ Eunjiui-MacBook:~ eunjisong$ docker ps
 CONTAINER ID   IMAGE     COMMAND            CREATED          STATUS          PORTS     NAMES
 5c7086fe84cf   alpine    "ping localhost"   13 seconds ago   Up 12 seconds             vigorous_tu
 ~~~
+
+## 컨테이너 삭제하기
+1. 중지된 컨테이너를 삭제할 때
+~~~
+docker rm <아이디/이름>
+~~~
+
+실행중인 컨테이너는 먼저 중지한 후에 삭제 가능하다.
+`ps` 커맨드로 현재 실행 중인 컨테이너가 있는지 없는지 확인 후 실행하면 된다!
+
+~~~
+// 현재 실행 중인 컨테이너를 확인한다. 없음
+Eunjiui-MacBook:~ eunjisong$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+// 컨테이너 리스트를 출력하여 삭제하고자 하는 컨테이너의 ID를 확인한다.
+Eunjiui-MacBook:~ eunjisong$ docker ps -a
+CONTAINER ID   IMAGE         COMMAND            CREATED          STATUS                       PORTS     NAMES
+5c7086fe84cf   alpine        "ping localhost"   7 minutes ago    Exited (137) 7 minutes ago             vigorous_tu
+5a43514beeb6   alpine        "ping localhost"   8 minutes ago    Exited (137) 7 minutes ago             sweet_cannon
+6425b4fd81c7   hello-world   "/hello"           18 minutes ago   Exited (0) 18 minutes ago              amazing_diffie
+c189a32e16d6   alpine        "ping localhost"   2 days ago       Exited (0) 2 days ago                  zealous_germain
+3146fa293894   hello-world   "ls"               2 days ago       Created                                dreamy_yalow
+5dba7f117e66   alpine        "ls"               2 days ago       Exited (0) 2 days ago                  tender_goldstine
+c104efac0dbe   hello-world   "/hello"           8 days ago       Exited (0) 8 days ago                  angry_greider
+b2937496e656   hello-world   "/hello"           8 days ago       Exited (0) 8 days ago                  busy_gould
+
+// 컨테이너(ID: 5c7086fe84cf)를 삭제한다.
+Eunjiui-MacBook:~ eunjisong$ docker rm 5c7086fe84cf
+5c7086fe84cf
+
+// 컨테이너(ID: 5c7086fe84cf)가 삭제되고 리스트에 없다.
+Eunjiui-MacBook:~ eunjisong$ docker ps -a
+CONTAINER ID   IMAGE         COMMAND            CREATED          STATUS                       PORTS     NAMES
+5a43514beeb6   alpine        "ping localhost"   9 minutes ago    Exited (137) 8 minutes ago             sweet_cannon
+6425b4fd81c7   hello-world   "/hello"           19 minutes ago   Exited (0) 18 minutes ago              amazing_diffie
+c189a32e16d6   alpine        "ping localhost"   2 days ago       Exited (0) 2 days ago                  zealous_germain
+3146fa293894   hello-world   "ls"               2 days ago       Created                                dreamy_yalow
+5dba7f117e66   alpine        "ls"               2 days ago       Exited (0) 2 days ago                  tender_goldstine
+c104efac0dbe   hello-world   "/hello"           8 days ago       Exited (0) 8 days ago                  angry_greider
+b2937496e656   hello-world   "/hello"           8 days ago       Exited (0) 8 days ago                  busy_gould
+~~~
+
+2. 모든 컨테이너를 삭제하고 싶을 때
+~~~
+docker rm `docker ps -a -q`
+~~~
+
+3. 이미지를 삭제하고 싶을 때
+~~~
+docker rmi <이미지 id>
+~~~
+
+4. 한번에 컨테이너, 이미지, 네트워크 모두 삭제하고 싶다면?
+도커와 관련된 부분이 초기화 된다.
+~~~
+docker system prune
+~~~ 
+
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker system prune
+WARNING! This will remove:
+  - all stopped containers
+  - all networks not used by at least one container
+  - all dangling images
+  - all dangling build cache
+
+Are you sure you want to continue? [y/N] y
+Deleted Containers:
+28aae9ba0b91421a04b6301828f9e83e98f47858278bdca4e016309b62b0e040
+
+Total reclaimed space: 0B
+~~~
