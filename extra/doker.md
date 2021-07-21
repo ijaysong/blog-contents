@@ -449,3 +449,46 @@ Deleted Containers:
 
 Total reclaimed space: 0B
 ~~~
+
+## 실행 중인 컨테이너에 명령어 전달
+`이미 실행 중인` 컨테이너에 명령어를 전달하는 커맨드는 다음과 같다.
+~~~
+docker exec <컨테이너 아이디>
+~~~
+
+ex) 
+1. 터미널 2개를 실행한다.
+2. 첫번째 터미널에서 컨테이너 하나를 실행한다.
+~~~
+docker run alpine ping localhost
+~~~
+3. 두번째 터미널에서 컨테이너가 잘 작동하고 있는지 확인하고 다른 명령어를 전달한다.
+`ps` 명령어로 실행 중인 컨테이너의 아이디를 확인한다.
+~~~
+Eunjiui-MacBook:~ eunjisong$ docker ps
+CONTAINER ID   IMAGE     COMMAND            CREATED          STATUS          PORTS     NAMES
+27eae59d8c39   alpine    "ping localhost"   16 seconds ago   Up 12 seconds             sleepy_aryabhata
+Eunjiui-MacBook:~ eunjisong$ docker exec 27eae59d8c39 ls
+bin
+dev
+etc
+home
+lib
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+~~~
+
+`docker exec <컨테이너 아이디> ls`와 같은 결과를 출력하는 것이 `docker run alpine ls`이다.
+
+=> docker exec은 `이미 실행 중인 컨테이너`에 명령어를 전달
+=> docker run은 `새로 컨테이너를 생성`해서 실행
