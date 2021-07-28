@@ -696,3 +696,37 @@ CMD [ "echo", "hello" ]
 
 => 이미지 -> 임시 컨테이너(새로운 명령어, 새로운 파일 스냅샷) -> 새로운 이미지
 
+## 내가 만든 이미지 기억하기 쉬운 이름 주기
+도커 파일로 이미지를 만들면 아이디가 숫자로 만들어진다.
+ex) 265431....
+도커 아이디로 컨테이너를 실행하려면 `docker run 265431....` 이런식으로 너무 길고 복잡하다.
+도커 아이디를 매번 기억하기 힘들기 때문에 이미지에 이름을 지정해서 실행할 수 있다.
+
+### 도커 이미지에 이름 주는 방법
+`docker build` 커맨드에 `t 옵션`을 준다.
+~~~
+docker build -t ijaysong/hello:latest .
+~~~
+-t {나의 도커 아이디} / {저장소/프로젝트 이름} : {버전} 
+
+~~~
+Eunjiui-MacBook:dockerfile-folder eunjisong$ docker build -t ijaysong/hello:latest .
+[+] Building 0.5s (5/5) FINISHED                                              
+ => [internal] load build definition from Dockerfile                     0.1s
+ => => transferring dockerfile: 268B                                     0.0s
+ => [internal] load .dockerignore                                        0.1s
+ => => transferring context: 2B                                          0.0s
+ => [internal] load metadata for docker.io/library/alpine:latest         0.0s
+ => CACHED [1/1] FROM docker.io/library/alpine                           0.0s
+ => exporting to image                                                   0.0s
+ => => exporting layers                                                  0.0s
+ => => writing image sha256:700d6646badf50c893acf603ca95fcc2a57017d8cf0  0.0s
+ => => naming to docker.io/ijaysong/hello:latest                         0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Eunjiui-MacBook:dockerfile-folder eunjisong$ docker run -it ijaysong/hello
+hello
+~~~
+
+도커 이미지에 hello라는 이름과 latest라는 이름을 지정하고, 도커 이름으로 실행을 하면 제대로 동작하는 것을 확인할 수 있다.
+
