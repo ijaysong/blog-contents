@@ -729,3 +729,81 @@ hello
 ~~~
 
 도커 이미지에 hello라는 이름과 latest라는 이름을 지정하고, 도커 이름으로 실행을 하면 제대로 동작하는 것을 확인할 수 있다.
+
+# 도커를 이용한 간단한 Node.js 어플 만들기
+Node.js App을 만들어서 도커 이미지 생성 후, 컨테이너에서 실행해보겠다.
+
+## Node.js 앱 만들기
+0. 컴퓨터 사양에 맞는 node.js 다운로드
+1. package.json 생성
+: 프로젝트의 정보와 프로젝트에서 사용 중인 패키지의 의존성을 관리한다.
+2. server.js 생성
+: Entry Point로서 가장 먼저 실행되는 파일이다.
+
+### package.json 생성
+`package.json`파일을 직접 작성할 수 있지만, `npm init` 커맨드를 통해 작성할 수도 있다.
+~~~
+Eunjiui-MacBook:nodejs-docker-app eunjisong$ npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (nodejs-docker-app) 
+version: (1.0.0) 
+description: 
+entry point: (index.js) server.js
+test command: 
+git repository: 
+keywords: 
+author: 
+license: (ISC) 
+About to write to /Users/eunjisong/Documents/projects/Blog-contents/docker/nodejs-docker-app/package.json:
+
+{
+  "name": "nodejs-docker-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+~~~
+dependency에 `express`를 추가해준다.
+`express`는 JavaScript와 jQuery의 관계처럼 Node.js의 API를 단순화하고 새로운 기능을 추가해서 Node.js를 더 쉽고 유용하게 사용할 수 있게 해준다.
+
+### server.js 생성
+~~~
+const express = require('express');
+
+// Constants
+const PORT = 8080;
+const HOST = '0.0.0.0';
+
+// App
+const app = express();
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
+~~~
+Express 모듈을 불러온다.
+Express 서버를 위한 포트와 호스트를 지정한다.
+새로운 Express 어플을 생성하고,
+"/" 경로로 요청이 오면 Hello World를 결과값으로 전달한다.
+해당 포트와 호스트에서 HTTP 서버를 시작한다.
+
+
