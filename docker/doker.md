@@ -806,4 +806,24 @@ Express 서버를 위한 포트와 호스트를 지정한다.
 "/" 경로로 요청이 오면 Hello World를 결과값으로 전달한다.
 해당 포트와 호스트에서 HTTP 서버를 시작한다.
 
+### 도커 파일 만들기
+dockerfile로 도커 이미지를 만들어서 생성한 도커 컨테이너에 Node.js app을 실행시켜 보겠다.
 
+근본이 되는 부분을 먼저 작성해준다.
+~~~
+FROM node:10
+
+RUN npm install
+
+CMD ["node", "server.js"]
+~~~
+- FROM: 베이스 이미지에 node 10버전을 지정해준다.
+기존에 사용했던 `alpine 이미지는 가장 최소한의 경량화된 파일들이 들어 있기 때문에 npm을 위한 파일이 들어있지 않아 RUN 커맨드인 npm install을 실행 할 수 없다.`
+그래서 npm이 들어있는 베이스 이미지를 찾아야하는데 그것들 중 하나가 node이다.
+
+- RUN: npm은 Node.js로 만들어진 모듈을 웹에서 다운 받아 설치하고 관리해주는 프로그램.
+npm install은 package.json에 적혀있는 종속성들(dependencies)을 웹에서 자동으로 다운 받아서 설치해주는 명령어이다.
+(npm install -> npm registry에서 모듈 다운로드 -> app에 모듈 설치)
+결론적으로, `node.js app을 만들때 필요한 모듈들을 다운받아 설치하는 역할을 한다.`
+
+- CMD: node 파일을 실행시키려면 `node + 엔트리 파일 이름`을 지정해줘야 한다.
