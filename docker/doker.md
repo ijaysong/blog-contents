@@ -827,3 +827,23 @@ npm install은 package.json에 적혀있는 종속성들(dependencies)을 웹에
 결론적으로, `node.js app을 만들때 필요한 모듈들을 다운받아 설치하는 역할을 한다.`
 
 - CMD: node 파일을 실행시키려면 `node + 엔트리 파일 이름`을 지정해줘야 한다.
+
+### Package.json 파일이 없다고 나오는 이유
+위에서 작성한 dockerfile을 빌드하면 Package.json 파일이 없다고 에러가 발생한다.
+이유가 무엇일까??
+
+`npm install` 커맨드는 어플리케이션에 필요한 종속성을 다운받아 준다.
+이렇게 다운 받을 때, package.json을 보고 그곳에 명시된 종속성들을 다운 받아서 설치해준다.
+하지만 package.json가 컨테이너 안에 없기에 찾을 수 없다는 에러가 발생한 것이다.
+
+ex)
+Node 베이스 이미지
+- 시작시 실행될 명령어: ???
+- 파일 스냅샷 : home, bin, dev...
+
+임시컨테이너
+- 하드웨어 : Node 베이스 이미지의 파일 스냅샷
+
+package.json 및 그 외 파일들 : 임시 컨테이너 외부에 존재하고 있음!
+
+이러한 이유로 `COPY`를 이용해서 package.json을 컨테이너 안으로 넣어줘야 한다.
