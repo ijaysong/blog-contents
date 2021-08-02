@@ -844,6 +844,41 @@ Node 베이스 이미지
 임시컨테이너
 - 하드웨어 : Node 베이스 이미지의 파일 스냅샷
 
-package.json 및 그 외 파일들 : 임시 컨테이너 외부에 존재하고 있음!
+package.json 및 그 외 파일들(server.js) : 임시 컨테이너 외부에 존재하고 있음!
 
 이러한 이유로 `COPY`를 이용해서 package.json을 컨테이너 안으로 넣어줘야 한다.
+~~~
+COPY package.json ./
+~~~
+- COPY
+- package.json : 복사 할 파일 경로, 복사 대상
+- ./ : 컨테이너 내에서 파일이 복사될 경로, 붙여넣기 할 위치
+
+Dockerfile을 다음과 같이 수정해준다.
+~~~
+FROM node:10
+
+COPY package.json ./
+
+RUN npm install
+
+CMD ["node", "server.js"]
+~~~
+
+그런데 server.js가 없다고 또 에러가 발생한다.
+package.json과 마찬가지로 컨테이너 안에 해당 파일이 존재하지 않기 때문이다.
+해당 디렉토리에 존재하는 모든 파일을 복사하여 붙여넣기 해준다.
+~~~
+COPY ./ ./
+~~~
+
+dockerfile도 다음과 같이 변경해준다.
+~~~
+FROM node:10
+
+COPY ./ ./
+
+RUN npm install
+
+CMD ["node", "server.js"]
+~~~
