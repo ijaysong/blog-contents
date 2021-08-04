@@ -910,3 +910,36 @@ ex)
 -p: 포트 옵션
 49160: 웹 브라우저에서 입력할 포트번호 (로컬 호스트 네트워크)
 8080: 컨테이너 네트워크 포트번호
+
+### Working Directory 명시해주기
+Work Directory(WORKDIR)란?
+이미지 안에서 어플리케이션 소스 코드를 가지고 있을 디렉토리를 생성하는 것이다.
+이 디렉토리가 어플리케이션의 working directory가 된다.
+
+그렇다면 왜 working directory를 지정해주어야 하는 것일까?
+
+node 이미지의 파일 스냅샷 리스트를 살펴보면 home, bin, dev 등의 파일들이 있다.
+~~~
+// Node 이미지 속 Root 디렉토리
+Eunjiui-MacBook:nodejs-docker-app eunjisong$ docker run -it node ls
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+boot  etc  lib   media  opt  root  sbin  sys  usr
+~~~
+
+반면에 직접 만든 이미지의 Root 디렉토리를 살펴보면 
+Dockerfile에서 COPY해온 여러 파일들까지 지저분하게 루트 디렉토리에 저장되어 있는 것을 알 수 있다.  
+~~~
+Eunjiui-MacBook:nodejs-docker-app eunjisong$ docker run -it ijaysong/nodejs ls 
+Dockerfile  etc    media         package-lock.json  run        sys
+bin         home   mnt           package.json       sbin       tmp
+boot        lib    node_modules  proc               server.js  usr
+dev         lib64  opt           root               srv        var
+~~~
+
+COPY 해온 파일들이 루트 디렉토리에 저장되면서 발생하는 문제점이 두가지가 있다.
+
+1. 기존에 존재하는 파일과 동일한 이름의 파일을 COPY해오면 기존의 것이 덮어씌워져 사라진다.
+ex) 기존 working directory에 home이라는 폴더가 있고 COPY하면서 새로 추가되는 폴더에 home이 있다면 중복되므로 원래있던 폴더가 덮어씌워져 버린다.
+2. 모든 파일이 한 디렉토리에 저장되어 정리정돈이 안되어 있다.
+
+=> 그래서 어플리케이션을 위한 소스들은 work 디렉토리를 따로 만들어서 보관한다.
