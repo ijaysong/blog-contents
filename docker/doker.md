@@ -943,3 +943,32 @@ ex) 기존 working directory에 home이라는 폴더가 있고 COPY하면서 새
 2. 모든 파일이 한 디렉토리에 저장되어 정리정돈이 안되어 있다.
 
 => 그래서 어플리케이션을 위한 소스들은 work 디렉토리를 따로 만들어서 보관한다.
+
+도커 파일을 만들때 `WORKDIR`를 지정해준다.
+~~~
+FROM node:10
+
+WORKDIR /usr/src/app
+
+COPY ./ ./
+
+RUN npm install
+
+CMD ["node", "server.js"]
+~~~
+
+도커 이미지를 빌드하여 새로운 컨테이너를 만들고 해당 컨테이너 내부로 접속해본다.
+work directory를 지정해주면 컨테이너 내부에 처음 접속 했을 때 work directory가 표시된다.
+~~~
+Eunjiui-MacBook:nodejs-docker-app eunjisong$ docker run -it ijaysong/nodejs sh# ls
+Dockerfile  node_modules  package-lock.json  package.json  server.js
+# cd /
+# ls
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+boot  etc  lib   media  opt  root  sbin  sys  usr
+~~~
+
+WORKDIR 커맨드 지정 후 파일의 구성은 다음과 같다.
+루트 경로(/) : root, usr, home, bin, var ...
+/user : src
+/app: Dockerfile, package.json, pakcage-lock.json, node_module
