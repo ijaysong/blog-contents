@@ -944,31 +944,12 @@ ex) 기존 working directory에 home이라는 폴더가 있고 COPY하면서 새
 
 => 그래서 어플리케이션을 위한 소스들은 work 디렉토리를 따로 만들어서 보관한다.
 
-도커 파일을 만들때 `WORKDIR`를 지정해준다.
-~~~
-FROM node:10
+### 어플리케이션 소스 변경으로 다시 빌드하는 것에 대한 문제점
+현재까지는 만든 어플을 소스 변경시 변경된 소스를 반영시켜주기 위해서 도커 파일을 다시 빌드해서 컨테이너 이미지를 생성시켜줘야 했다.
+ex)
+도커 파일 생성 -> 도커 파일로 도커 이미지 생성(docker build) -> 도커 이미지로 컨테이너 생성 후 앱 실행 (docker run)
 
-WORKDIR /usr/src/app
-
-COPY ./ ./
-
-RUN npm install
-
-CMD ["node", "server.js"]
-~~~
-
-도커 이미지를 빌드하여 새로운 컨테이너를 만들고 해당 컨테이너 내부로 접속해본다.
-work directory를 지정해주면 컨테이너 내부에 처음 접속 했을 때 work directory가 표시된다.
-~~~
-Eunjiui-MacBook:nodejs-docker-app eunjisong$ docker run -it ijaysong/nodejs sh# ls
-Dockerfile  node_modules  package-lock.json  package.json  server.js
-# cd /
-# ls
-bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
-boot  etc  lib   media  opt  root  sbin  sys  usr
-~~~
-
-WORKDIR 커맨드 지정 후 파일의 구성은 다음과 같다.
-루트 경로(/) : root, usr, home, bin, var ...
-/user : src
-/app: Dockerfile, package.json, pakcage-lock.json, node_module
+매번 도커파일을 수정해야 할 떄마다 다시 빌드하고 컨테이너를 생성해야 하는 것은 비효율적이고 번거롭기까지 하다!
+도커 파일 내부에서 COPY ././를 지정해주고 있는데
+이 부분으로 인해서 타겟 파일들을 다시 다운 받아주어야 하기 때문이다.
+그렇다면 이러한 비효율적인 부분을 어떻게 해결할 수 있을까? 
