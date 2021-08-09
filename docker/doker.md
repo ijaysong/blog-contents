@@ -995,3 +995,13 @@ docker run -p 5000:8080 -v /usr/src/app/node_modules -v $(pwd):/usr/src/app {이
 pwd 부분에는 로컬에서 다운로드 받을 경로를 지정을 해주고, : 다음에는 도커 컨테이너 참조하고 있는 경로를 지정해준다.
 
 => 다시 빌드하지 않아도 소스코드가 반영이 될 수 있다!
+
+## Docker Compose
+### Docker Compose란 무엇인가
+`docker compose`란 다중 컨테이너 도커 애플리케이션을 정의하고 실행하기 위한 도구이다.
+
+### 애플리케이션 소스 작성하기
+1. `npm init`으로 package.json 작성
+2. server.js도 작성
+3. 기본적인 노드 부분 작성
+4. 레디스 부분 작성
