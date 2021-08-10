@@ -1005,3 +1005,22 @@ pwd 부분에는 로컬에서 다운로드 받을 경로를 지정을 해주고,
 2. server.js도 작성
 3. 기본적인 노드 부분 작성
 4. 레디스 부분 작성
+
+#### `레디스`란?
+Redis(REmote Dictionary Server)는 메모리 기반의 키-값 구조 데이터 관리 시스템이며,
+모든 데이터를 메모리에 저장하고 빠르게 조회할 수 있는 비관계형 데이터베이스(NoSql)이다.
+
+#### 레디스를 쓰는 이유?
+메모리에 저장을 하기 때문에 Mysql같은 데이터베이스에 데이터를 저장하는 것과
+데이터를 불러올 때 훨씬 빠르게 처리할 수 있으며,
+비록 메모리에 저장하지만 영속적으로도 보관이 가능하다.
+그래서 서버를 재부팅해도 데이터를 유지할 수 있는 장점이 있다. 
+
+#### Node.js 환경에서 Redis 사용 방법
+1. 먼저 redis-server를 작동시킨다.
+2. redis 모듈을 다운 받는다. (package.json에 dependencies에 지정해놓음)
+3. 레디스 모듈을 받은 후, 레디스 클라이언트를 생성하기 위해서 Redis에서 제공하는 createClient()함수를 이용해서 redis.createClient로 레디스 클라이언트를 생성해준다. (server.js)
+   - redis server가 작동하는 곳이 Node.js 앱이 작동하는 곳과 다른 곳이라면 host와 port 값을 명시해주어야 한다.
+   - 도커를 사용하지 않는 환경 : host: "https://redis-server.com"
+   - 도커를 사용하는 환경 : host: "redis-server" 
+   - 도커 Compose를 사용할 때는 host 옵션에 docker-compose.yml에서 명시한 컨테이너 이름을 지정하면 된다.
