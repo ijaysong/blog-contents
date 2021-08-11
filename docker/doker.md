@@ -1024,3 +1024,20 @@ Redis(REmote Dictionary Server)는 메모리 기반의 키-값 구조 데이터 
    - 도커를 사용하지 않는 환경 : host: "https://redis-server.com"
    - 도커를 사용하는 환경 : host: "redis-server" 
    - 도커 Compose를 사용할 때는 host 옵션에 docker-compose.yml에서 명시한 컨테이너 이름을 지정하면 된다.
+
+### Dockerfile 작성하기
+~~~
+FROM node:10
+
+WORKDIR /usr/src/app
+
+COPY ./ ./
+
+RUN npm install
+
+CMD [ "node", "server.js"]
+~~~
+- WORKDIR : working directory를 지정해주어 COPY 해온 파일들이 깔끔하게 정리될 수 있도록 한다.
+- COPY : 현재 디렉토리의 파일들을 루트(working directory)에 복사한다. ex) package.json 등등...
+- RUN : package.json의 dependencies에 작성한 express와 redis를 사용하기 위해서 npm을 설치한다.
+- CMD : 노드 실행 커맨드
