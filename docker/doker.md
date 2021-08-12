@@ -1041,3 +1041,33 @@ CMD [ "node", "server.js"]
 - COPY : 현재 디렉토리의 파일들을 루트(working directory)에 복사한다. ex) package.json 등등...
 - RUN : package.json의 dependencies에 작성한 express와 redis를 사용하기 위해서 npm을 설치한다.
 - CMD : 노드 실행 커맨드
+
+### Docker Containers간 통신 할 때 나타나는 에러
+레디스 클라이언트를 작동하려면 레디스 서버가 켜져 있어야 한다.
+먼저 레디스 서버를 위한 컨테이너를 실행하고, 노드 js를 위한 컨테이너를 실행해본다.
+ex)
+- 컨테이너 1 : 레디스 서버
+- 컨테이너 2 : 노드 JS 앱 + 레디스 클라이언트
+
+컨테이너 1을 실행한다. (레디스 서버)
+~~~
+// 레디스 서버 실행
+docker run redis
+~~~
+
+컨테이너 2를 실행한다. (노드 JS 앱 + 레디스 클라이언트)
+~~~
+// 만들어 둔 docker file로 이미지를 생성
+docker build -t ijaysong/docker-compose-app ./
+
+// 이미지로 컨테이너를 실행한다.
+docker run ijaysong/docker-compose-app
+~~~
+
+컨테이너 2를 실행하면 레디스 서버 연결이 실패했다고 뜬다!
+왜일까??
+
+컨테이너 간 통신을 할 때 설정을 해주지 않으면, 서로 접근 할 수 없다.
+그래서 노드 JS 앱에서 레디스 서버에 접근 할 수 없었던 것이다.
+
+이와 같은 컨테이너 상황에서 쉽게 네트워크를 연결 시켜주기 위해서 `Docker Compose`를 이용하면 된다.
