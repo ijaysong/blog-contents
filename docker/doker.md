@@ -1071,3 +1071,35 @@ docker run ijaysong/docker-compose-app
 그래서 노드 JS 앱에서 레디스 서버에 접근 할 수 없었던 것이다.
 
 이와 같은 컨테이너 상황에서 쉽게 네트워크를 연결 시켜주기 위해서 `Docker Compose`를 이용하면 된다.
+
+### Docker Compose 파일 작성하기
+컨테이너 간 통신을 위해 `Docker Compose.yml`를 작성해보자.
+Docker Compose 파일은 yaml(얌)파일 인데 `yml`은 뭘까??
+
+YAML (ain't markup language)의 약자이며, `일반적으로 구성 파일 및 데이터가 저장되거나 전송되는 응용 프로그램에서 사용되고` 원래는 XML이나 json 포맷으로 많이 쓰였지만, `좀더 사람이 읽기 쉬운 포맷`으로 나타난게 yaml 이다.
+
+컨테이너 1, 2 간 통신이 가능하도록 두 개의 컨테이너의 바탕엔 docker compose가 있다.
+docker compose에는 버전이 있고, 두 컨테이너를 service로 감싼다.
+그렇다면 docker compose 파일을 작성해보자.
+~~~
+version: "3"
+services:
+    redis-server:
+        image: "redis"
+    node-app:
+        build: .
+        ports:
+            - "5000:8080"
+~~~
+version : 도커 컴포즈의 버전이다.
+services: 이곳에 실행하려는 컨테이너
+   redis-server : 컨테이너 이름
+      image : 컨테이너에서 사용하는 이미지
+   node-app : 컨테이너 이름
+      build : Dockerfile의 위치를 지정해줌. 현 디렉토리에 있으면 `.`을 작성
+      ports : 포트 맵핑 ex) 로컬 포트 : 컨테이너 포트
+
+도커 컴포즈를 이용해서 앱을 실행시켜보자.
+~~~
+docker-compose up
+~~~
