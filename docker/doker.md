@@ -1103,3 +1103,23 @@ services: 이곳에 실행하려는 컨테이너
 ~~~
 docker-compose up
 ~~~
+
+### Docker Compose로 컨테이너를 멈추기
+도커 컴포즈를 이용해서 앱을 중단시켜보자.
+새로운 터미널을 열어서 다음 커맨드를 실행한다.
+~~~
+docker-compose down
+~~~
+docker-compose.yml 파일이 위치해있는 디렉토리에서 실행해야 한다.
+
+새로운 터미널을 열어서 실행해줘야 해서 번거로운 점이 있다.
+굳이 다른 터미널을 켜지 않고ㅡ 하나의 터미널로 해결하고 싶다면 
+docker compose를 컨테이너를 실행할 때, `d` 옵션을 주면 된다.
+~~~
+docker compose -d up
+~~~
+-d : detached 모드로서 앱을 백그라운드에서 실행시킨다. 그래서 앱에서 나오는 output을 표출하지 않는다.
+
+cf )
+- docker-compose up : 이미지가 없을 때 이미지를 빌드하고 컨테이너 시작
+- docker-compose up --build : 이미지가 있든 없든 이미지를 빌드하고 컨테이너 시작
