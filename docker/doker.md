@@ -1154,4 +1154,47 @@ npm run test
 배포를 위한 build 폴더와 그 안에 많은 파일을 생성한다.
 ~~~
 npm run build
+~~~~~~
+
+### 도커를 이용하여 리액트 앱 실행해보기
+개발 흐름은 다음과 같다.
+1. Dockerfile 작성
+   1-1. Dev Dockerfile.dev
+   1-2. Prod Dockerfile
+   실제 배포 후 각각 달리 적용되는 부분이 있어서 개발과 운영단계를 위한 도커파일을 분리한다.
+   관용적으로 개발 단계에서 사용하는 도커 파일에 `.dev`를 붙여준다.
+2. 도커 이미지 생성
+3. 이미지를 이용해서 컨테이너 만들기
+4. 컨테이너 안에서 앱 실행하기
+
+다음과 같이 개발 단계의 dockerfile을 작성하고 `docker build`를 해준다.
+
+그러면 Dockerfile을 찾을 수 없다고 에러가 뜬다.
+왜 일까??
+
+지금까지 `docker build ./`를 실행하면 현재 디렉토리 안에 존재하는 Dockerfile을 찾아서 실행했는데, 도커 파일 뒤에 `.dev`가 붙어서 찾지 못한 것이다.
+그래서 `f옵셥`을 사용해 `이미지를 빌드 할때 쓰일 도커 파일을 임의로 지정`해준다.
 ~~~
+docker build -f Dockerfile.dev .
+~~~
+
+cf) `도커 환경에서 리액트 앱을 실행할 때는 node_modules 폴더를 삭제해줘도 된다.`
+리액트 앱을 실행 할 때 필요한 모듈들이 node_modules 안에 들어있다.
+그러나 이미지를 빌드할 때 이미 npm install로 모든 모듈을 도커 이미지에 다운 받기 때문에 굳이 로컬 머신에 node_module를 둘 필요가 없다.
+
+다음은 개발 단계에서 작성한 도커 파일이다.
+~~~
+FROM node:alpine
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+RUN npm install
+
+COPY ./ ./
+
+CMD [ "npm", "run", "start" ]
+~~~
+- RUN npm install : 여기서 한번 node_modules가 생성
+- COPY ./ ./ : 로컬머신에 node_module이 있다면 여기서 한번 더 이미지에 복사가 되서 중복이 된다.
