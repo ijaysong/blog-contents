@@ -1211,3 +1211,18 @@ docker run -it -p 3000:3000 {이미지 이름}
 ~~~
 -i : 상호 입출력
 -t : tty를 활성화 하여 bash 쉘을 사용
+
+### 도커 Volume을 이용한 소스 코드 변경
+먼저 `COPY`와 `Volume`에 대해서 살펴보자.
+- COPY : 로컬에 있는 server.js나 package.json 파일 등을 도커 컨테이너로 그대로 `복사`하는 것.
+- Volume : 로컬에 있는 파일을 도커 컨테이너에 `매핑`하거나 `참조`해서 사용하는 것. 
+
+Volume `v 옵션`을 사용해서 어플리케이션을 실행하는 방법은 다음과 같다.
+~~~
+docker run -it -p 3000:3000 -v /usr/src/app/node_modules -v $(pwd):/usr/src/app <이미지 아이디>
+~~~
+-v /usr/src/app/node_modules : 호스트 디렉토리에 node_modules는 없기에 컨테이너에 맵핑을 하지 말라고 하는 것
+-v $(pwd):/usr/src/app : pwd 경로에 있는 디렉토리 혹은 파일을 /usr/src/app 경로에서 참조
+
+COPY로 실행시키면 소스 코드를 수정해도 바로 반영되지 않는다. build를 해줘야 하기 때문이다.
+반면에 Volume으로 실행시키면 코드 변경 내용이 바로 반영된다. 참조를 하고 있기 때문이다.
