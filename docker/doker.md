@@ -1226,3 +1226,34 @@ docker run -it -p 3000:3000 -v /usr/src/app/node_modules -v $(pwd):/usr/src/app 
 
 COPY로 실행시키면 소스 코드를 수정해도 바로 반영되지 않는다. build를 해줘야 하기 때문이다.
 반면에 Volume으로 실행시키면 코드 변경 내용이 바로 반영된다. 참조를 하고 있기 때문이다.
+
+### 도커 컴포즈로 좀 더 간단하게 앱 실행해보기
+1. docker-compose.yml 파일 작성하기
+~~~
+version: "3"
+services: 
+  react:
+    build:
+      context: .
+      dockerfile: : Dockerfile.dev
+    ports:
+    - "3000:3000"
+    volumes: 
+    - /usr/src/app/node_modules
+    - ./:/usr/src/app
+    stdin_open: true
+~~~
+- 도커 컴포즈의 버전 : 3
+- 이곳에 실행하려는 컨테이너들을 정의
+- 컨테이너 이름 : react
+- 도커 이미지를 구성하기 위한 파일과 폴더들이 있는 위치 (.)
+- 도커 파일의 이름
+- 포트 맵핑 ex) 로컬 포트 : 컨테이너 포트
+- 로컬 머신에 있는 파일들 맵핑
+- 리액트 앱을 끌때 필요 (버그 수정)
+  
+2. 도커 컴포즈로 실행
+~~~
+docker-compose up
+~~~
+
