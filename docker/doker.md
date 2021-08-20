@@ -1257,3 +1257,46 @@ services:
 docker-compose up
 ~~~
 
+### 리액트 앱 테스트 하기
+도커를 이용한 리액트 앱에서 테스트를 진행해보자.
+이미지 생성 커맨드는 다음과 같다.
+~~~
+docker build -f dockerfile.dev .
+~~~
+
+앱 실행을 해본다.
+~~~
+docker run -it 이미지 이름 npm run test
+~~~
+`-it` 옵션은 더 좋은 포맷으로 결과값을 보기 위한 옵션이다.
+
+테스트 코드도 소스 코드와 마찬가지로 변경 되는대로 바로 build해서 반영이 되었으면 좋겠다.
+동일하게 `volume`을 사용해서 테스트 코드를 참조하도록 한다.
+
+1. docker-compose.yml 파일 작성하기
+compose.yml 파일에 test용 컨테이너를 추가한다.
+yaml 파일에 tests 컨테이너를 추가해줌으로서 앱을 시작할 때 두개의 컨테이너를 다 시작하게 된다. 
+(먼저 리액트 앱을 실행하고 그 앱을 테스트를 한다.)
+~~~
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /usr/src/app/node_modules
+      - ./:/usr/src/app
+    command: ["npm", "run", "test"]
+~~~
+- 컨테이너 이름 : tests
+- 도커 이미지를 구성하기 위한 파일과 폴더들이 있는 위치 (.)
+- 도커 파일의 이름
+- 로컬 머신에 있는 파일들 맵핑
+- 테스트 컨테이너 시작할 때 실행되는 명령어
+
+2. 도커 컴포즈 build 하기
+~~~
+docker-compose up --build
+~~~
+이렇게 실행시킨 후 테스트를 변경해보면 자동으로 변경된 부분도 반영되어 테스트 된다.
+
+
