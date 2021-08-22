@@ -1320,3 +1320,39 @@ npm run build를 수행하고 build 된 파일을 브라우저로부터 요청�
 반면에 운영 환경에서 개발 서버를 사용하기엔 개발 서버에 잡다한 많은 것들이 포함되어 무겁고 느리다는 단점이 있어
 각 서버의 장단점 및 용도, 목적에 맞게 사용하는 것이 효율적이기 때문에 환경별로 서버를 달리 사용하는 것이다. 
 
+### 운영환경 도커 이미지를 위한 Dockerfile 작성하기
+운영환경을 위한 Dockerfile을 요약하자만 두가지 단계로 이루어져 있다.
+1. build 파일을 생성한다. (Builder Stage)
+2. nginx를 가동하고 첫번째 단계에서 생성된 build 폴더의 파일들을 웹 브라우저의 요청에 따라 제공해준다. (Run Stage)
+
+~~~
+# builder stage
+FROM node:alpine as builder
+WORKDIR /usr/src/app
+COPY package.json ./
+RUN npm install
+COPY ./ ./
+CMD [ "npm", "run", "build" ]
+
+# run stage
+FROM nginx
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+~~~
+- as builder : 여기 FROM 부터 다음 FROM 전까지는 모두 builder stage라는 것을 명시
+- builder stage에서 생성된 파일과 폴더들은 /usr/src/app/build로 들어간다.
+- --from=builder : 다른 stage에 있는 파일을 복사할 때 다른 stage 이름을 명시
+- `/usr/share/nginx/html` 패스에 파일이 놓여있어야 nginx가 요청에 맞게 제공해줄 수 있다.
+- working directory에 있는 파일들을 `/usr/share/nginx/html` 로 복사해주어 nginx가 사용할 수 있도록 해준다.
+- nginx가 사용하는 해당 패스는 `/usr/share/nginx/html` 변경할 수 있다.
+
+이렇게 다 작성을 했다면 Dockerfile로 이미지를 생성해보자.
+~~~
+docker build .
+~~~
+도커 파일명이 `Dockerfile.dev`가 아니라 일반 `Dockerfile`이므로 `-f 옵션`을 붙여서 build 해줄 필요가 없다.
+
+이미지를 생성했다면 그 이미ㅏ지를 이용해서 앱을 실행해보자.
+~~~
+docker run -p 8080:80 {이미지 이름}
+~~~
+- nginx의 기본 사용포트는 80이다.
