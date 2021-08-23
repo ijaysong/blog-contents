@@ -1356,3 +1356,22 @@ docker build .
 docker run -p 8080:80 {이미지 이름}
 ~~~
 - nginx의 기본 사용포트는 80이다.
+
+## 간단한 어플을 실제로 배포해보기(테스트 & 배포 부분)
+### Travis CI 란?
+Travis CI는 Github에서 진행되는 오픈소스 프로젝트를 위한 지속적인 통합 서비스(Continuous Integration)이다.
+Travis CI를 이용하면 Github repository에 있는 프로젝트를 특정 이벤트에 따라 자동으로 `테스트`,
+빌드하거나 `배포` 할 수 있다.
+Private repository는 유료로 일정 금액을 지불하고 사용할 수 있다.
+
+### Travis CI의 흐름
+1. 로컬 Git
+2. Github
+3. Travis CI
+4. AWS
+
+- 로컬 Git에 있는 소스를 Github 저장소에 push 한다.
+- Github의 해당 저장소에 소스가 push 되면 Travis CI에게 소스가 push 되었다고 알려준다.
+- Travis CI는 업데이트 된 소스를 Github에서 가지고 온다.
+- Github에서 가져온 소스의 테스트 코드를 실행해본다.
+- 테스트 코드 실행 후 테스트가 성공하면 AWS같은 호스팅 사이트로 보내서 배포를 한다.
