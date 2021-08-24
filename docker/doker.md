@@ -1375,3 +1375,18 @@ Private repository는 유료로 일정 금액을 지불하고 사용할 수 있�
 - Travis CI는 업데이트 된 소스를 Github에서 가지고 온다.
 - Github에서 가져온 소스의 테스트 코드를 실행해본다.
 - 테스트 코드 실행 후 테스트가 성공하면 AWS같은 호스팅 사이트로 보내서 배포를 한다.
+
+### Travis CI 이용 순서
+Travis CI에서 계정을 만들때 github 계정과 동일한 이메일을 사용해야 연동이 된다.
+Travis CI의 Settings에서 연결할 repository를 선택해준다. 
+
+Github에서 Travis CI로 소스를 어떻게 전달 시킬것이며,
+전달 받은 것을 어떻게 TEST 할 것이며,
+그 테스트가 성공했을 때 어떻게 AWS에 전달해서 배포할 것인지를 설정해주어야 한다.
+
+이러한 설정을 위해서 `.travis.yml` 파일을 작성해주어야 한다.
+
+cf)
+설정을 위해서
+Docker: docker-compose.yml
+Travis CI: .travis.yml 
