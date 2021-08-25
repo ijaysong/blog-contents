@@ -1390,3 +1390,39 @@ cf)
 설정을 위해서
 Docker: docker-compose.yml
 Travis CI: .travis.yml 
+
+### .travis.yml 파일 작성하기 (테스트까지)
+전체적인 흐름은 다음과 같다.
+1. Test를 수행하기 위한 준비
+   - 도커 환경에서 리액트 앱을 실행하고 있으니 Travis CI에서도 도커 환경을 구성한다.
+   - 구성된 도커 환경에서 Docker.dev를 이용해서 도커 이미지를 생성한다.
+2. Test를 수행하기
+   - 어떻게 Test를 수행할 것인지 설정해준다.
+3. AWS로 배포하기
+   - 어떻게 AWS에 소스코드를 배포할 것인지 설정해준다.
+
+`.travis.yml`은 다음과 같이 작성해본다.
+~~~
+sudo: required
+
+language: generic
+
+services:
+   - docker
+
+before_install:
+   - echo "start Creating an image with dockerfile"
+   - docker build -t ijaysong/docker-react-app -f Dockerfile.dev .
+
+script:
+   - docker run -e CI=true ijaysong/docker-react-app npm run test -- --coverage
+
+after_success:
+   - echo "Test Success"
+~~~
+- sudo : 관리자 권한 갖기
+- language: 언어(플랫폼)을 선택
+- services: 도커 환경 구성
+- before_install : 스크립트를 실행하기 전에 수행할 내용 (도커 이미지 build)
+- script: 테스트 코드를 적은 스크립트를 실행
+- after_success: 테스트 성공 후
