@@ -1449,3 +1449,34 @@ AWS에서 사용할 두가지 기능에 대해서 살펴보자.
    - 플랫폼 브랜치 : Docker running on 64bit Amazon Linux 64
    - 플랫폼 버전 : 3.0.3
 4. 애플리케이션 생성
+
+### .travis.yml 파일 작성하기 (배포 부분)
+도커 이미지를 생성 후 어플을 실행하여 테스트 하는 부분까지 travis 설정을 하였다.
+이제는 테스트에 성공한 소스를 AWS Elastic Beanstalk에 자동으로 배포하는 부분을 travis 파일에 넣어줄 차례이다.
+
+다음은 .travis.yml 파일에 추가로 넣어줄 내용이다.
+~~~
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-northeast-2"
+  app: "docker-react-app"
+  env: "DockerReactApp-env"
+  bucket_name: "elasticbeanstalk-ap-northeast-2-972153559337"
+  bucket_path: "docker-react-app"
+  on:
+    branch: main
+~~~
+- provider : 외부 서비스 표시 (s3, elasticbeanstalk, firebase 등등...)
+- region: 현재 사용하고 있는 AWS의 서비스가 위치하고 있는 물리적 장소
+- app: 생성된 어플리케이션 이름
+- env: 환경의 이름
+- bucket_name: 해당 elasticbeanstalk을 위한 s3 버켓 이름 
+  ex) Travis CI에서 가지고 있는 파일을 압축해서 S3에 보내기 때문에 bucket_name을 지정해주어야 한다.
+  ex) elasticbeanstalk을 설치하면 자동으로 S3까지 설치된다. 커다란 환경이기 때문에.
+- bucket_path : 어플리케이션의 이름과 동일
+- on
+  - branch : 어떤 브랜치에 Push를 할때 AWS에 배포를 할 것인지
+
+하지만 Travis CI는 아무런 허가 없이 AWS에 파일을 전송할 수 없다.
+어떻게 해야할까??
+
