@@ -1480,3 +1480,29 @@ deploy:
 하지만 Travis CI는 아무런 허가 없이 AWS에 파일을 전송할 수 없다.
 어떻게 해야할까??
 
+### Travis CI의 AWS접근을 위한 API 생성
+Travis CI와 AWS가 소통을 할 수 있도록 인증하는 부분을 설정해보자.
+
+#### 소스 파일을 전달하기 위한 접근 요건
+~~~
+Github -> Travis CI -> AWS
+~~~
+1. Github -> Travis CI
+- Travis CI 아이디 로그인 시, Github 연동으로 인증해준다.
+
+2. Travis CI -> AWS
+- AWS에서 제공해주는 `Secret Key`를 Travis yml 파일에다가 적어주면 된다.
+
+그렇다면 `Secret Key`는 어떻게 받아와야 할까??
+
+### Secret, Access API Key 받는 순서
+1. IAM USER 생성
+   `IAM`(Identity and Access Management)란, 
+   AWS 리소스에 대한 액세스를 안전하게 제어할 수 있는 웹 서비스이다.
+   IAM을 사용하여 리소스를 사용하도록 인증(로그인) 및 권한부여(권한 있음)된 대상을 제어한다.
+
+   `Root 사용자`는 처음 가입해서 사용할 때의 계정으로, AWS 서비스 및 리소스에 대한 완전한 액세스 권한이 있다.
+   하지만 보안상 Root 사용자를 사용하는 것은 좋지 않기 때문에, IAM 유저를 생성한다.
+   `IAM 사용자`는 root 사용자가 부여한 권한만 가지고 있다. 배포를 위해 생성한 beanstalk에 대한 권한을 제공해보자.
+
+   액세스 키는 한번만 발급이 되므로 복사하여 어딘가에 잘 보관해두는 것을 권장한다.
