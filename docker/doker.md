@@ -1505,4 +1505,14 @@ Github -> Travis CI -> AWS
    하지만 보안상 Root 사용자를 사용하는 것은 좋지 않기 때문에, IAM 유저를 생성한다.
    `IAM 사용자`는 root 사용자가 부여한 권한만 가지고 있다. 배포를 위해 생성한 beanstalk에 대한 권한을 제공해보자.
 
-   액세스 키는 한번만 발급이 되므로 복사하여 어딘가에 잘 보관해두는 것을 권장한다.
+   액세스 키와 비밀 액세스 키는 한번만 발급이 되므로 복사하여 어딘가에 잘 보관해두는 것을 권장한다.
+
+2. API 키를 Travis yml 파일에 적어주기
+직접 API 키를 Travis yml 파일에 적어주면 노출이 되기 때문에, 다른 곳에 적고 그것을 가져와야 한다.
+
+API 키를 숨겨서 적어놓을 곳
+Travis CI > More Options > Settings > Environment Variables
+`Travis CI 환경변수`에 액세스 키와 비밀 엑세스 키를 입력한다.
+- AWS_ACCESS_KEY
+- AWS_SECRET_ACCESS_KEY   
+
