@@ -1516,3 +1516,32 @@ Travis CI > More Options > Settings > Environment Variables
 - AWS_ACCESS_KEY
 - AWS_SECRET_ACCESS_KEY   
 
+## 복잡한 어플을 실제로 배포해보기 (개발 환경 부분)
+멀티 컨테이너 or 풀 스택 어플리케이션으로 구성해보겠다. (컨테이너를 여러개 활용하겠다는 말이다.)
+ex) 
+- Nginx 컨테이너
+- React JS 컨테이너
+- Node JS 컨테이너
+- Mysql 컨테이너
+
+설계는 이하 두가지 방법으로 진행될 수 있는데, Nginx의 Proxy를 이용한 설계 방법으로 진행해보겠다.
+
+1. Nginx의 Proxy를 이용한 설계 
+다음과 같은 방법으로 요청을 받는다.
+~~~
+axios.get(`/api/values`)
+~~~
+- 요청을 routing 해주는 설계
+- 장점
+  - Request를 보낼 때, URL 부분의 host 이름이 바뀌어도 변경시켜 주지 않아도 된다.
+  - 포트가 바뀌어도 변경을 안해줘도 된다.
+- 단점
+  - nginx 설정, 전체 설계가 다소 복잡하다.
+
+1. Nginx는 정적파일을 제공만 해주는 설계
+~~~
+axios.get(`http://localhost:5000/api/values`)
+axios.get(`http://johnahn.com:5000/api/values`)
+~~~
+- 장점 : 설계가 다소 간단하여 구현하는게 더 쉽다.
+- 단점 : host name 이나 포트 변경이 있을 때, Request URL도 변경시켜줘야 한다.
