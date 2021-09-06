@@ -1545,3 +1545,18 @@ axios.get(`http://johnahn.com:5000/api/values`)
 ~~~
 - 장점 : 설계가 다소 간단하여 구현하는게 더 쉽다.
 - 단점 : host name 이나 포트 변경이 있을 때, Request URL도 변경시켜줘야 한다.
+
+### 개발 흐름
+1. 전체 소스 코드 작성 (NodeJS, React)
+2. Dockerfile 작성
+   - 개발환경 Dockerfile.dev
+   - 운영환경 Dockerfile
+3. Docker-compose 작성
+4. 깃헙에 push
+   - feature -> main 머지
+5. Travis CI
+   - 테스트 성공 -> Dockerfile을 이용해서 Image 생성 (빌드) -> Docker Hub으로 전달
+6. Docker Hub
+   - Travis CI에서 전달받은 이미지 보관 -> AWS에서 가져가려 할때 전달
+7. AWS Elastic Beanstalk
+   - Travis CI에서 빌드된 이미지를 이용해서 배포하기
