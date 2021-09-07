@@ -1560,3 +1560,36 @@ axios.get(`http://johnahn.com:5000/api/values`)
    - Travis CI에서 전달받은 이미지 보관 -> AWS에서 가져가려 할때 전달
 7. AWS Elastic Beanstalk
    - Travis CI에서 빌드된 이미지를 이용해서 배포하기
+
+### Node JS 구성하기
+1. backend 라는 폴더 만들기 : Node JS 소스들이 들어가는 장소
+2. package.json 파일 만들기 : npm init
+3. package.json 파일 안에 스크립트와 사용할 모듈들 명시해주기
+~~~
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "4.16.3",
+    "mysql": "2.16.0",
+    "nodemon": "1.18.3",
+    "body-parser": "1.19.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
+~~~
+- test : test 코드를 실행할 때 사용
+- start : express 서버를 시작할때 사용
+- dev : nodemon을 이용하여 express 서버를 시작할 때 사용
+  `nodemon`이란, Node JS로 작성한 코드를 수정했을 때, 서버를 껐다가 다시 빌드하지 않고, 서버가 계속 켜진 상태에서 수정된 내용이 반영되도록 해주는 확장 모듈
+- express : 웹 프레임워크 모듈
+- mysql : mysql을 사용하기 위한 모듈
+- body-parser : 클라이언트에서 오는 요청의 본문을 해석해주는 미들웨어 
