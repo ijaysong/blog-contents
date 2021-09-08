@@ -1563,7 +1563,9 @@ axios.get(`http://johnahn.com:5000/api/values`)
 
 ### Node JS 구성하기
 1. backend 라는 폴더 만들기 : Node JS 소스들이 들어가는 장소
+
 2. package.json 파일 만들기 : npm init
+
 3. package.json 파일 안에 스크립트와 사용할 모듈들 명시해주기
 ~~~
 {
@@ -1593,3 +1595,70 @@ axios.get(`http://johnahn.com:5000/api/values`)
 - express : 웹 프레임워크 모듈
 - mysql : mysql을 사용하기 위한 모듈
 - body-parser : 클라이언트에서 오는 요청의 본문을 해석해주는 미들웨어 
+
+4. 시작점이 되는 server.js 만들기
+: 앱을 실행할 때 `node server.js`로 시작하니 server.js 파일이 시작점이 된다.
+
+5. server.js의 기본 구조 작성
+~~~
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.use(bodyParser.json());
+
+app.listen(5000, () => {
+    console.log('어플리케이션이 서버 5000번 포트에서 되었습니다.');
+})
+~~~
+
+6. mysql을 연결하기 위한 db.js 파일 생성
+
+
+7. Host, 유저 이름, 비밀번호, 데이터베이스 이름을 명시해서 Pool을 생성해줌.
+   그리고 생성한 pool을 다른 부분에서 쓸 수 있게 export 해줌.
+~~~
+var mysql = require("mysql");
+var pool = mysql.createPool({
+    connectionLimit: 10,
+    host: 'mysql',
+    user: 'root',
+    password: 'johnahn',
+    database: 'myapp',
+});
+exports.pool = pool;
+~~~
+
+8. export 된 pool을 시작점인 server.js 에서 불러오기
+server.js에 다음 내용 추가
+~~~
+const db = require('./db');
+~~~
+
+9. 이 어플에서 필요한 두가지 API 작성하기 (server.js)
+    - 1) 입력을 받은 keyword를 저장하는 API
+    - 2) 저장된 keyword를 화면에 뿌려주는 API
+~~~
+// DB lists 테이블에 있는 모든 데이터를 프론트 서버에 보내주기
+app.get('/api/values', function(req, res, next) {
+    db.pool.query('SELECT * FROM lists;', 
+    (err, results, fields) => {
+        if (err)
+            return res.status(500).send(err)
+        else
+            return res.json(results)
+    })
+})
+
+// 클라이언트에서 입력한 값을 데이터베이스 lists 테이블에 넣어주기
+app.post('/api/value', function (req, res, next) {
+    db.pool.query(`INSERT INTO lists (value) VALUES ("${req.body.value}");`, 
+    (err, results, fields) => {
+        if (err)
+            return res.status(500).send(err)
+        else
+            return res.json({ success: true, value: req.body.value })
+    })
+})
+~~~
