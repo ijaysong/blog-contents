@@ -1662,3 +1662,33 @@ app.post('/api/value', function (req, res, next) {
     })
 })
 ~~~
+
+### React JS 구성하기
+1. Create-React-App으로 리액트 앱 생성하기
+다음 커맨드를 실행하면 React JS 가 다운로드 된다.
+~~~
+npx create-react-app frontend
+~~~
+
+2. App.js 파일 안에 원하는 UI를 생성
+- Input 박스, Button 추가
+
+3. UI를 위한 CSS 코드 작성
+
+4. 데이터 흐름을 위한 State 생성
+App.js 파일에 다음 내용을 지정해준다.
+~~~
+const [lists, setLists] = useState([])
+const [value, setValue] = useState("")
+~~~
+- useState : useState을 사용하기 위해서 react 라이브러리에서 가져옴
+- lists: 데이터베이스에 저장된 값을 가져와서 화면에 보여주기 전 이 Stage에 넣어둠
+- value: input 박스에 입력한 값이 이 stage에 들어감
+
+5. DB에서 데이터를 가져오기 위해, 필요한 useEffect 넣어주기
+- useEffect: useState을 사용하기 위해서 react 라이브러리에서 가져옴
+
+6. 나머지 해야할 것들 처리하기
+- useEffect에서 DB에 있는 값을 가져온다.
+- changeHandler : input 박스에 입력을 할때 onChange가 발생 할때마다 value State을 지정해준다.
+- submitHandler : 값을 input 박스에 입력하고, 입력한 값이 DB에 저장한다.
