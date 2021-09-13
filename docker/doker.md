@@ -1692,3 +1692,52 @@ const [value, setValue] = useState("")
 - useEffect에서 DB에 있는 값을 가져온다.
 - changeHandler : input 박스에 입력을 할때 onChange가 발생 할때마다 value State을 지정해준다.
 - submitHandler : 값을 input 박스에 입력하고, 입력한 값이 DB에 저장한다.
+
+### 리액트 앱을 위한 도커 파일 만들기
+전체 소스 코드 작성을 완성했다. (Node JS + React JS)
+개발환경과 운영환경 Dockerfile을 따로 따로 만들어야 한다.
+먼저 React JS을 위한 도커파일을 작성해보겠다.
+
+< 개발 환경을 위한 Dockerfile >
+~~~
+FROM node:alpine
+
+WORKDIR /app
+
+COPY package.json ./
+
+RUN npm install
+
+COPY ./ ./
+
+CMD [ "npm", "run", "start" ]
+~~~
+- FROM : 베이스 이미지를 도커 허브에서 가져온다.
+- WORKDIR : 해당 어플의 소스 코드들이 들어가게 된다.
+- COPY : 소스 코드가 비뀔 때마다 종속성까지 다시 복사를 해주는 수고를 하지 않기 위해 먼저 종속성 목록을 담고 있는 package.json을 복사한다.
+- RUN : package.json에 명시된 종속성을 다운 받는다.
+- COPY : 모든 소스코드들을 WORKDIR로 복사해준다.
+- CMD : 이 컨테이너가 실행될 때 같이 실행할 명령어를 지정해준다.
+
+< 운영 환경을 위한 Dockerfile >
+~~~
+FROM node:alpine
+WORKDIR /app
+COPY package.json ./
+RUN npm install
+COPY ./ ./
+CMD [ "npm", "run", "start" ]
+
+FROM nginx
+EXPOSE 3000
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/build /usr/share/nginx/html
+~~~
+크게 두 단계로 나뉜다.
+
+1. Build 파일을 생성하는 단계
+- nginx가 제공해줄 Build 파일들을 생성하는 단계이다.
+
+2. Nginx에 Build 파일을 제공하는 단계
+- Nginx를 가동하고 윗 단계에서 생성된 빌드 파일들을 제공해준다.
+- default.conf에서 해준 설정을 nginx 컨테이너 안에 있는 설정이 되게 복사를 해준다.
