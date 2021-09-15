@@ -1741,3 +1741,38 @@ COPY --from=builder /app/build /usr/share/nginx/html
 2. Nginx에 Build 파일을 제공하는 단계
 - Nginx를 가동하고 윗 단계에서 생성된 빌드 파일들을 제공해준다.
 - default.conf에서 해준 설정을 nginx 컨테이너 안에 있는 설정이 되게 복사를 해준다.
+
+### 프론트 Nginx 설정파일 작성하기
+클라이언트에서 받은 요청을 넘겨 받으면 프론트에 있는 Nginx가 받아서 요청에 따라 빌드 파일을 제공하는 역할을 한다.
+이번 단계에서는 프론트에 있는 Nginx의 설정파일을 작성해보겠다.
+
+~~~
+server {
+    listen 3000;
+
+    location / {
+
+        root /usr/share/nginx/html;
+
+        index index.html index.html;
+
+        try_files $uri $uri/ /index.html
+    }
+}
+~~~
+- listen 3000
+: 운영환경용 Dockerfile에서도 적었듯이 서버 포트는 3000이다.
+
+- location / 
+: 클라이언트에서 넘어오는 요청 중 `/`은 프론트 용이다. `/`로 넘어오는 요청을 받을 것이라는 것을 지정하고 있다.
+
+- root 
+: HTML 파일 등 빌드 파일이 위치하는 디렉토리이다.
+
+- index
+: 사이트의 index 페이지로 할 파일명이다.
+
+- try_files
+: React Router를 사용해서 페이지 간 이동할 때 이 부분이 필요하다.
+React 는 Single Page Application이다.
+/home에 접속하려고 할 때 /home에 매칭되는 것이 없으면, 대안책으로 index.html을 제공해서 /home으로 라우팅 시킬 수 있게 임의로 설정해주는 것이다.
