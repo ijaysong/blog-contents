@@ -1776,3 +1776,34 @@ server {
 : React Router를 사용해서 페이지 간 이동할 때 이 부분이 필요하다.
 React 는 Single Page Application이다.
 /home에 접속하려고 할 때 /home에 매칭되는 것이 없으면, 대안책으로 index.html을 제공해서 /home으로 라우팅 시킬 수 있게 임의로 설정해주는 것이다.
+
+### 노드 앱을 위한 도커 파일 만들기
+1. backend 폴더 안에 Dockerfile을 생성한다.
+2. 개발 환경을 위한 Dockerfile을 작성한다.
+3. 운영환경을 위한 Dockerfile을 작성한다.
+~~~
+FROM node:alpine
+
+WORKDIR /app
+
+COPY ./package.json ./
+
+RUN npm install
+
+COPY . .
+
+# 개발환경
+CMD ["npm", "run", "dev"]
+
+# 운영환경
+# CMD ["npm", "run", "dev"]
+~~~
+개발환경에서 start가 아닌 dev를 실행한 이유는
+코드가 변경될 때 바로 반영을 시켜주게 해주는 nodemon이라는 모듈을 사용하기 위해서!
+nodemon은 node를 바로 중단 시켰다가 다시 재기동 시켜주는 역할을 한다.
+
+운영환경에서는 소스를 바꿀때마다 반영할 필요가 없기 때문에 start를 실행한다.
+
+cf)
+"start": "node server.js",
+"dev": "nodemon server.js"
