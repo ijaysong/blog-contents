@@ -1807,3 +1807,35 @@ nodemon은 node를 바로 중단 시켰다가 다시 재기동 시켜주는 역�
 cf)
 "start": "node server.js",
 "dev": "nodemon server.js"
+
+### DB에 관해서
+개발환경과 운영환경 각각 DB 구성을 어떻게 해야할까!
+실제 중요한 데이터를 다루는 운영환경에서는 더욱 안정적인 AWS RDS를 사용해보겠다.
+
+1. 개발 환경 : 도커 환경 이용
+ - Server에서 MySQL로 이어지는 흐름을 Elastic Beanstalk 안에서 처리
+
+2. 운영 환경 : AWS RDS 서비스 이용
+- Elastic Beanstalk 내부의 Server와 AWS RDS의 MySQL를 연결해서 처리
+
+### MYSQL을 위한 도커 파일 만들기
+현재 MySQL과 NodeJS를 연결하는 코드는 작성되어 있다.
+이제 MySQL을 도커 이미지를 통해서 설치를 해보겠다.
+
+<MySQL 도커 파일 작성>
+1. mysql이라는 폴더를 Root 디렉토리에 생성한 후 그 안에 Dockerfile 생성
+2. Dockerfile 작성
+~~~
+FROM mysql:5.7
+~~~
+
+3. MySQL을 시작할 때 Database와 Table이 필요한데 그것들을 만들 장소를 만들어준다.
+4. Database와 Table을 만들어준다.
+5. 한글도 저장할 수 있도록 설정해준다. (my.cnf)
+아무런 설정이 없이 실행시키면 한글을 DB에 넣었을 때 깨지는 현상이 발생한다.
+설정해준것을 도커 컨테이너 내부의 my.conf 파일에 덮어씌워주는 작업을 추가한다.
+~~~
+FROM mysql:5.7
+
+ADD ./my.cnf /etc/mysql/conf.d/my.cnf
+~~~
