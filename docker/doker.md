@@ -1839,3 +1839,64 @@ FROM mysql:5.7
 
 ADD ./my.cnf /etc/mysql/conf.d/my.cnf
 ~~~
+
+### NGINX를 위한 도커 파일 만들기
+클라이언트에서 Request를 보낼 때, Nginx를 통해서 프론트와 서버로 나눠서 보내줄 수 있다.
+Request는 다음과 같이 나누어서 처리할 것이다.
+- /api로 오는 요청 : 서버
+- /로 오는 요청 : 프론트
+
+현재 Nginx가 쓰이는 곳은 두군데이다. 서로 다른 이유로 쓰이고 있다.
+하나는 Proxy를 이유로, 다른 하나는 Static 파일을 제공해주는 역할을 하고 있다.
+
+Nginx가 요처을 나눠서 보내주는 기준은
+location이 /로 시작하는지, /api로 시작하는지에 따라서 나눠준다.
+/로 시작하면 ReactJS로
+/api로 시작하면 NodeJS로 보내준다.
+
+이러한 proxy 기능을 위해 먼저 Nginx를 설정해주어야 한다.
+1. nginx 폴더와 default.conf 파일, Dockerfile 생성
+2. default.conf 파일에 proxy 기능 작성
+~~~
+upstream frontend {
+    server frontend:3000;
+}
+
+upstream backend {
+    server backend:5000;
+}
+
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://frontend;
+    }
+
+    location /api {
+        proxy_pass http://backend;
+    }
+
+    location /sockjs-node {
+        proxy_pass http://frontend;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+    }
+}
+~~~
+- 3000번 포트에서 frontend가 돌아가고 있다는 것을 명시해줌.
+- 5000번 포트에서 backend가 돌아가고 있다는 것을 명시해줌.
+- Nginx 서버 포트 80번으로 열어준다.
+- location에는 우선 숭위가 있는데 / 그냥 이렇게만 되는 것은 우선 순위가 가장 낮다.
+그래서 /api로 시작하는 것을 먼저 찾고, 그게 없다면 /로 찾아 그 요청을 http://frontend로 보내면 된다.
+- /api로 들어오는 요청을 http://backend로 보내준다.
+- /sockjs-node에 대한 부분이 없다면 web socket connection 관련 에러가 일어한다. (개발 환경에서만 발생) -> 에러 처리를 위한 것
+
+3. Nginx를 위한 도커 파일 작성하기
+~~~
+FROM nginx
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+~~~
+- Nginx 베이스 이미지 가져와서
+- 작성된 conf 파일을 컨테이너에서 실행될 Nginx에도 적용될 수 있게 COPY 해주기
