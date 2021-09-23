@@ -1900,3 +1900,53 @@ COPY ./default.conf /etc/nginx/conf.d/default.conf
 ~~~
 - Nginx 베이스 이미지 가져와서
 - 작성된 conf 파일을 컨테이너에서 실행될 Nginx에도 적용될 수 있게 COPY 해주기
+
+### Docker Compose 파일 작성하기
+각각의 컨테이너를 위한 도커 파일을 작성했다.
+컨테이너 간에는 통신이 불가능 하기 때문에, 서로 연결을 시켜주기 위해서 Docker Compose를 작성해보겠다.
+
+1. 먼저 docker-compose.yml 파일을 생성한다.
+2. 각각의 서비스들을 위한 틀을 만든다.
+~~~
+version: "3"
+services: 
+  frontend:
+
+  nginx:
+
+  backend:
+
+  mysql:
+~~~
+
+3. frontend 서비스를 위한 설정을 해준다.
+~~~
+  frontend:
+    build:
+      dockerfile: dockerfile.dev
+      context: ./frontend
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+   stdin_open: true
+~~~
+- build : 개발환경을 위한 Dockerfile이 어디에 있는지 알려준다.
+- volumes : 코드를 수정 후 다시 이미지를 build 하는 것 없이 수정된 코드가 반영될 수 있게 volume을 이용해준다.
+- stdin_open: 리액트 앱을 종료할 때 나오는 버그를 잡아줌
+
+4. nginx 서비스를 위한 설정을 해준다.
+~~~
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports: 
+      - "3000:80"
+~~~
+- restart : 재시작 정책
+  - restart: no -> 어떠한 상황에서도 재시작을 하지 않는다.
+  - restart: always -> 항상 재시작을 한다.
+  - restart: on-failure -> on-failure 에러 코드와 함꼐 컨테이너가 멈추었을 때만 재시작을 한다.
+  - restart: unless-stopped -> 개발자가 임의로 멈추려고 할 때 빼고는 항상 재시작을 한다.
+
