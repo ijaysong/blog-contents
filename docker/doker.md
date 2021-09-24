@@ -1950,3 +1950,33 @@ services:
   - restart: on-failure -> on-failure 에러 코드와 함꼐 컨테이너가 멈추었을 때만 재시작을 한다.
   - restart: unless-stopped -> 개발자가 임의로 멈추려고 할 때 빼고는 항상 재시작을 한다.
 
+5. backend 서비스를 위한 설정을 해준다.
+~~~
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./backend
+    container_name: app_backend
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+~~~
+
+6. mysql 서비스를 위한 설정을 해준다.
+~~~
+  mysql:
+    build: ./mysql
+    restart: unless-stopped
+    container_name: app_mysql
+    ports:
+      - "3306:3306"
+    volumes: 
+      - ./mysql/mysql_data:/var/lib/mysql
+      - ./mysql/sqls/:/docker-entrypoint-initdb.d/
+    environment:
+      MYSQL_ROOT_PASSWORD: johnahn
+      MYSQL_DATABASE: myapp
+~~~
+- restart: unless-stopped -> 개발자가 임의로 멈추려고 할 때 빼고는 항상 재시작을 한다.
+- volumes:
+
