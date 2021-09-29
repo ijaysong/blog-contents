@@ -2015,3 +2015,31 @@ MySQL에 대한 연결 부분만 남겨두고 나머지 부분은 다 삭제하�
 docker-compose.yml에서 mysql 부분을 코멘트 처리 해주었기 때문에 지우지 않아도 작동 안된다.
 
 3. AWS에서 생성한 DB 정보는 backend의 db.js에 내용을 다시 넣어준다.
+
+### GITHUB에 소스코드 올려보기
+1. new repository 만들기
+
+2. 로컬 git 저장소 만들기
+~~~
+git init
+~~~
+
+3. git에 올리고 싶지 않는 파일을 `.gitignore`로 지정해준다.
+- backend : node_modules (종속성을 관리하는 파일)
+- mysql : mysql_data (DB 데이터를 저장하는 파일)
+
+4. 현재까지의 소스를 로컬 git 저장소에 저장
+~~~
+git add .
+git commit -m "first commit"
+~~~
+
+5. 로컬 git 저장소와 github remote를 연결시키기
+~~~
+git remote add origin {repository url}
+~~~
+
+6. 로컬 git 저장소에 있는 소스를 github에 업로드 시키기
+~~~
+git push origin master
+~~~
