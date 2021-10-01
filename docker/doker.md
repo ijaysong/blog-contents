@@ -2043,3 +2043,34 @@ git remote add origin {repository url}
 ~~~
 git push origin master
 ~~~
+
+### Travis CI Steps
+github의 master 브랜치에 새로 업데이트 된 소스가 올라왔다면, 해당 소스를 Travis CI에서 가져와야 한다.
+Travis CI에서의 동작은 다음과 같이 이루어진다.
+
+< Travis CI에서의 흐름 >
+1. 깃헙에서 코드를 Push한다.
+
+2. Travis CI가 자동으로 코드를 가져온다.
+
+3. 가져온 코드로 `테스트 코드`를 실행한다.
+
+4. 성공하면 운영 환경 이미지들을 Build 한다.
+
+5. 빌드 된 이미지들을 `DockerHub`로 보낸다.
+DockerHub는 유명한 이미지를 다운받을 수 있을 뿐만 아니라, 자신이 만든 이미지도 업로드 할 수 있다.
+DockerHub에 빌드된 이미지를 보내고 AWS에서 그 이미지를 가져가기 때문에, EB 안에서 다시 이미지를 빌드하지 않아도 된다.
+(모든 과정 중에 빌드가 한번만 이루어진다.)
+
+6. AWS EB에 DockerHub에 이미지를 보냈다고 알려준다.
+
+7. AWS EB에서 DockerHub에 있는 이미지를 가져온 후에 배포를 한다.
+
+< 작업 순서 >
+1. Travis CI 사이트에서 깃헙 아이디로 로그인
+깃헙 아이디로 로그인 해야 깃헙에 있는 repository에 접근 할 수 있다.
+
+2. Settings에서 작업한 repository를 활성화시켜준다.
+repository가 없는 걸로 나온다면 sync account 버튼을 눌러서 최신화를 시켜준다.
+
+3. 해당 저장소의 Setting 버튼(활성화 버튼)을 눌러서 Travis CI에게 Github 저장소의 소스가 변경될 때마다 소스를 가져와서 `테스트`하고 `배포`하라고 알려준다.
