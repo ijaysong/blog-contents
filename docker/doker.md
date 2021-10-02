@@ -2074,3 +2074,57 @@ DockerHub에 빌드된 이미지를 보내고 AWS에서 그 이미지를 가져�
 repository가 없는 걸로 나온다면 sync account 버튼을 눌러서 최신화를 시켜준다.
 
 3. 해당 저장소의 Setting 버튼(활성화 버튼)을 눌러서 Travis CI에게 Github 저장소의 소스가 변경될 때마다 소스를 가져와서 `테스트`하고 `배포`하라고 알려준다.
+
+### .travis.yml 파일 작성하기
+1. 파일 생성
+   - .travis.yml 파일을 생성한다.
+
+2. Test를 수행하기 위한 준비
+   - 앱을 도커 환경에서 실행하고 있으니 Travis CI에게 도커 환경으로 만들 것이라고 선언해준다.
+   - 구성된 도커 환경에서 Dockerfile.dev를 이용해서 도커 이미지를 생성한다.
+   ~~~
+   before_install:
+       - docker build -t ijaysong/react-test-app -f ./frontend/Dockerfile.dev ./frontend
+   ~~~
+
+   ~~~
+   docker build -t <도커 아이디>/<어플 이름> -f <Dockerfile 경로> 빌드해야할 파일들이 있는 경로
+   ~~~
+
+3. Test를 수행하기
+   - 생성된 테스트 이미지를 이용해서 테스트를 수행한다.
+   ~~~
+   script:
+       - docker run -e CI=true ijaysong/react-test-app npm run test
+   ~~~
+
+4. 모든 프로젝트의 운영버전 이미지를 빌드하기
+   - 테스트가 성공했다면 하나하나의 프로젝트의 운영버전 이미지를 빌드하는 설정을 해준다.
+   ~~~
+   after_success:
+       - docker build -t ijaysong/docker-frontend ./frontend
+       - docker build -t ijaysong/docker-backend ./backend
+       - docker build -t ijaysong/docker-nginx ./nginx
+   ~~~
+
+5. 빌드된 이미지를 도커 허브에 보내주기
+   - 도커 허브에 빌드 된 파일을 넣어주기 위해서 도커 허브에 로그인 한다.
+   ~~~
+       - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+   ~~~
+   ID나 패스워드를 적어서 깃헙에 push하면 개인 정보 유출의 위험이 있으므로 직접적으로 적지 않고,
+   Travis CI에 도커 허브 ID와 패스워드를 미리 넣어준다.
+   Travis CI에서 작업하고 있는 해당 Repository의 Setting에 들어가서 Environment Variables에 다음과 같은 값을 지정해준다.
+   - DOCKER_HUB_ID
+   - DOCKER_HUB_PASSWORD
+   이렇게 도커 허브 아이디와 비밀번호라는 환경변수를 만들어 주면 Travis CI가 Script에서 이 변수를 읽을 때 자동으로 해당하는 값을 가져가서 로그인 할 수 있다.
+
+   - 빌드된 이미지를 도커 허브에 보내준다.
+   ~~~
+       - docker push ijaysong/docker-frontend
+       - docker push ijaysong/docker-backend
+       - docker push ijaysong/docker-nginx
+   ~~~
+
+6. 배포하기
+   - AWS Elastic Beanstalk이 업데이트된 빌드 이미지를 가져와서 배포 할 수 있게 걸정해준다.
