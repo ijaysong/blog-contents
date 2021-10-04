@@ -2128,3 +2128,22 @@ repository가 없는 걸로 나온다면 sync account 버튼을 눌러서 최신
 
 6. 배포하기
    - AWS Elastic Beanstalk이 업데이트된 빌드 이미지를 가져와서 배포 할 수 있게 걸정해준다.
+
+### Dockerrun.aws.json에 대해서
+Dockerrun.aws.json파일을 써야 Elastic Beanstalk에서 어플리케이션을 작동 시킬 수 있다.
+왜 그럴까?
+
+1. Dockerfile이 하나인 경우
+Dockerfile이 하나만 있으면 Elastic Beanstalk에서 이미지를 실행시켜서 컨테이너를 만든다.
+
+ex)React App
+이전에 리액트만 이용한 어플리케이션을 만들때는 Dockerfile이 하나라서 그 도커 파일을 Elastic Beanstalk에 전달하면 EB가 알아서 처리를 해주면
+그 빌드된 이미지를 돌려서 어플리케이션을 실행했기 때문에 아무런 설정을 해주지 않아도 됐다.
+
+2. Dockerfile이 여러 개인 경우
+Dockerfile이 여러 개 있으면 Elastic Beanstalk이 어떻게 처리해야 될지 모르고 헷갈리게 된다.
+이때 어떤 파일을 실행시킬지 설정해주는 파일이 바로 `Dockerrun.aws.json`이다.
+
+ex) Full Stack App
+이번에 작성한 어플리케이션에는 노드, MySQL, Nginx 등을 위한 Dockerfile이 존재하는데
+EB의 입장에선 어떤 파일을 먼저 실행하고 어떻게 행동을 취해야 하는지 알 수 없어 자동으로 프로세스를 해나갈 수 없기 때문에 임의로 설정을 해주어야한다.
