@@ -2147,3 +2147,25 @@ Dockerfile이 여러 개 있으면 Elastic Beanstalk이 어떻게 처리해야 �
 ex) Full Stack App
 이번에 작성한 어플리케이션에는 노드, MySQL, Nginx 등을 위한 Dockerfile이 존재하는데
 EB의 입장에선 어떤 파일을 먼저 실행하고 어떻게 행동을 취해야 하는지 알 수 없어 자동으로 프로세스를 해나갈 수 없기 때문에 임의로 설정을 해주어야한다.
+
+<AWS에서 말하는 Dockerrun.aws.json 파일의 정의>
+`Dockerrun.aws.json`파일은 Docker 컨테이너 세트를 Elastic Beanstalk 애플리케이션으로 배포하는 방법을 설명하는
+Elastic Beanstalk 고유의 JSON 파일이다.
+Dockerrun.aws.json 파일을 멀티 컨테이너 Docker 환경에서 사용할 수 있다.
+Dcoekrrun.aws.json은 환경에서 각 컨테이너 인스턴스 (Docker 컨테이너를 호스트하는 Amazon EC2 인스턴스)에 배포할 컨테이너 및 탑재할 컨테이너의 호스트 인스턴스에서 생성할 데이터 볼륨을 설명한다.
+
+=> EB는 다중 컨테이너를 어떻게 실행시켜야 할지 잘 모르기 떄문에 Dockerrun.aws.json 파일이 어떻게 작동시킬지 알려준다. (Task Definition : 작업정의)
+
+<AWS에서 말하는 Task Definition(작업 정의)에서 지정할 수 있는 것들>
+- 작업의 각 컨테이너에서 사용할 도커 이미지
+- 각 작업 또는 작업 내 각 컨테이너에서 사용할 CPU 및 메모리의 양
+- 사용할 시작 유형으로서 해당 작업이 호스팅되는 인프라를 결정
+- 작업의 컨테이너에 사용할 도커 네트워킹 모드
+- 작업에 사용할 로깅 구성
+- 컨테이너가 종료 또는 실패하더라도 작업이 계속 실행될지 여부
+- 컨테이너 시작 시 컨테이너가 실행할 명령
+- 작업의 컨테이너에서 사용할 데이터 볼륨
+- 작업에서 사용해야 하는 IAM 역할
+
+=> 작업 정의를 등록할 때는 Container Definition (컨테이너 정의)을 명시해줘야 한다.
+Dockerrun.aws.json 안에 Container Definition에 명시해주며 도커 데몬으로 전해진다.
