@@ -2169,3 +2169,57 @@ Dcoekrrun.aws.json은 환경에서 각 컨테이너 인스턴스 (Docker 컨테�
 
 => 작업 정의를 등록할 때는 Container Definition (컨테이너 정의)을 명시해줘야 한다.
 Dockerrun.aws.json 안에 Container Definition에 명시해주며 도커 데몬으로 전해진다.
+
+### Dockerrun.aws.json 파일 작성하기
+1. Dockerrun.aws.json 파일 생성
+2. Container Definitions을 작성하기
+~~~
+{
+   "AWSEBDockerrunVersion": 2,
+   "containerDefinitions": [
+       {
+           "name": "frontend",
+           "image": "ijaysong/docker-frontend",
+           "hostname": "frontend",
+           "essential": false,
+           "memory": 128
+       },
+       {
+           "name": "backend",
+           "image": "ijaysong/docker-frontend",
+           "hostname": "backend",
+           "essential": false,
+           "memory": 128
+       },
+       {
+           "name": "nginx"
+           "image": "ijaysong/docker-nginx",
+           "hostname": "nginx",
+           "essential": true,
+           "portMappings": [
+               {
+                   "hostPort": 80.
+                   "containerPort": 80
+               }
+           ],
+           "links": ["frontend", "backend"],
+           "memory": 128
+       }
+   ]
+}
+~~~
+객체 안에서 하나의 컨테이너를 정의한다.
+
+- AWSEBDockerrunVersion : Dockerrun 버전 2로 지정
+- containerDefinitions : 이 안에서 컨테이너들을 정의해준다.
+
+- name : 컨테이너의 이름
+- image : Docker 컨테이너를 구축할 온라인 Docker 리포지도리의 Docker 이미지가 이름이다.
+- hostname : 호스트 이름. 이 이름을 이용해서 도커 컴포즈를 이용해 생성된 다른 컨테이너에서 접근이 가능하다.
+- essential : 컨테이너가 실패할 경우 작업을 중지해야 하면 true이다.
+           필수적이지 않은 컨테이너는 인스턴스의 나머지 컨테이너에 영향을 미치지 않고 종료되거나 충돌할 수 있다.
+- memory : 컨테이너용으로 예약할 컨테이너 인스턴스에 있는 메모리 양이다.
+           컨테이너 정의에서 memory 또는 memoryReservation 파라미터 중 하나 또는 모두에 0이 아닌 정수를 지정하면 된다.
+- portMappings : 컨테이너에 있는 네트워크 지점을 호스트에 있는 지점에 매핑한다.
+- links : 연결할 컨테이너의 목록. 연결된 컨테이너는 서로를 검색하고 안전하게 통신할 수 있따.
+- nignx : links를 통해서 Frontend와 Backend를 연결해 통신
