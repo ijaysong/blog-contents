@@ -2223,3 +2223,13 @@ Dockerrun.aws.json 안에 Container Definition에 명시해주며 도커 데몬�
 - portMappings : 컨테이너에 있는 네트워크 지점을 호스트에 있는 지점에 매핑한다.
 - links : 연결할 컨테이너의 목록. 연결된 컨테이너는 서로를 검색하고 안전하게 통신할 수 있따.
 - nignx : links를 통해서 Frontend와 Backend를 연결해 통신
+
+### 다중 컨테이너 앱을 위한 Elastic Beanstalk 환경 생성
+1. AWS에서 Elastic Beanstalk을 생성해준다.
+Create Application 버튼 클릭
+
+2. 어플리케이션 이름 정하기
+docker-fullstack-app
+
+Elastic Beanstalk은 EC2 인스턴스, Security 그룹, Auto-Scaling 그룹 등을 컨트롤 한다.
+트래픽이 많지 않을 땐 하나의 EC2에서 처리하지만 트래픽이 많아지면 로드 밸런서에서 EC2 인스턴스를 여러개 만들어서 처리한다.
