@@ -2233,3 +2233,33 @@ docker-fullstack-app
 
 Elastic Beanstalk은 EC2 인스턴스, Security 그룹, Auto-Scaling 그룹 등을 컨트롤 한다.
 트래픽이 많지 않을 땐 하나의 EC2에서 처리하지만 트래픽이 많아지면 로드 밸런서에서 EC2 인스턴스를 여러개 만들어서 처리한다.
+
+### VPC (Virtual Private Cloud)와 Security Group 설정하기
+AWS의 RDS를 이용해 MySQL을 어플리케이션과 연결하기 위해서 VPC와 Security Group을 설정해주어야 한다.
+또한 EB 인스턴스와 RDS(MySQL)는 기본적으로 연결이 되어 있지 않기 때문에 연결을 해주어야 한다.
+
+#### VPC란?
+Amazon Virtual Private Cloud(VPC)의 약자로,
+AWS 클라우드에서 논리적으로 격리된 공간을 제공하여 고객이 정의하는 가상 네트워크에서 AWS 리소스를 시작할 수 있도록 하는 서비스이다.
+AWS에서 EC2 인스턴스나 EB 인스턴스 혹은 RDS 데이터 베이스를 만들었다면
+VPC는 해당 인스턴스를 `나의 아이디`에서만 접근이 가능하도록 `논리적으로 격리된 환경에서 생성해준다.`
+뿐만 아니라 EC2 인스턴스나 RDS를 생성하면 자동적으로 기본 VPC(default VPC)가 할당된다.
+그리고 할당이 될때는 `지역(region)별`로 다르게 할당이 된다.
+ex)
+AP-Norteast-2(서울)에서 VPC가 생성이 되었다.
+AP-Norteast-1(도쿄)에서 VPC를 확인해보면 아무것도 없는 것을 확인할 수 있다.
+
+1. 대시보드에서 VPC(격리형 클라우드 리소스) 검색
+Elastic Beanstalk을 생성할 때 함께 만들어진 VPC가 보일 것
+
+#### Security Group(보안그룹 / 방화벽)이란?
+Security Group은 보안그룹 혹은 방화벽이라고도 한다.
+Security Group을 거쳐서 Elastic Beanstalk 내부의 EC2 인스턴스나 EB 인스턴스와 요쳥을 주고 받는다. (Inbound, Outbound 처리)
+- Inbound : 외부에서 EC2 인스턴스나 EB 인스턴스로 요청을 보내는 트래픽이다. ex) HTTP, HTTPS, SSH 등등...
+- Outbound : EC2 인스턴스나 EB 인스턴스 등에서 외부로 나가는 트래픽이다.
+   파일을 다운로드하거나 inbound로 들어온 트래픽을 처리하여 응답하는 경우도 포함된다.
+
+=> Security Group이 Inbound와 Outbound를 통제하는 역할을 한다.
+=> 결론적으로 Security Group이 트래픽을 열어줄수도 있고, 닫아줄 수도 있다.
+
+동일한 VPC에서 오는 트래픽을 모두 허용하여 EB 인스턴스와 RDS(MySQL)를 연결해 줄 수 있다.
