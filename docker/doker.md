@@ -2263,3 +2263,45 @@ Security Group을 거쳐서 Elastic Beanstalk 내부의 EC2 인스턴스나 EB �
 => 결론적으로 Security Group이 트래픽을 열어줄수도 있고, 닫아줄 수도 있다.
 
 동일한 VPC에서 오는 트래픽을 모두 허용하여 EB 인스턴스와 RDS(MySQL)를 연결해 줄 수 있다.
+
+### MYSQL을 위한 AWS RDS 생성하기
+1. docker-compose 부분에 DB를 위한 환경변수를 넣어준다.
+
+docker-compose.yml
+~~~
+backend:
+   build:
+       dockerfile: Dockerfile.dev
+       context: ./backend
+   volumes:
+       - /app/node_modules
+       - ./backend:/app
+   environment:
+       MYSQL_HOST: mysql
+       MYSQL_USER: root
+       MYSQL_ROOT_PASSWORD: johnahn777
+       MYSQL_DATABASE: myapp
+       MYSQL_PORT: 3306
+~~~
+
+db.js
+~~~
+const mysql = require("mysql");
+const pool = mysql.createPool({
+   connectionLimit: 10,
+   host: process.env.MYSQL_HOST,
+   user: process.env.MYSQL_USER,
+   password: process.env.MYSQL_ROOT_PASSWORD
+   database: process.env.MYSQL_DATABASE
+   port: process.env.MYSQL_PORT
+})
+~~~
+
+2. RDS를 생성해준다.
+- AWS > RDS > 데이터베이스 생성
+- 엔진유형 : MySQL
+- 템플릿 : 프리티어
+- DB 인스턴스 식별자 : docker-fullstack-mysql
+- 마스터 사용자 이름 : root (DB 환경변수에 지정한 MYSQL_USER)
+- 마스터 암호 : johnahn777 (DB 환경변수에 지정한 MYSQL_ROOT_PASSWORD)
+- 데이터베이스 옵션 > 초기 데이터베이스 옵션 : myapp (DB 환경변수에 지정한 MYSQL_DATABASE)
