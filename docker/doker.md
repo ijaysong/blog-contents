@@ -2305,3 +2305,23 @@ const pool = mysql.createPool({
 - 마스터 사용자 이름 : root (DB 환경변수에 지정한 MYSQL_USER)
 - 마스터 암호 : johnahn777 (DB 환경변수에 지정한 MYSQL_ROOT_PASSWORD)
 - 데이터베이스 옵션 > 초기 데이터베이스 옵션 : myapp (DB 환경변수에 지정한 MYSQL_DATABASE)
+
+### Security Group 생성하기
+AP-Norteast-2에 할당된 기본 VPC가 있고 내부에는 다음의 것들이 존재한다.
+- EB 인스턴스
+- RDS (MySQL)
+Security Group에서 같은 VPC에서 오는 트래픽은 모두 허용하도록 설정하여, EB 인스턴스와 RDS가 서로 통신이 가능하도록 해준다.
+
+EB 인스턴스와 RDS가 서로 요청을 보낼 수 있게 Security Group을 생성해보겠다.
+1. AWS > VPC > 보안그룹 생성
+
+2. 기본 세부 정보 작성
+- 보안 그룹 이름 : DockerSecurityGroup
+- 설명 : allow traffics between services in docker app
+- vpc : 기본값 설정
+
+3. 인바운드 규칙 추가
+- 유형 : 사용자 지정 TCP
+- 포트 범위 : 3306
+- 소스 : 만든 Security Group 선택
+- 설명 : open port for mysql inside the vpc
