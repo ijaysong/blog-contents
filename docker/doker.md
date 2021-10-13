@@ -2325,3 +2325,16 @@ EB 인스턴스와 RDS가 서로 요청을 보낼 수 있게 Security Group을 �
 - 포트 범위 : 3306
 - 소스 : 만든 Security Group 선택
 - 설명 : open port for mysql inside the vpc
+
+### Security Group 적용하기
+RDS에 새로 생성된 Security Group(보안그룹) 적용하기
+1. AWS > RDS > 데이터베이스
+2. MySQL 인스턴스 클릭
+3. 수정 > 보안 그룹 > 만들어 놓은 Security Group 선택
+
+EB 인스턴스에 새로 생성된 Security Group(보안그룹) 적용하기
+1. AWS > EB
+2. EB 인스턴스 > 구성 클릭
+3. 보안그룹 편집 > 인스턴스 보안 그룹에서 새로 생성된 보안 그룹 선택
+
+=> VPC 내부의 EB 인스턴스와 RDS (MySQL)에 보안그룹을 적용해주었다.
