@@ -2338,3 +2338,17 @@ EB 인스턴스에 새로 생성된 Security Group(보안그룹) 적용하기
 3. 보안그룹 편집 > 인스턴스 보안 그룹에서 새로 생성된 보안 그룹 선택
 
 => VPC 내부의 EB 인스턴스와 RDS (MySQL)에 보안그룹을 적용해주었다.
+
+### EB와 RDS 소통을 위한 환경 변수 설정하기
+아직은 ElasticBeanstalk 안에 있는 컨테이너들이 MySQL 인스턴스와 소통할 때 환경 변수 부분을 인식하지 못한다.
+그래서 AWS ElasticBeanstalk에 환경변수를 설정함으로서 그 부분의 문제를 해결해보겠다.
+
+1. AWS > EB
+2. EB 인스턴스 > 구성 클릭
+3. 소프트웨어 > 편집 클릭
+4. 환경 속성 편집
+- MYSQL_HOST : RDS 인스턴스의 앤드포인트에 작성된 호스트를 직접 가져와 붙여넣어준다.
+- MYSQL_USER : root
+- MYSQL_ROOT_PASSWORD : johnahn777
+- MYSQL_DATABASE : myapp
+- MYSQL_PORT : 3306
