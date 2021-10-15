@@ -2352,3 +2352,27 @@ EB 인스턴스에 새로 생성된 Security Group(보안그룹) 적용하기
 - MYSQL_ROOT_PASSWORD : johnahn777
 - MYSQL_DATABASE : myapp
 - MYSQL_PORT : 3306
+
+### .travis.yml 파일 작성하기 (배포 부분)
+travis CI에서 AWS로 배포하는 부분을 작성해보겠다.
+
+.travis.yml
+~~~
+deploy:
+   provider: elasticBeanstalk
+   region: "ap-northeast-2"
+   app: "docker-fullstack-app"
+   env: DockerFullstackApp-env
+   bucket_name: elasticbeanstalk-ap-northeast-2-306476627547
+   bucket_path: "docker-fullstak-app"
+   on:
+       branch: main
+~~~
+- provider : 외부 서비스 표시 (s3, elasticbeanstalk, firebase 등등)
+- region: 현재 사용하고 있는 AWS의 서비스가 위치하고 있는 물리적 장소
+- app : 생성된 어플리케이션의 이름
+- env: 환경 이름 (ElasticBeanstalk에 적혀있는 환경 이름)
+- bucket_name : 해당 elasticbeanstalk을 위한 s3 버켓 이름 (s3에 넣어서 elasticBeanstalk을 사용하기 때문)
+- bucket_path : 어플리케이션의 이름과 동일
+- on
+   - branch : 어떤 브랜치에 Push를 할때 AWS에 배포를 할 것인지
