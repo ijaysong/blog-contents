@@ -2376,3 +2376,51 @@ deploy:
 - bucket_path : 어플리케이션의 이름과 동일
 - on
    - branch : 어떤 브랜치에 Push를 할때 AWS에 배포를 할 것인지
+
+### Travis CI의 AWS 접근을 위한 API key 생성
+아무런 인증 없이 Travis CI에서 마음대로 AWS와 소통할 수 없다.
+Travis CI가 AWS에 접근 할 수 있게 인증 방식을 설정해주겠다.
+
+< 소스 파일을 전달하기 위한 접근 요건 >
+1. GITHUB -> Travis CI
+: Travis CI 아이디 로그인 시 Github 연동으로 로그인 해준다.
+
+2. Travis CI -> AWS
+: AWS에서 제공해주는 Secret Key를 Travis yml 파일에 적어준다.
+=> 인증을 위해서 API Key가 필요하다! 어떻게 받아야할까?
+
+< Secret, Access API Key 받는 순서 >
+1. IAM USER 생성
+
+IAM이란? (Identity and Access Management)
+AWS 리소스에 대한 액세스를 안전하게 제어할 수 있는 웹 서비스이다.
+IAM을 사용하여 리소스를 사용하도록 인증(로그인) 및 권한 부여(권한 있음)된 대상을 제어한다.
+
+- Root 사용자 : 현재 우리가 처음 가입하여 사용하고 있는 계정, AWS 서비스 및 리소스에 대한 완전한 액세스 권한이 있다.
+- IAM 사용자 : root 사용자가 부여한 권한만 가지고 있음
+=> 일상적인 관리 or 관리 작업이던 보안 측면에서 Root 사용자를 사용하는 것은 좋지 않다. IAM 유저를 생성해 사용하는 것을 추천!!
+
+2. IAM > 사용자 추가
+- 사용자 이름 : docker-fullstack-user
+- 액세스 유형 : 프로그래밍 액세스
+- 권한 설정 : AWSElasticBeanstalkFullAccess
+
+3. IAM 사용자 액세스 키 ID와 비밀 액세스 키가 생성됨
+
+4. API키를 Travis yml 파일에 적어주기
+(직접 API 키를 Travis yml 파일에 적어주면 노출이 되기 때문에, 다른 곳에 적고 그것을 가져와줘야 한다.)
+
+5. Travis CI에서 작업 중인 repo > more options > settings > Environment Variables
+AWS에서 받은 API 키들을 NAME과 VALUE에 적어서 입력해준다.
+- AWS_ACCESS_KEY
+- AWS_SECRET_ACCESS_KEY
+이곳에 넣어주면 외부에서 접근할 수 없어 더욱 안전하다.
+
+
+6. travis yml 파일에서 환경변수로 입력해준 값을 받아오기 위한 설정을 입력해준다.
+Travis CI 웹 사이트에서 보관 중인 Key와 Value를 로컬 환경에서 가지고 올 수 있게 travis yml 파일을 설정해준다.
+.travis.yml
+~~~
+access_key_id: $AWS_ACCESS_KEY
+secret_access_key: $AWS_SECRET_ACCESS_KEY
+~~~
