@@ -99,6 +99,23 @@ IAM 그룹에 사용자를 등록한다.
 파일의 내용대로 하면 IAM 계정으로 접속할 수 있다.
 정책에 따라서 접근 가능한 서비스가 제한되어 있지만, IAM 계정 자신의 정보 등은 수정이 가능하다.
 
+### IAM 로그인 URL 변경
+IAM 계정으로 로그인을 하기 위해선 계정 번호가 포함된 URL에 접속을 해야 한다.
+~~~
+https://{계정 번호}.signin.aws.amazon.com/console
+ex) https://962895253643.signin.aws.amazon.com/console
+~~~
+하지만 계정 번호가 포함된 URL을 매번 입력하는 것이 어렵기 때문에 사용자가 지정한 URL로 접속할 수 있도록 변경할 수 있다.
+IAM 메인 페이지 > IAM 사용자를 위한 로그인 URL > 사용자 지정 ex) aws-test
+~~~
+https://aws-test/signin.aws.amazon.com/console
+~~~
+
+지정한 별칭으로 IAM 계정으로 로그인을 할 수도 있다.
+- 계정 ID(12자리) 또는 계정 별칭 : aws-test
+- 사용자 이름 : IAM 계정 ID
+- 암호 : IAM 계정 PW
+
 ## 지역과 가용구역
 
 AWS의 인프라가 위치하고 있는 공간에 대해 지역(Region)과 가용구역(avaliability zone)으로 구분할 수 있다.
