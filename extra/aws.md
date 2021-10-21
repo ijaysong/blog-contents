@@ -116,6 +116,30 @@ https://aws-test/signin.aws.amazon.com/console
 - 사용자 이름 : IAM 계정 ID
 - 암호 : IAM 계정 PW
 
+## IAM Policy
+- IAM User
+   - 그룹의 IAM Policy에 따라 권한을 부여받는다.
+   - 사용자에게 직접 Policy를 추가할 수도 있다.
+   - IAM User의 인증방식과 사용용도
+       - ID/PW : 관리 콘솔에서 사용
+       - AccessKey ID / Secret Access Key : CLI, SDK, Web API에서 사용
+   - 영구 자격 증명(Long Term Credential)이라고도 한다.
+
+- IAM Group
+   - 공통 권한을 가지는 사용자들의 집합
+   - 그룹 생성 후 IAM Policy 연결
+   - 그룹에 사용자 추가
+   - 그룹 내 사용자는 그룹과 연결된 Policy의 권한을 부여받는다.
+
+- IAM Policy
+   - AWS 서비스의 접근 권한을 세부적으로 관리하기 위해 사용
+   - JSON 포맷의 문서
+   - Group, User, Role 등에 적용 가능
+
+- Role
+   - 임시 자격 증명 ex) 1시간, 3시간 동안
+   - AWS 내부의 서비스들이 인증하고자 할때 사용
+
 ## 지역과 가용구역
 
 AWS의 인프라가 위치하고 있는 공간에 대해 지역(Region)과 가용구역(avaliability zone)으로 구분할 수 있다.
