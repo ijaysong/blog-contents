@@ -140,6 +140,76 @@ https://aws-test/signin.aws.amazon.com/console
    - 임시 자격 증명 ex) 1시간, 3시간 동안
    - AWS 내부의 서비스들이 인증하고자 할때 사용
 
+### IAM Policy의 종류
+- AWS 관리 정책 : AWS가 미리 만들어 놓은 정책으로 사용자는 편집 불가능
+- 사용자 관리 정책 : 사용자가 직접 생성한 정책으로 기존 정책으로부터 생성, 수정, 직접 생성 가능 / GUI 편집기 혹은 JSON 편집기 모두 사용 가능
+- Inline 정책 : 1회성 정책
+
+< AdministratorAccess Policy >
+~~~
+{
+   "Version": "2012-10-17",
+   "Statement": [
+       {
+           "Effect": "Allow",
+           "Action": "*",
+           "Resource": "*"
+       }
+   ]
+}
+~~~
+=> 모든 자원에 대한 모든 행동이 허용된다.
+
+< Power User Policy >
+~~~
+{
+   "Version": "2012-10-17",
+   "Statement": [
+       {
+           "Effect": "Allow",
+           "NotAction": "iam:*",
+           "Resource": "*"
+       }
+   ]
+}
+~~~
+=> 모든 자원에 대한 iam의 액션이 거부된다. (iam 유저의 패스워드 변경마저 안된다는 단점이 있음)
+
+< S3 Full Permission >
+~~~
+{
+   "Version": "2012-10-17",
+   "Statement": [
+       {
+           "Effect": "Allow",
+           "Action": "s3:*",
+           "Resource": "*"
+       }
+   ]
+}
+~~~
+=> 모든 자원에 대한 S3와 관련된 액션만 허용된다. (ec2, rds 등등의 다른 서비스는 사용할 수 없다)
+
+예시) 직접 작성한 Policy
+
+< S3 특정 버킷 읽기 전용 정책 >
+~~~
+{
+   "Version": "2012-10-17",
+   "Statement": [
+       {
+           "Effect": "Allow",
+           "Action": [
+               "s3:Get*",
+               "s3:List*"
+           ],
+           "Resource": [ "arn:aws:s3:::mydata", "arn:aws:s3:::mydata/*" ]
+       }
+   ]
+}
+~~~
+=>  AWS S3의 mydata 버킷과 mydata/*에 저장된 데이터에 대한 읽기 전용(Read Only) 액션만 허용된다.
+
 ## 지역과 가용구역
 
 AWS의 인프라가 위치하고 있는 공간에 대해 지역(Region)과 가용구역(avaliability zone)으로 구분할 수 있다.
