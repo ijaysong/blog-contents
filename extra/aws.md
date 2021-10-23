@@ -210,6 +210,18 @@ https://aws-test/signin.aws.amazon.com/console
 ~~~
 =>  AWS S3의 mydata 버킷과 mydata/*에 저장된 데이터에 대한 읽기 전용(Read Only) 액션만 허용된다.
 
+## IAM Role
+특정 개체(IAM 사용자, AWS 서비스, 다른 계정, AWS 관리 계정)에게 리소스의 접근 권한을 부여하기 위해 사용
+임시 자격 증명(Short Term Credential)이라고도 한다.
+주로 AWS 서비스들이 직접 다른 AWS 서비스를 제어하기 위해 사용한다.
+사용자나 응용 프로그램에서 일시적으로 AWS 리소스에 접근 권한을 얻을 때도 사용한다.
+
+### IAM Role의 구성요소
+- Role ARN : 역할을 호출하기 위해 필요, role을 식별할 수 있는 주소
+- IAM Policy : 이 역할이 어떤 권한을 부여할 수 있는가
+- 신뢰관계 : Role을 아무나 사용하면 안된다. 어떤 개체가 IAM Role을 호출할 수 있는가, assume 할수 있는가
+- 그 외 유지 시간, 이름 등도 필요
+
 ## 지역과 가용구역
 
 AWS의 인프라가 위치하고 있는 공간에 대해 지역(Region)과 가용구역(avaliability zone)으로 구분할 수 있다.
