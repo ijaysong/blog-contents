@@ -222,6 +222,30 @@ https://aws-test/signin.aws.amazon.com/console
 - 신뢰관계 : Role을 아무나 사용하면 안된다. 어떤 개체가 IAM Role을 호출할 수 있는가, assume 할수 있는가
 - 그 외 유지 시간, 이름 등도 필요
 
+### IAM Role 사용예
+EC2 role
+- EC2 인스턴스에게 AWS 서비스 접근 권한을 부여
+Lambda Execution Role
+- 람다에서 S3로부터 파일을 읽고 싶을 때 role에 권한 지정
+- 다른 계정의 사용자에게 내 계정의 DynamoDB에 임시 접근 권한 부여
+- 안드로이드 앱이 S3로 직접 동영상을 업로드할 때 사용
+
+ARN(Amazon Resource Name) : 아마존에서 리소스를 유일하게 식별할 수 있는 구분자
+~~~
+arn:partition:service:region:account-id:resource-id
+arn:partition:service:region:account-id:resource-type/resource-id
+arn:partition:service:region:account-id:resource-type:resource-id
+~~~
+- partition : aws 밖에 없음
+- region : 글로벌 서비스의 경우 생략 가능 ex) iam, s3
+- account-id : 계정과 관계 없는 서비스의 경우 생략 가능
+
+ex)
+~~~
+arn:aws:iam::123456789012:user/honux
+Arn:aws:s3:::my-bucket/folder1/file1
+~~~
+
 ## 지역과 가용구역
 
 AWS의 인프라가 위치하고 있는 공간에 대해 지역(Region)과 가용구역(avaliability zone)으로 구분할 수 있다.
