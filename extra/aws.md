@@ -246,6 +246,30 @@ arn:aws:iam::123456789012:user/honux
 Arn:aws:s3:::my-bucket/folder1/file1
 ~~~
 
+### Switch Role 만들기
+IAM > 역할 > 역할 만들기 클릭
+- 신뢰할 수 있는 유형의 개체 선택
+- 이 역할을 사용할 수 있는 계정 ID 지정
+- 정책 연결
+
+IAM > 역할 > 신뢰관계 편집 클릭
+~~~
+{
+   "Version": "2012-10-17",
+   "Statement": [
+       {
+           "Effect": "Allow",
+           "Principal": {
+               "AWS": "arn:aws:iam::123456789012:user/aws-tester1"
+           },
+           "Action": "sts:AssumeRole",
+           "Condition": {}
+       }
+   ]
+}
+~~~
+- principal : iam 계정인 aws-tester1의 arn을 등록함으로서 해당 role에 대해서 신뢰할 수 있는 개체임을 등록한다.
+
 ## 지역과 가용구역
 
 AWS의 인프라가 위치하고 있는 공간에 대해 지역(Region)과 가용구역(avaliability zone)으로 구분할 수 있다.
