@@ -270,6 +270,15 @@ IAM > 역할 > 신뢰관계 편집 클릭
 ~~~
 - principal : iam 계정인 aws-tester1의 arn을 등록함으로서 해당 role에 대해서 신뢰할 수 있는 개체임을 등록한다.
 
+### Switch Role 사용하기
+우 상단에서 계정명을 클릭하면 role 전환 버튼이 있다.
+신뢰관계로 등록된 계정이라면 작성한 policy를 assume하여 switch role을 할 수 있다.
+반면에 등록이 안된 계정이라면 switch role을 할 수 없다.
+동일한 방법으로 role 전환을 해제할 수 있다.
+맨위로
+
+
+
 ## 지역과 가용구역
 
 AWS의 인프라가 위치하고 있는 공간에 대해 지역(Region)과 가용구역(avaliability zone)으로 구분할 수 있다.
