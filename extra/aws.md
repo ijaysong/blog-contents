@@ -804,6 +804,22 @@ or
 - 서비스 사용자의 데이터 업로드 서버 : 이미지 서버, 동영상 서버
 - 중요한 파일은 EC2의 SSD(EBS)에 저장하지 말고 S3에 저장하자!
 - glacier(cold data / 자주 사용하지 않는 데이터)와의 연동으로 비용 절감 및 규정 준수 가능
+
+### S3에서 권한 제어하는 법
+1. ACL (Access Control List)
+- 객체마다 ACL 지정 가능
+- 주로 간단한 제어에 사용
+
+2. Bucket Policy
+- IAM Policy와 유사한 문법
+- ACL 보다 복잡하고 세부적으로 지정 가능
+
+3. IAM을 이용한 제어
+- IAM 사용자에게 버킷 접근 권한을 주기 위해 사용
+
+4. PresignedURL
+- URL을 이용해 임시 권한을 부여하는 기능
+- 매우 유용함
   
 ## AWS RDS
 
