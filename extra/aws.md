@@ -373,6 +373,23 @@ key pair name을 지정하면 비밀번호가 파일로 다운받아지는데, (
 
 1. EC2 > 삭제할 인스턴스 선택 > 오른쪽 클릭 > instance status > stop / terminate 선택
 2. EC2 > 삭제할 인스턴스 선택 > 인스턴스 상태 comboBox > 인스턴스 중지 선택
+
+#### Mac 및 Linux에서 ssh로 접속하기
+1. ssh 클라이언트를 연다
+
+2. 프라이빗 키 파일을 찾는다. 키에 접속할 수 있도록 권한을 준다.
+~~~
+chmod 400 pem파일.pem
+~~~
+
+3. 퍼블릭 DNS를 사용하여 인스턴스에 연결한다.
+~~~
+ssh -i pem파일.pem ec2-user@public-ip
+~~~
+
+cf) 연결이 안된다면 다음 두가지를 확인해보자!
+- public IP가 열려 있어야 한다.
+- 보안 그룹의 인바운드 규칙에 SSH가 등록 되어 있어야 접속된다
  
  ### EC2 인스턴스 타입
 
