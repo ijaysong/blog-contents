@@ -390,6 +390,26 @@ ssh -i pem파일.pem ec2-user@public-ip
 cf) 연결이 안된다면 다음 두가지를 확인해보자!
 - public IP가 열려 있어야 한다.
 - 보안 그룹의 인바운드 규칙에 SSH가 등록 되어 있어야 접속된다
+
+#### Windows에서 ec2 접속하기
+
+두가지 방법이 있다.
+첫번째 방법은 mac에서 ec2에 접속하는 것과 동일하다.
+
+1. ssh 클라이언트를 연다
+2. 프라이빗 키 파일을 찾는다. 키에 접속할 수 있도록 권한을 준다.
+3. 퍼블릭 DNS를 사용하여 인스턴스에 연결한다.
+
+두번째 방법은 putty를 사용해서 Windows에서 Linux 인스턴스에 접속하는 것이다.
+putty.exe와 puttygen.exe 파일을 다운 받아야 한다.
+puttygen을 통해서 pem파일을 putty가 사용할 수 있는 형식으로 변환한다.
+
+1. puttygen을 실행시킨다.
+- gem 파일을 import하여 save private key를 실행한다. (pem파일.pem -> pem파일-ppk.ppk)
+
+2. putty에 접속 정보를 입력하고, ppk 파일을 연결한다.
+
+3. 저장 후, 실행하면 된다.
  
  ### EC2 인스턴스 타입
 
