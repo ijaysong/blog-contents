@@ -603,13 +603,26 @@ ab -n 400 -c 1 {접속 주소}/
 
 AWS에서 Public IP는 인스턴스를 껐다 다시 켜면 변화한다.
 
-Elastic IP란, 고정 아이피를 말한다.
+Elastic IP란, 고정 IP를 말한다.
 Elastic IP를 부여받으면 IP가 변화하는 문제를 해결할 수 있다.
-Elastic IP는 유료임!!
+Elastic IP는 사용 중에는 무료이나, 사용하지 않을 경우 과금이 된다. (월 4000원 정도)
+프리 티어 사용자가 요금을 지불하게 되는 원인 중 하나로, 사용하지 않을 경우 반드시 반납할 것!!
 
-- Elastic IP 생성 : Elastic IPs > Allocate New Address
-- Elastic IP 부여 : Elastic IPs 오른쪽 클릭 > Associate Address > 인스턴스 선택 > Associate
-- Elastic IP 해제 : Elastic IPs 오른쪽 클릭 > Release Addresses
+### EC2 Elastic IP 연결 및 해제
+
+< EC2 elastic-ip 연결 >
+1. EC2 > Elastic IP 생성
+
+2. 탄력적 IP 주소 할당 (IP를 새로 만드는 것)
+
+3. 작업 comboBox > 탄력적 IP 주소 연결
+- 연결하고자 하는 인스턴스 선택하면 됨.
+
+< EC2 elastic-ip 해제 >
+1. EC2 > Elastic IP > 작업 comboBox > 탄력적 IP 주소 연결 해제
+
+cf) 탄력적 IP 주소 릴리스를 하면 IP를 삭제하는 것이 됨.
+그러면 운영중인 프로그램에 장애가 발생하니 주의할 것!
 
 ### EC2 Scalability - Scale Out (ELB)
 
@@ -895,6 +908,20 @@ or
 4. PresignedURL
 - URL을 이용해 임시 권한을 부여하는 기능
 - 매우 유용함
+
+### ACL (Access Control List)
+액세스 제어 목록이다.
+다음 3 그룹의 AWS 계정에 대해 액세스 권한을 지정할 수 있다.
+
+- 객체 소유자
+- 모든 사람(퍼블릭 액세스)
+- 인증된 사용자 그룹(AWS 계정이 있는 모든 사용자)
+
+public 설정 기능도 ACL을 이용해서 권한을 제어한 것이다.
+모든 S3 객체는 ACL이 있고, 이를 이용해서 개별 권한 제어가 가능하다.
+맨위로
+
+
   
 ## AWS RDS
 
