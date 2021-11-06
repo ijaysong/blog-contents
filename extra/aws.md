@@ -319,6 +319,11 @@ region1 : 도쿄        az1    <- 전용 선 ->  az2
 <- 인터넷 선 ->                                  
 region2 : 캘리포니아  az1    <- 전용 선 ->  az2  
 
+#### Multi AZ란?
+둘 이상의 AZ를 활용해서 서비스를 구축하는 것이다.
+두 대 이상의 서버가 필요하다.
+주로 ELB(Elastic Load Balancer)를 이용해서 서버를 연결해서 사용한다.
+
 ## AWS EC2
 
 EC2(Elastic Compute Cloud)는 독립된 컴퓨터를 임대해주는 서비스이다.
