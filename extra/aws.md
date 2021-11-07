@@ -328,6 +328,43 @@ region2 : 캘리포니아  az1    <- 전용 선 ->  az2
 
 EC2(Elastic Compute Cloud)는 독립된 컴퓨터를 임대해주는 서비스이다.
 
+### EC2 관련 서비스들
+1. EC2
+- 서버, CPU에 해당한다.
+
+2. EBS (Elastic Block Storage)
+- EC2의 블록 저장장치, SSD, AZ 서비스
+
+3. VPC (Virtual Private Cloud)
+- EC2가 연결되는 사설 네트워크 망
+- 리전 기반
+
+4. Subnet
+- VPC의 하위망
+- AZ 서비스로 EC2sms subnet에 위치함
+
+5. ENI (Elastic Network Interface)
+- 가상 네트워크 인터페이스, 렌카드, AZ 서비스
+
+6. Security Group
+- EC2의 방화벽, 포트 접근 제어
+
+7. ELB (Elastic Load Balancer)
+- 트래픽 분산을 위해 사용
+
+8. Auto Scaling
+- EC2의 확장성을 위해 제공되는 서비스
+- 매우 유명!!
+
+9. EBS Snapshot
+- EBS의 백업 데이터
+
+10. AMI (Amazon Machine Image)
+- EC2의 백업 이미지
+- EC2를 시작할 때 사용
+- AWS에서 제공하는 AMI를 이용해서 EC2 시작
+- 사용자가 원하는 시점에 AMI를 생성하고 이를 통해 EC2 시작 가능
+
 ## EC2 생성 및 삭제
 
 인스턴스란, 컴퓨터 한대라고 이해하면 된다. ex) 3대의 컴퓨터를 임대했다 == 인스턴스 3개를 만들었다.
