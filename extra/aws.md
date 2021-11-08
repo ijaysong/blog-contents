@@ -585,6 +585,24 @@ sudo apt-get install apache2
 
 security group에 web이 설정되어 있음. (방화벽 설정)
 
+### EBS (Elastic Block Storage)
+EBS는 EC2의 블록 저장장치이며, AZ 서비스이다.
+EBS 스냅샷은 EBS의 백업 데이터로, AZ 서비스이다.
+스냅샷을 이용해서 다른 AZ로 복사 가능하다.
+안전하게 S3에 저장된다.
+실행 중인 인스턴스에서도 생성 가능하지만, 가급적이면 정지 후에 생성하는 것이 좋다.
+
+< EBS 스냅샷 생성 >
+- EBS > 스냅샷 생성
+- Select resource type : instance
+- 설명 추가
+- 태그 추가
+
+< EBS 스냅샷 다른 AZ에 복사 >
+- EBS > 스냅샷 > 작업 comboBox > 볼륨 생성
+- 가용영역 선택
+- 태그 추가
+
 ### EC2 AWS Marketplace (Wordpress)
 
 AMI란, 아마존 머신 이미지(Amazon Machine Image)의 약자로, 소프트웨어 환경설정 내용, OS, 애플리케이션 서버, 애플리케이션 등이 포함된 템플릿이다.
