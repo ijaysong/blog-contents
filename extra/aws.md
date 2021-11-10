@@ -585,6 +585,37 @@ sudo apt-get install apache2
 
 security group에 web이 설정되어 있음. (방화벽 설정)
 
+### EC2 Role
+EC2 인스턴스가 다른 AWS 리소스를 제어할 때 사용하는 IAM Role
+EC2 안에서 CLI 설정처럼 할 수 있지만, EC2 Role을 사용하는게 더 안전하다.
+EC2 Role을 사용하기 위래서 추가적인 IAM 권한이 필요하다.
+
+1. EC2 Role을 생성한다. ex) ec2-s3-full
+
+2. AWS 사용자가 EC2 Role을 연결할 수 있도록 IAM Policy를 통해 권한을 부여한다.
+admin 유저만 IAM 권한에 접속할 수 있는 권한이 있는데, 그러면 매번 admin으로 접속해서 해야해서 너무 불편하니
+개발자 유저들도 EC2 Role을 더할 수 있는 권한을 부여한다.
+
+EC2 Role을 추가하고 확인할 수 있는 권한.
+개발자 유저 IAM policy에 추가해줄 것.
+~~~
+{
+ "Version": "2012-10-17",
+ "Statement": [
+   {
+     "Sid": "VisualEditor0",
+     "Effect": "Allow",
+     "Action": [
+       "iam:PassRole",
+       "iam:ListInstanceProfiles"
+     ],
+     "Resource": "*"
+   }
+ ]
+}
+~~~
+
+3. EC2 인스턴스에 EC2 Role 연결
 ### EBS (Elastic Block Storage)
 EBS는 EC2의 블록 저장장치이며, AZ 서비스이다.
 EBS 스냅샷은 EBS의 백업 데이터로, AZ 서비스이다.
