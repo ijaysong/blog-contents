@@ -635,6 +635,12 @@ EC2 Role을 추가하고 확인할 수 있는 권한.
 - EBS 스냅샷이 남아있으면 과금이 된다. (S3 요금)
 - AMI가 있다면 역시 과금이 된다. (S3 요금)
 - AMI를 제거해도 스냅샷은 남아있는 경우가 많으므로 주의할 것
+
+## VPC
+### VPC 란?
+- Amazon Virtual Private Cloud
+- AWS의 가상 사설 네트워크
+- EC2의 네트워크 계층이며, 많은 AWS 서비스들이 VPC를 통해 네트워크에 연결된다.
 ### EBS (Elastic Block Storage)
 EBS는 EC2의 블록 저장장치이며, AZ 서비스이다.
 EBS 스냅샷은 EBS의 백업 데이터로, AZ 서비스이다.
