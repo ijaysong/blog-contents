@@ -716,6 +716,12 @@ ex6) 10.5.21.64/28
 - prefix는 8비트의 배수일 필요가 없다. ex) 0.5.21.64/28
 - 가장 큰 범위의 prefix: 16
 - 가장 작은 범위의 prefix : 28
+
+### VPC 만들기
+- AWS 관리 콘솔 > VPC > VPC 생성 > 이름과 IPv4 CIDR 블록을 지정 > VPC 생성
+- AWS 관리 콘솔에 이름과 CIDR 지정으로 간단히 만들 수 있다.
+- VPC를 생성하면 기본 라우팅 테이블이 하나 생긴다.
+- default VPC (172.1.0.0/16) : 어떤 VPC를 지정하지 않았을 때 적용되는 default VPC 이다. 생성/삭제 가능.
 ### EBS (Elastic Block Storage)
 EBS는 EC2의 블록 저장장치이며, AZ 서비스이다.
 EBS 스냅샷은 EBS의 백업 데이터로, AZ 서비스이다.
