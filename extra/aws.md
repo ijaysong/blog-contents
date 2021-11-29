@@ -802,6 +802,19 @@ VPC > NAT 게이트웨이 > NAT 게이트웨이 생성
 - NAT Gateway
 
 Private 서브넷에 라우팅 테이블을 적용해준다.
+
+### NACL과 보안그룹
+NACL은 서브넷을 제어할 때 사용된다.
+
+| | NACL | 보안그룹 |
+| 용도 | 서브넷 트래픽 제어 | EC2 트래픽 제어 |
+| 상태 | Stateless | Stateful |
+| 관리자 | admin 또는 네트워크 관리자 | 개발자 |
+| 주용도 | 인바운드 및 아웃바운드 기본 규칙 정의 | 주로 인바운드 트래픽 제어 |
+| 초기상태 | Open | 아웃바운드만 Open |
+| 규칙평가 | 순서대로 평가 | 모아서 한꺼번에 평가 |
+| Rule Limit | 20 | 40 |
+
 ### EBS (Elastic Block Storage)
 EBS는 EC2의 블록 저장장치이며, AZ 서비스이다.
 EBS 스냅샷은 EBS의 백업 데이터로, AZ 서비스이다.
