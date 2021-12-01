@@ -1258,6 +1258,13 @@ AWS에서는 이러한 기능을 위임하여 관리해 주는 서비스를 제�
 - Oracle
 - SQL Server : 마이크로소프트 사에서 개발
 
+### RDS에서 지원하는 RDB
+- Oracle
+- MySQL
+- MariaDB
+- Aurora
+- PostgreSQL
+- SQL Server
 ### RDS 서버 생성
 
 지역을 선택을 하고 서버를 생성하는 것임.
