@@ -1321,6 +1321,19 @@ EC2 > 보안 그룹 > 작성
 
 DB Instance는 일반 EC2보다 생성되는데 시간이 좀 걸림
 
+### RDS 연결
+연결할 EC2에 접근한다.
+mysql이 설치가 안되어 있으므로 설치를 해준다.
+~~~
+sudo yum install mysql
+~~~
+
+RDS를 EC2와 연결해준다.
+~~~
+mysql -u admin -h {RDS 엔드포인트}
+~~~
+
+EC2 내부에서 RDS의 데이터베이스 및 테이블을 생성하면 이용상황을 콘솔에서 확인할 수 있다.
 ### RDS 백업 & 복원
 
 - Take Snapshot
