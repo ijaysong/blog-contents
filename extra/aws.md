@@ -1334,6 +1334,17 @@ mysql -u admin -h {RDS 엔드포인트}
 ~~~
 
 EC2 내부에서 RDS의 데이터베이스 및 테이블을 생성하면 이용상황을 콘솔에서 확인할 수 있다.
+
+### GUI로 RDS 접속
+Sequel Ace는 RDS의 GUI tool 이다.
+외부 툴을 이용해서 접속할 때 SSH Tunneling을 이용해서 접속할 수 있다.
+- MYSQL Host : RDS 엔드포인트
+- Username : RDS 사용자 이름
+- Password : RDS 사용자 비밀번호
+- SSH Host : EC2 주소
+- SSH User : EC2 사용자
+- SSH Key : pem 파일을 등록
+
 ### RDS 백업 & 복원
 
 - Take Snapshot
