@@ -96,3 +96,17 @@ IP 주소를 기반으로 한 둘 이상의 네트워크 간에 데이터 패킷
 => 이렇게 이해하면 쉽다.
 => IDS는 집 지키는 작은 개, IPS는 집 지키는 큰 개
 => 집 지키는 개는 침입자에 대해 냄새를 맡고 짖음으로서 주인에게 침입자의 존재를 경고한다.
+
+## TCP/IP 모델
+OSI 계층은 현실에 맞지 않다는 의견이 많이 올라오고 있다.
+OSI 계층은 TCP/IP 모델에 다음과 같이 매칭될 수 있다.
+
+| 계층 | OSI | 계층 | TCP/IP |
+|-----|-----|-----|--------|
+| 7 | Application <td rowspan="3">5 ~ 7</td> | |
+| 6 | Presentation | |
+| 5 | Session | |
+| 4 | Transport | 4 | Transport |
+| 3 | Network | 3 | Network|
+| 2 | Data Link | 2 | DataLink |
+| 1 | Physical | 1 | Physical |
