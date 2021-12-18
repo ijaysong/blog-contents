@@ -111,6 +111,19 @@ OSI 계층은 TCP/IP 모델에 다음과 같이 매칭될 수 있다.
 | 2 | Data Link | 2 | DataLink |
 | 1 | Physical | 1 | Physical |
 
+### TCP/IP 모델이란?
+TCP/IP는 패킷 통신 방식의 인터넷 프로토콜인 IP(인터넷 프로토콜)와 TCP(전송 제어 프로토콜)로 이루어져 있다.
+IP는 패킷 전달 여부를 보증하지 ㅇ낳고, 패킷을 보낸 순서와 받는 순서가 다를 수 있다.
+TCP는 IP 위에서 동작하는 프로토콜로, 데이터의 전달을 보증하고 보낸 순서대로 받게 해준다.
+HTTP, FTP, SMTP 등 TCP를 기반으로 한 수 많은 애플리케이션 프로토콜들이 IP 위에서 동작하기 때문에 묶어서 TCP/IP로 부르기도 한다.
+
+### TCP/IP 모델의 계층
+1. 계층 1 : 물리 계층 - Hub (Bits)
+2. 계층 2 : 데이터 링크 계층 - Bridge / Switch (Frames)
+3. 계층 3 : 네트워크 계층 - Router (Packets)
+4. 계층 4 : 전송 계층 - TCP/UDP (Segments)
+5. 계층 5 : 응용 계층 - HTTP, HTTPS, Telnet, FTP, TFTP (Applications)
+
 ## OSI 모델
 ### OSI 모델이란?
 국제표준화기구(ISO)에서 개발한 모델로, 컴퓨터 네트워크 프로토콜 디자인과 통신 계층을 나누어 설명한 것이다.
