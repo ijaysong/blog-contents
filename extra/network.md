@@ -175,3 +175,16 @@ HTTP, FTP, SMTP 등 TCP를 기반으로 한 수 많은 애플리케이션 프로
 응용 서비스의 예로 가장 터미널(텔넷) 등이 있다.
 네트워크 소프트웨어 UI 부분
 사용자의 입출력(I/O) 부분
+
+### OSI 모델과 TCP/IP 모델
+OSI 모델과 TCP/IP 모델은 관련 있으나 서로 완전히 매칭되는 것은 아니다.
+
+| 계층 | OSI | 계층 | TCP/IP |
+|-----|-----|-----|--------|
+| 7 | Application <td rowspan="3">5 ~ 7</td> | |
+| 6 | Presentation | |
+| 5 | Session | |
+| 4 | Transport | 4 | Transport |
+| 3 | Network | 3 | Network|
+| 2 | Data Link | 2 | DataLink |
+| 1 | Physical | 1 | Physical |
