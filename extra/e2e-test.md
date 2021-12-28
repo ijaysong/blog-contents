@@ -79,3 +79,97 @@ Protractor가 동작되는 방식을 요약하면 다음과 같다.
 > 3. Selenium을 사용하여 브라우저를 관리한다.
 > 4. Selenium WebDriver를 사용하여 브라우저 API 호출한다.
 
+## 2. ng test
+
+* **Jasmine, Karma**
+* browser에 표시되는 데이터의 결과까지 포함한다.
+* component와 service를 모두 테스트 가능하다.
+* native javascript 코딩방식으로 querySelector를 활용하는 것이 편하다.
+* 단, service 단위까지 테스트 가능하므로 **Unit Test(단위 테스트)에 적합**하다.
+* 즉, 함수 단위의 테스트로 활용하는 것이 좋다.
+
+------
+
+### 1) 테스트 코드 작성
+테스트코드는 **spec 파일**에 작성한다.
+.component.ts 및 .component.spec.ts 파일은 같은 폴더에 있는 형제 자매이다.
+
+다음은 App Component를 테스트하는 코드이다. (app.component.spec.ts)
+
+~~~ javascript
+import { TestBed, async } from '@angular/core/testing';
+import { AppComponent } from '../app/app.component';
+describe('AppComponent', () => {
+ beforeEach(async(() => {
+   TestBed.configureTestingModule({
+     declarations: [
+       AppComponent
+     ],
+   }).compileComponents();
+ }));
+ it('app component를 생성합니다.', async(() => {
+   const fixture = TestBed.createComponent(AppComponent);
+   const app = fixture.debugElement.componentInstance;
+   expect(app).toBeTruthy();
+ }));
+ it('타이틀은 app title 입니다.', async(() => {
+   const fixture = TestBed.createComponent(AppComponent);
+   fixture.detectChanges();
+   const app = fixture.debugElement.componentInstance;
+   expect(app.title).toEqual('app title');
+ }));
+ it('컨텐츠는 app content 입니다.', async(() => {
+   const fixture = TestBed.createComponent(AppComponent);
+   fixture.detectChanges();
+   const app = fixture.debugElement.componentInstance;
+   expect(app.content).toEqual('app content');
+ }));
+ it('h1 태그에 들어갈 제목은 Welcome to app title 입니다.', async(() => {
+   const fixture = TestBed.createComponent(AppComponent);
+   fixture.detectChanges();
+   const compiled = fixture.debugElement.nativeElement;
+   expect(compiled.querySelector('h1').textContent).toContain('Welcome to app title!');
+ }));
+ it('로그인 정보를 입력합니다', async(() => {
+   const fixture = TestBed.createComponent(AppComponent);
+   // fixture.detectChanges();
+   const compiled = fixture.debugElement.nativeElement;
+   compiled.querySelector('input#email').value = 'test@test.com';
+   compiled.querySelector('input#password').value = 'password';
+   compiled.querySelector('button.btn').click();
+ }));
+});
+~~~
+
+------
+
+### 2) 테스트 실행 및 결과
+
+ng test가 동작되는 방식을 요약하면 다음과 같다.
+> 1. 콘솔에 Karma 테스트 결과가 출력된다.
+> 2. Chrome 브라우저가 열리고, Jasmine HTML Reporter에 테스트 출력이 표시된다.
+> 3. 브라우저에 테스트와 실행결과가 출력된다.
+> 4. 테스트 실행기가 준비되면 Angular는 Jasmine 테스트 프레임워크를 통해 단위 테스트를 실행한다.
+
+ng test CLI 명령을 실행한다.
+
+~~~
+ng test
+~~~
+
+콘솔 출력은 다음과 같다.
+
+~~~
+10% building modules 1/1 modules 0 active
+...INFO [karma]: Karma v1.7.1 server started at http://0.0.0.0:9876/
+...INFO [launcher]: Launching browser Chrome ...
+...INFO [launcher]: Starting browser Chrome
+...INFO [Chrome ...]: Connected on socket ...
+Chrome ...: Executed 3 of 3 SUCCESS (0.135 secs / 0.205 secs)
+~~~
+로그의 마지막 줄을 보면 Karma가 세 가지 테스트를 모두 통과했음을 알 수 있다.
+
+Chrome 브라우저가 열리고 Jasmine HTML Reporter에 테스트 출력이 표시된다.
+테스트 행을 클릭하여 해당 테스트만 다시 실행할 수 있다.
+ng test 명령은 변경 사항을 감시하고 있어, 테스트가 다시 실행되고 브라우저가 새로 고쳐지며 새 테스트 결과가 나온다.
+
