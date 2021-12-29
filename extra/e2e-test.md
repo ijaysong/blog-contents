@@ -173,3 +173,131 @@ Chrome 브라우저가 열리고 Jasmine HTML Reporter에 테스트 출력이 �
 테스트 행을 클릭하여 해당 테스트만 다시 실행할 수 있다.
 ng test 명령은 변경 사항을 감시하고 있어, 테스트가 다시 실행되고 브라우저가 새로 고쳐지며 새 테스트 결과가 나온다.
 
+## 3. ng e2e
+
+[**Angular 팀은 2022년 말에 Protractor 개발을 종료할 계획 (Angular v15와 함께)**] (https://github.com/angular/protractor/issues/5502)
+
+- **Jasmine, Protractor**
+- 터미널에만 결과를 표시한다.
+- dom에 접근하여 테스트 하므로 service의 DI 테스트가 불가하다.
+- typescript 코딩이 일부 들어가므로 별도의 개발이 될 수 있다.
+- protractor에서 $를 elementFinder로 사용할 수 있는데 이는 jQuery처럼 $(element) 형태로 부를 수 있다.
+- 보다 정교하게 테스트 코드를 구성할 수 있다. ( .po.ts 파일에 service 처럼 테스트할 값을 return 하는 함수를 만들고, e2e-spec.ts 파일에는 *.po.ts의 함수의 결과를 기록한다. )
+- **실제 브라우저에서 수행**되는 테스트이므로, **실 테스트에 적합**하다.
+- 브라우저 DOM 단위의 테스트로 활용 가능하므로 QA 용으로 적합하다.
+
+------
+
+### 1) 테스트 코드 작성
+
+응용 프로그램의 e2e 폴더를 보면 다음과 같은 4개의 파일이 존재한다.
+
+
+- tsconfig.e2e.json
+- app.po.ts
+- app.e2e-spec.ts
+- protractor.conf.js
+
+**tsconfig.e2e.json**은 **설정 파일**이며, 해당 파일을 열면 tsconfig.json에서 확장된 파일임을 알 수 있다.
+
+~~~ json
+{
+ "extends": "../../../tsconfig.json",
+ "compilerOptions": {
+   "outDir": "../../../out-tsc/e2e",
+   "module": "commonjs",
+   "target": "es2018",
+   "types": [
+     "jasmine",
+     "jasminewd2",
+     "node"
+   ]
+ }
+}
+
+~~~
+
+**app.po.ts** 는 **페이지 객체**이다.
+페이지 또는 뷰의 element를 찾기 위한 코드를 작성하는 파일이다.
+element에 대한 선택자가 바뀌게 되더라도 해당 파일만 수정하면 된다.
+
+~~~ javascript
+import { browser, by, element, $ } from 'protractor';
+
+export class AppPage {
+ navigateTo() {
+   return browser.get('/');
+ }
+ getTitle() {
+   return $('h1').getText();
+ }
+ getContent() {
+   return $('h3').getText();
+ }
+ loginTest() {
+   $('input#email').sendKeys('test@test.com');
+   $('input#password').sendKeys('password');
+   $('button.btn').click();
+ }
+}
+~~~
+
+**app.e2e-spec.ts**는 **테스트 홀더**이다. 이곳에서 모든 테스트를 작성한다.
+
+~~~ javascript
+import { AppPage } from './app.po';
+
+describe('workspace-project App', () => {
+ let page: AppPage;
+
+ beforeEach(() => {
+   page = new AppPage();
+ });
+
+ it('제목 표시 여부', () => {
+   page.navigateTo();
+   expect(page.getTitle()).toEqual('Welcome to app title!');
+ });
+ it('로그인', () => {
+   page.navigateTo();
+   expect(page.loginTest());
+ });
+});
+~~~
+
+**protractor.conf.js**는 테스트 파일(spec)이 있는 위치와 Selenium 서버와 통신할 위치를 protractor에 알려준다,
+테스트 프레임워크에 Jasmine을 사용할 것임을 지정한다.
+
+~~~ text
+exports.config = {
+ framework: 'jasmine',
+ seleniumAddress: 'http://localhost:4444/wd/hub',
+ specs: ['spec.js']
+}
+~~~
+
+------
+
+### 2) 테스트 실행 및 결과
+
+ng e2e가 동작되는 방식을 요약하면 다음과 같다.
+> 1. ng e2e 명령 실행
+> 2. selenium 서버 실행
+> 3. Chrome 브라우저가 열리고, 브라우저에서 테스트 실행
+> 4. 콘솔에 테스트 실행 결과가 출력된다.
+
+
+ng e2e CLI 명령을 실행한다.
+
+~~~ text
+ng e2e
+~~~
+
+애플리케이션이 브라우저에서 열리고 테스트 되어진다. (매우 빠르게 진행된다!)
+"Chrome이 자동화된 테스트 소프트웨어에 의해 제어되고 있습니다"라는 메세지도 표시된다.
+
+![](nge2e_browser.jpeg)
+
+콘솔에 테스트 결과가 출력된다.
+마지막 문단을 보면 모든 테스트가 통과되었음을 알 수 있다.
+
