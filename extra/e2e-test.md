@@ -301,3 +301,47 @@ ng e2e
 콘솔에 테스트 결과가 출력된다.
 마지막 문단을 보면 모든 테스트가 통과되었음을 알 수 있다.
 
+## 4. 추가 조사
+### 1) [Cypress] (https://www.cypress.io/)
+jasmine, cypress
+e2e 테스트 도구로 가장 많이 사용되는 테스트러너
+테스트 결과를 직관적으로 확인할 수 있다.
+테스트 로그를 누르면 해당 테스트 실행 시 화면 스냅샷이 표시된다.
+chrome과 firefox, electron만 지원한다. (cross brower 테스트에 제한이 있음)
+
+장점:
+- 쉬운 설정 및 설치
+- 쉬운 디버깅
+- 다양한 플러그인 사용 가능
+
+단점:
+- IE 및 Safari와 같은 다른 브라우저는 지원하지 않음.
+- 여러 도메인에서 테스트 할 수 없음
+- 기본 모바일 작업을 지원하지 않음.
+
+[cypress로 e2e 테스트 작성] (https://soobing.github.io/dev/cypress-with-react/)
+[selenium과 cypress의 차이점] (https://blog.hbsmith.io/selenium%EC%97%90%EC%84%9C-cypress%EB%A1%9C-%EA%B0%88%EC%95%84%ED%83%84-%ED%9B%84%EA%B8%B0-324f224c14db)
+
+------
+
+### 2. Selenium
+
+jasmine, selenium, protractor
+selenium suite의 webdriver를 protractor로 감싸서 e2e 테스트를 진행한다. (protractor가 wrapper의 역할을 한다.)
+ng e2e CLI 명령으로 테스트를 실행한다.
+테스트 결과가 터미널 콘솔에 표시된다.
+angular 팀에서 앞으로 protractor의 개발을 종료할 계획이라고 발표했다. (21년 4월)
+그러므로 현재 Selenium을 적용하더라도 추후 다른 e2e 테스트 도구로 전환해야 할 가능성이 있다.
+
+장점 :
+- 무료
+- 지원되는 언어, 플랫폼 및 브라우저의 범위가 다양.
+- 확장 및 플러그인 라이브러리
+- 모바일 테스트 지원
+
+단점 :
+- 기술 지원이 없음.
+- 보고 기능이 없음.
+- 가파른 학습 곡선
+
+코드 작성 및 실행 결과 등에 관한 자세한 내용은 위에 기재한 ng e2e의 내용을 참고해주세요.
