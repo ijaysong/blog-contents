@@ -366,3 +366,34 @@ BDD 테스트 도구
 
 [cucumber에 대한 이해] (https://hsoochun.tistory.com/487)
 [cucumber와 cypress의 사용] (https://medium.com/@talktokapildev/angular-e2e-with-cypress-and-cucumber-d689e123d469)
+
+## 5. 피드백에 대한 추가 조사
+
+> - e2e 테스트 도구에 대한 Trend는 어떠한지
+> - e2e 테스트 프레임워크 및 테스트 러너 좀 더 찾아볼 것
+
+> > - 테스트 산출물
+> > - 테스트 속도
+> > - 가격
+
+[Google Trend - bdd] (https://trends.google.com/trends/explore?q=%2Fm%2F08gkql) : selenium, cucumber
+[Google Trend - bdd test] (https://trends.google.com/trends/explore?q=bdd%20test) : cucumber, testng, selenium
+[Google Trend - e2e test] (https://trends.google.com/trends/explore?q=e2e%20test) : jest, protractor, selenium
+
+[Npm Trend - Selenium vs Puppeteer vs Cypress vs NightWatch] (https://www.npmtrends.com/cypress-vs-nightwatch-vs-selenium-webdriver-vs-puppeteer)
+
+
+|    | Selenium | Puppeteer | Cypress | NightWatch |
+|---|------------|-------------|-----------|---------------|
+| 구분 | E2E 지원 웹 자동화 테스트 도구 | 크롬 제어 API를 제공하는 node.js 라이브러리 (자동화 도구) | JavaScript E2E 테스트 도구 | E2E 지원 웹 자동화 테스트 도구 |
+| 특징 | 내부 Selenium WebDriver 사용 (셀레늄 Suite 패키지에는 Selenium Server, WebDriver API 및 WebDriver 브라우저 드라이버가 포함된다.) | 구글 Chrome 팀에서 개발. 크롬의 DevTools Protocol을 통해 Chrome 혹은 Chromium을 제어 | selenium을 사용하지 않음. 드라이버 없이 브라우저에서 직접 실행 (대부분의 종단간 프레임워크는 selenium을 기반으로 하여 모두 동일한 문제를 공유함) | 내부적으로 W3C WebDriver (Selenium WebDriver) API를 사용 |
+| 지원되는 브라우저 | 크롬, IE, 사파리, 엣지, 파이어폭스, 오페라, 모바일 브라우저 | 크롬, 파이어폭스 (테스트 실행 화면을 모바일 사이즈에 맞게 조정하여 반응형 웹 앱 모바일 테스트 진행 할 수 있음)  | 크롬, 파이어폭스, 일렉트론, 엣지, 브레이브 (테스트 실행 화면을 모바일 사이즈에 맞게 조정하여 반응형 웹 앱 모바일 테스트 진행 할 수 있음) | 크롬, 파이어폭스, 엣지, 사파리 일부 지원 |
+| 가격 | 무료 | 무료 | 무료 오픈 소스 ([무료 테스트는 한번에 총 500건까지 가능] (https://www.cypress.io/pricing/)) | 무료 오픈 소스 |
+| BDD 작업 | 가능함 | 가능함 | 가능함 | 가능함 |
+| 병렬 테스트 기능 | 지원함 | 지원함 | 지원함 (무료버전에서도 가능) | 지원함 |
+| 테스트 실행 시간 | 비교적 느림 | 빠름 | 빠름, 자동 로드밸런싱 |  빠름 |
+| 테스트 결과| 터미널 콘솔에 테스트 실행 결과 표시 | [chrome 혹은 chromium 테스트 실행 화면, 헤드리스 모드] (https://ui.toast.com/weekly-pick/ko_20200630) | [Cypress 디버그 UI, 헤드리스 버전] (https://chercher.tech/cypress-io/chrome-execution-cypress) | [터미널 콘솔에 테스트 실행 결과 표시] (https://kamang-it.tistory.com/entry/NightwatchJavaScript%EC%97%90%EC%84%9C-e2e-Test%ED%95%98%EA%B8%B0-%EC%99%95%EC%B4%88%EB%B3%B4%EB%A7%8C) |
+| 테스트 결과 파일 형식 | 결과 보고 기능이 내재되어 있지 않음 (~~JUnit~~ 또는 TestNG 테스팅 프레임워크 등을 통해서 지정해주어야 함) | |  XML, HTML, TRX 테스트 결과 파일 생성 |  XML, HTML, Junit XML 테스트 결과 파일 생성 |
+| 모바일 앱 테스트 | Appium을 통해 실행 | 지원되지 않음 | 지원되지 않음 | Appium을 통해 실행 |
+| CI | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 |
+| 커뮤니티 지원 | 강력한 커뮤니티 | 소규모 커뮤니티이지만 많은 튜토리얼 존재 | 성장하는 커뮤니티 | 커뮤니티가 Selenium 및 Cypress 만큼 크지 않기 때문에 라이브러리 지원이 적은 편 |
