@@ -397,3 +397,47 @@ BDD 테스트 도구
 | 모바일 앱 테스트 | Appium을 통해 실행 | 지원되지 않음 | 지원되지 않음 | Appium을 통해 실행 |
 | CI | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 | Jenkins 및 GitLab 과 같은 일부 CI 공급자에서 작동하도록 지원 |
 | 커뮤니티 지원 | 강력한 커뮤니티 | 소규모 커뮤니티이지만 많은 튜토리얼 존재 | 성장하는 커뮤니티 | 커뮤니티가 Selenium 및 Cypress 만큼 크지 않기 때문에 라이브러리 지원이 적은 편 |
+
+## 6. 결론 및 의견
+
+### 1) Cypress에 대한 최종 생각
+Cypress는 UI 및 API 테스트에 가장 많이 사용되는 프레임워크 입니다.
+드라이버 없이 브라우저에서 직접 실행되므로 속도가 빠르고, 가장 인기 있는 상위 3개 브라우저에서 실행되며 많은 전문가가 사용할 수 있는 최고의 프레임워크로 간주됩니다.
+하지만  테스트를 500건 이상 실행시키려면 유료 버전을 사용해야 하며, 매달 적지않은 비용이 예상 됩니다. (한달에 8만원~30만원)
+단점보다는 장점이 더 많기 때문에 가장 많이 사용되어지고 있다고 생각합니다.
+
+### 2) Protractor에 대한 최종 생각
+Selenium과 함께 동작하므로 Selenium WebDriver의 모든 장점과 단점을 다 포함하고 있습니다.
+업데이트 및 문제 수정이 꽤 오랫동안 릴리스 되지 않았기 때문에 해당 프레임워크의 사용은 우려스럽습니다.
+
+
+### 3) Selenium에 대한 최종 생각
+Selenium은 가장 빠른 프레임워크는 아니지만, 거대한 커뮤니티를 가지고 있어 라이브러리에 대한 지원이 많습니다.
+범용적인 프레임워크인 만큼 많은 프로그래밍 언어와 브라우저를 지원하고, 다양한 CI 제공자와 호환됩니다.
+크로스 브라우저 테스트는 여러 플랫폼에서 수행해야 한다는 점을 고려하면 Selenium이 가장 적합니다.
+다만, 이미지 테스트는 제한된 범위에서 가능하며, 테스트 결과 보고 기능이 내장되어 있지 않아 다른 테스팅 프레임워크에서 도움을 받아 테스트 보고서를 작성해야 한다는 단점이 있습니다.
+
+### 4) Puppeteer에 대한 최종 생각
+puppeteer는 크롬과 파이어폭스만 지원하기 때문에 특별히 크롬으로만 작업하는 개발자와 테스터에게 적합하다고 볼 수 있습니다.
+
+### +) 조사한 도구
+- [Jasmine] (https://jasmine.github.io/)
+- [Karma] (https://karma-runner.github.io/latest/index.html)
+- [Protractor] (http://www.protractortest.org/#/tutorial)
+- [Selenium] (https://www.selenium.dev/)
+- [Cypress] (https://www.cypress.io/)
+- [Nightwatch] (https://nightwatchjs.org/)
+- [Jest] (https://jestjs.io/) : 페이스북에서 만든 JavaScript 테스트 프레임워크로, 단위테스트 주로 사용 (E2E 테스트 용으로 부적합 하다는 판단)
+- [Mocha.js] (https://mochajs.org/) : 테스트러너 지원 JavaScript 테스트 프레임워크. 단위테스트 주로 사용 (E2E 테스트 용으로 부적합 하다는 판단)
+- [Puppeteer] (https://developers.google.com/web/tools/puppeteer) :  Goole Chrome 팀에서 개발. 두번째로 가장 많이 사용되고 있는 E2E 테스트 툴 중 하나.
+- [Ava] (https://github.com/avajs/ava)
+- [Qunit] (https://qunitjs.com/) : JavaScript 단위 테스트 프레임워크. (E2E 테스트 용으로 부적합 하다는 판단)
+- [TestCafe] (https://testcafe.io/)
+- [Playwright] (https://playwright.dev/) : puppeteer를 만든 개발자가 구글을 떠나 마이크로소프트에서 만듦. playwright의 단점을 보완함. (크로스 브라우저 테스팅 추가, 테스트 결과 보고 기능 추가)
+
+
+### +) 링크되지 않은 참고 자료
+- [E2E 테스트에 사용되는 많은 테스트 도구에 대해] (https://laerteneto.medium.com/cypress-vs-webdriverio-vs-selenium-and-more-the-ultimate-comparison-among-testing-frameworks-1bde30c7900)
+- [Selenium과 Cypress의 속도 비교] (https://laerteneto.medium.com/speed-comparison-cypress-wdio-and-selenium-webdriver-e813d8d802c3)
+- [Selenium vs Cypress] (https://knapsackpro.com/testing_frameworks/difference_between/selenium/vs/cypress-io)
+- [Puppeteer vs Cypress] (https://knapsackpro.com/testing_frameworks/difference_between/puppeteer/vs/cypress-io)
