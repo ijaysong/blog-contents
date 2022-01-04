@@ -441,3 +441,31 @@ puppeteer는 크롬과 파이어폭스만 지원하기 때문에 특별히 크�
 - [Selenium과 Cypress의 속도 비교] (https://laerteneto.medium.com/speed-comparison-cypress-wdio-and-selenium-webdriver-e813d8d802c3)
 - [Selenium vs Cypress] (https://knapsackpro.com/testing_frameworks/difference_between/selenium/vs/cypress-io)
 - [Puppeteer vs Cypress] (https://knapsackpro.com/testing_frameworks/difference_between/puppeteer/vs/cypress-io)
+
+## 추가 ) Selenium의 이미지 테스트에 대하여
+
+이미지 테스트란, 화면에 올바른 이미지와 아이콘이 표시되는지 확인하고, 시각적 요소의 크기, 레이아웃 및 색 구성표 등을 확인하는 작업이다.
+
+Selenium의 단점 중 하나는 이미지 테스트가 제한된 범위에서 가능하다는 점이다.
+
+- 가능한 테스트 : 이미지 클릭 등의 동작, 이미지가 제대로 표시 되었는지, 깨진 이미지가 포함되었는지, 이미지 파일 업로드 / 다운로드 등등
+- 불가능한 테스트 : 두 이미지 간 비교 (같은 이미지인지, 아닌지)
+
+Selenium은 기본적으로 이미지 기반 테스트를 지원하지 않으며, 이를 사용하려면 **추가 라이브러리 또는 도구**(ex: Sikuli 또는 Applitools)와의 통합이 필요하다.
+
+1) Sikuli(시쿨리)
+대표적으로 Selenium과 함께 사용된다.
+Sikuli는 그래픽 사용자 인터페이스 자동화 도구로, 이미지 인식 기술을 사용하여 GUI 요소를 식별하고 제어한다.
+Sikuli는 Selenium이 요소 인식에 어려움을 겪거나 이미지 기반 요소 인식을 수행해야 할 때 널리 사용된다.  
+
+2) UFT, TestComplete
+이미지 기반 테스트를 기본적으로 지원하고, 픽셀 별 비교를 기반으로 한다.
+
+3) EggPlant AI, Applitools
+AI 기반 테스트는 시각 테스트의 다음 단계로 여겨진다.
+AI 테스트 도구로 두 이미지 간 정확한 픽셀 매치를 테스트하기 보다는 테스트 대상 간의 유사성을 확인하기 위해 특정한 컴퓨터 비전 알고리즘을 적용한다.
+
+
+[관련 참고 자료]
+[Selenium에는 내장된 이미지 비교 기능이 없다] (https://www.altexsoft.com/blog/engineering/the-good-and-the-bad-of-selenium-test-automation-tool/)
+[Selenium 이미지 테스트 지원 라이브러리 및 도구] (https://www.scnsoft.com/software-testing/selenium-alternatives)
