@@ -16,4 +16,23 @@ ex)
 - 유저 취향, ui 테마, 여러 셋팅 등을 저장한다.
 
 3. 트래킹
-- 유저의 행동을 기록한다.- 유저의 행동을 기록한다.
+- 유저의 행동을 기록한다.
+
+## 생성
+http response 시 헤더에 `Set-Cookie` 값을 지정해주면 쿠키가 셋팅된다.
+셋팅된 쿠키는 이후 http request 헤더에 `Cookie`로 실려 자동으로 전달된다.
+
+~~~
+Set-Cookie : <cookie-name>=<cookie-value>
+~~~
+
+ex)
+yummy-cookie와 tasty-cookie 쿠키 값이 셋팅된다.
+~~~
+HTTP/1.0 200 OK
+Content-Type : text/html
+Set-Cookie : yummy-cookie=choco
+Set-Cookie : tasty-cookie=strawberry
+
+[page content]
+~~~
