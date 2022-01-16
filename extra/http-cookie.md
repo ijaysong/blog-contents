@@ -36,3 +36,18 @@ Set-Cookie : tasty-cookie=strawberry
 
 [page content]
 ~~~
+
+## 활용
+ex) Mozilla (https://developer.mozilla.org/ko/docs/Mozilla)
+
+모질라 페이지에서 로그인을 하면 쿠키에 sessionid가 생성 된 것을 볼 수 있다.
+sessionid는 로그인 id와 pw를 전혀 담고 있지 않은 정보이지만, 
+id (abcd)로 로그인해서 얻은 sessionid (1234)를 다른 브라우저의 쿠키에 셋팅하면 id abcd로 로그인 한 것으로 인식한다.
+
+~~~
+* key = sessionid
+* value = 1234
+~~~
+
+sessionid가 유출되면 다른 사람이 허락 없이 내 아이디를 사용할 수도 있는 것이다.
+쿠키는 그만큼 중요한 역할을 하고 보안사고가 일어나지 않도록 주의를 기울여야 한다!
