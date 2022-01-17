@@ -51,3 +51,27 @@ id (abcd)로 로그인해서 얻은 sessionid (1234)를 다른 브라우저의 �
 
 sessionid가 유출되면 다른 사람이 허락 없이 내 아이디를 사용할 수도 있는 것이다.
 쿠키는 그만큼 중요한 역할을 하고 보안사고가 일어나지 않도록 주의를 기울여야 한다!
+
+## 종류
+### 1. session 쿠키
+- 웹 브라우저를 끄면 사라지는 쿠키 
+
+~~~
+set-cookie: yummy-cookie=choco
+~~~
+
+### 2. permanent 쿠키
+- 영속적인, 지속적인
+- 웹 브라우저를 꺼도 사라지지 않는 쿠키
+- 쿠키 key, value 이외에 max-age나 expires에 대한 옵션을 지정해준다.
+
+~~~
+set-cookie: yummy-cookie=choco; Expires=Wed, 2 JAN 2022 07:28:00 GMT;
+~~~
+
+그렇다면 expires와 max-age는 어떻게 다른가!
+
+expires는 만료되다 라는 뜻으로, 쿠키가 언제 사라질 것인가에 대한 것으로
+구체적인 날짜라는 절대적 시점이 지정되어 있다.
+
+max-age는 현재 시점을 기준으로 상대적으로 쿠키가 얼마동안 살 것인가를 표현한다. (초 단위)
