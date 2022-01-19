@@ -83,3 +83,37 @@ max-age는 현재 시점을 기준으로 상대적으로 쿠키가 얼마동안 
 ### 2. HttpOnly
 자바스크립트의 document.cookie를 이용해서 쿠키에 접속하는 것을 막는 옵션이다.
 XSS와 같이 악성 스크립트 실행하여 쿠키를 탈취하는 것을 막기 위한 방법이다.
+
+### 3. Path
+특정 디렉토리와 특정 디렉토리 하위에서만 쿠키가 활성화 되도록 제어하는 옵션
+
+ex)
+
+~~~
+Set-Cookie : yummy-cookie=choco; Path=/cookie;
+~~~
+
+/cookie 디렉토리 아래에서만 활성화 된다.
+
+- http://localhost:4000/ [활성화 X, 지정해준 쿠키 보이지 않음] 
+- http://localhost:4000/test [활성화 X, 지정해준 쿠키 보이지 않음] 
+- http://localhost:4000/cookie [활성화 O, 지정해준 쿠키 보임] 
+- http://localhost:4000/cookie/choco [활성화 O, 지정해준 쿠키 보임] 
+
+### 4. Domain 
+ip의 이름을 도메인이라고 한다.
+특정 도메인에서 쿠키가 활성화 되도록 제어하는 옵션
+어떤 서브 도메인이 붙어도 옵션으로 지정해준 도메인에서 활성화 된다.
+
+ex)
+
+~~~
+Set-Cookie : yummy-cookie=choco; Domain=o2.org;
+~~~
+
+o2.org 도메인에서만 활성화 된다.
+
+- http://localhost:4000 [활성화 X, 지정해준 쿠키 보이지 않음] 
+- http://o2.org [활성화 O, 지정해준 쿠키 보임] 
+- http://o2.org/test [활성화 O, 지정해준 쿠키 보임] 
+- http://study.o2.org [활성화 O, 지정해준 쿠키 보임] 
