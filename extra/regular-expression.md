@@ -58,3 +58,44 @@ Hello, world!
 Hello, world!
 ~~~
 
+### 위치와 이스케이핑
+
+1. 위치
+
+문자 ^ (캐럿)안 캐럿 뒤에 표현된 패턴이 소스 상에서 시작 위치에 있을 때 매치된다.
+문자 $ (달러)는 달러 사인 앞에 표현된 패턴으로 끝나는 소스를 찾는다.
+
+ex 1)
+who로 시작하는 소스를 찾는다.
+
+~~~
+[ Source ]
+who is who
+
+[ Regular Expression ]
+^who
+
+[ First match ]
+`who` is who
+
+[ All matches ]
+`who` is who
+~~~
+
+ex 2)
+who로 끝나는 소스를 찾는다.
+
+~~~
+[ Source ]
+who is who
+
+[ Regular Expression ]
+who$
+
+[ First match ]
+who is `who`
+
+[ All matches ]
+who is `who`
+~~~
+
