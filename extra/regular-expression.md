@@ -171,3 +171,94 @@ $12$ \-\ $25`$`
 $12`$` \-\ $25`$`
 ~~~
 
+### 모든 문자 그룹
+문자열 .은 모든 문자에 매칭된다.
+일종의 와일드 카드 같은 역할을 한다.
+
+ex 1)
+
+~~~
+[ Source ]
+Regular expressions are powerful!!!
+
+[ Regular Expression ]
+.
+
+[ First match ]
+`R`egular expressions are powerful!!!
+
+[ All matches ]
+`Regular expressions are powerful!!!`
+~~~
+
+ex 2)
+문자열 .을 6개 지정해주었다.
+문자열 길이가 6개인 것이 매칭된다.
+All matches의 경우, 길이 6개인 문자열 다섯 덩이가 선택된 것이다. 
+
+~~~
+[ Source ]
+Regular expressions are powerful!!!
+
+[ Regular Expression ]
+......
+
+[ First match ]
+`Regula`r expressions are powerful!!!
+
+[ All matches ]
+`Regular expressions are powerf`ul!!!
+~~~
+
+ex 3)
+모든 문자열 1개에 매칭되는 것을 선택한다.
+
+~~~
+[ Source ]
+O.K.
+
+[ Regular Expression ]
+.
+
+[ First match ]
+`O`.K.
+
+[ All matches ]
+`O.K.`
+~~~
+
+ex 4)
+이스케이프 문자를 사용하여, 문자열 .과 일치하는 것을 선택한다.
+모든 문자열을 의미하는 정규표현식에서의 .의 역할에서 벗어난다.
+
+~~~
+[ Source ]
+O.K.
+
+[ Regular Expression ]
+\.
+
+[ First match ]
+O`.`K.
+
+[ All matches ]
+O`.`K`.`
+~~~
+
+ex 5)
+점과 점 사이에 문자열 1개가 포함된 패턴과 매칭하는 것을 선택한다.
+
+~~~
+[ Source ]
+O.K.
+
+[ Regular Expression ]
+\..\.
+
+[ First match ]
+O`.K.`
+
+[ All matches ]
+O`.K.`
+~~~
+
