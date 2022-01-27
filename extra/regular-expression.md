@@ -262,3 +262,64 @@ O`.K.`
 O`.K.`
 ~~~
 
+### 특정 문자와 범위
+
+1. 특정 문자
+
+[]은 대괄호, 영어로는 square brackets라고 부른다.
+대괄호 사이에 적힌 문자열들 중에서 매칭되는 것을 찾는다.
+여러 후보군을 둔 셈이다!
+
+ex 1)
+~~~
+[ Source ]
+How do you do?
+
+[ Regular Expression ]
+[oyu]
+
+[ First match ]
+H`o`w do you do?
+
+[ All matches ]
+H`o`w d`o` `you` d`o`?
+~~~
+
+ex 2)
+문자열의 길이가 2개인 것을 찾는다.
+단, 첫번째 문자는 d와 H 중에서 매칭되는 것이 있어야 하고
+두번째 문자는 어떤 문자열이 와도 괜찮다.
+
+~~~
+[ Source ]
+How do you do?
+
+[ Regular Expression ]
+[dH].
+
+[ First match ]
+`Ho`w do you do?
+
+[ All matches ]
+`Ho`w `do` you `do`?
+~~~
+
+ex 3)
+문자열의 길이가 2개인 것을 찾는다.
+단, 첫번째 문자는 o와 w, y 중에서 매칭되는 것이 있어야 하고
+두번째 문자는 y와 o, w 중에서 매칭되어야 한다.
+
+~~~
+[ Source ]
+How do you do?
+
+[ Regular Expression ]
+[owy][yow]
+
+[ First match ]
+H`ow` do you do?
+
+[ All matches ]
+H`ow` do `yo`u do?
+~~~
+
