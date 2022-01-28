@@ -323,3 +323,107 @@ H`ow` do you do?
 H`ow` do `yo`u do?
 ~~~
 
+2. 범위
+
+문자 - (dash)는 범위를 의미한다.
+
+ex 1)
+C에서 K까지의 문자열 중 매칭되는 문자 1개를 표시한다.
+
+~~~
+[ Source ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ Regular Expression ]
+[C-K]
+
+[ First match ]
+AB`C`DEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ All matches ]
+AB`CDEFGHIJK`LMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+~~~
+
+ex 2)
+정규 표현식 [C-K]와 [CDEFGHIJK] 일치한다.
+
+~~~
+[ Source ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ Regular Expression ]
+[CDEFGHIJK]
+
+[ First match ]
+AB`C`DEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ All matches ]
+AB`CDEFGHIJK`LMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+~~~
+
+ex 3)
+대소문자를 구분하며 범위를 표현한다.
+
+~~~
+[ Source ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ Regular Expression ]
+[a-d]
+
+[ First match ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+`a`bcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ All matches ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+`abcd`efghjiklmnopqrstuvwxyz 0123456789
+~~~
+
+ex 4)
+숫자를 구분하며 범위를 표현한다.
+
+~~~
+[ Source ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ Regular Expression ]
+[2-6]
+
+[ First match ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 01`2`3456789
+
+[ All matches ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 01`23456`789
+~~~
+
+ex 5)
+[] 내부에서 복수 개의 범위를 표현할 수 있다.
+
+~~~
+[ Source ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ Regular Expression ]
+[C-Ka-d2-6]
+
+[ First match ]
+AB`C`DEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ All matches ]
+AB`CDEFGHIJK`LMNOPQRSTUVWXYZ
+`abcd`efghjiklmnopqrstuvwxyz 01`23456`789
+~~~
+
