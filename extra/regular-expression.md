@@ -427,3 +427,48 @@ AB`CDEFGHIJK`LMNOPQRSTUVWXYZ
 `abcd`efghjiklmnopqrstuvwxyz 01`23456`789
 ~~~
 
+3. 범위 부정
+
+문자열 ^(캐럿)은 단독으로 사용될 때는 캐럿 바로 뒤의 패턴으로 시작하는 문자열을 찾는다는 의미를 가진다.
+하지만, [] 대괄호 내부에서 사용할 때는 부정(not)의 의미를 가진다.
+
+ex 1)
+CDghi45에 해당하지 않는 문자열을 선택한다. 
+
+~~~
+[ Source ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ Regular Expression ]
+[^CDghi45]
+
+[ First match ]
+`A`BCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ All matches ]
+`AB`CD`EFGHIJKLMNOPQRSTUVWXYZ`
+`abcdef`ghj`iklmnopqrstuvwxyz 0123`45`6789`
+~~~
+
+ex 2)
+W ~ Z에 해당하지 않는 문자열을 선택한다. 
+
+~~~
+[ Source ]
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ Regular Expression ]
+[^W-Z]
+
+[ First match ]
+`A`BCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghjiklmnopqrstuvwxyz 0123456789
+
+[ All matches ]
+`ABCDEFGHIJKLMNOPQRSTUV`WXYZ
+`abcdefghjiklmnopqrstuvwxyz 0123456789`
+~~~
+
