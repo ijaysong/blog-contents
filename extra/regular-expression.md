@@ -472,3 +472,58 @@ abcdefghjiklmnopqrstuvwxyz 0123456789
 `abcdefghjiklmnopqrstuvwxyz 0123456789`
 ~~~
 
+### 서브 패턴
+
+() 소괄호 안에 지정된 문자들 중 매칭되는 것을 선택한다.
+소괄호 내부의 각 문자는 | 파이프로 구분한다.
+
+ex 1)
+
+~~~
+[ Source ]
+Monday Tuesday Friday
+
+[ Regular Expression ]
+(on|use|rida)
+
+[ First match ]
+M`on`day Tuesday Friday
+
+[ All matches ]
+M`on`day T`ues`day F`rida`y
+~~~
+
+ex 2)
+공통된 부분을 서브 패턴으로 빼서 공통 문자열을 지정해 줄 수 있다.
+
+~~~
+[ Source ]
+Monday Tuesday Friday
+
+[ Regular Expression ]
+(Mon|Tues|Fri)day
+
+[ First match ]
+`Monday` Tuesday Friday
+
+[ All matches ]
+`Monday` `Tuesday` `Friday`
+~~~
+
+ex 3)
+문자 두개와 공통 문자열 ay 사이에 id 나 esd, nd 가 들어 갈 수 있다.
+
+~~~
+[ Source ]
+Monday Tuesday Friday
+
+[ Regular Expression ]
+..(id|esd|nd)ay
+
+[ First match ]
+`Monday` Tuesday Friday
+
+[ All matches ]
+`Monday` `Tuesday` `Friday`
+~~~
+
