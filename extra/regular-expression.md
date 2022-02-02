@@ -678,3 +678,59 @@ ex 4)
 `-@@@-` `*` `**` `--` `"*"` `--` `*` `**` `-@@@-`
 ~~~
 
+3. ? 수량자 (0 개 ~ 1 개)
+
+ex 1)
+? 앞에 지정된 패턴이 없거나 한 개가 있어야 한다는 뜻이다.
+=> 0개 ~ 1개
+
+~~~
+[ Source ]
+aabc abc bc
+
+[ Regular Expression ]
+a?b
+
+[ First match ]
+a`ab`c abc bc
+
+[ All matches ]
+a`ab`c `ab`c `b`c
+~~~
+
+ex 2)
+-XX는 무조건 존재해야 한다.
+X의 갯수가 2~4개 인 것을 찾는다.
+
+~~~
+[ Source ]
+--XX-@-XX-@@-XX-@@@-XX-@@@@-XX-@@-@@-
+
+[ Regular Expression ]
+-X?XX?X
+
+[ First match ]
+-`-XX`-@-XX-@@-XX-@@@-XX-@@@@-XX-@@-@@-
+
+[ All matches ]
+-`-XX`-@`-XX`-@@`-XX`-@@@`-XX`-@@@@`-XX`-@@-@@-
+~~~
+
+ex 3)
+앞뒤로 -는 무조건 있어야 한다.
+@의 갯수는 0 ~ 3개 까지 있을 수 있다.
+
+~~~
+[ Source ]
+--XX-@-XX-@@-XX-@@@-XX-@@@@-XX-@@-@@-
+
+[ Regular Expression ]
+-@?@?@?-
+
+[ First match ]
+`--`XX-@-XX-@@-XX-@@@-XX-@@@@-XX-@@-@@-
+
+[ All matches ]
+--XX`-@-`XX`-@@-`XX`-@@@-`XX-@@@@-XX`-@@-`@@-
+~~~
+
