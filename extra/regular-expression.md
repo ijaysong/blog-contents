@@ -734,3 +734,58 @@ ex 3)
 --XX`-@-`XX`-@@-`XX`-@@@-`XX-@@@@-XX`-@@-`@@-
 ~~~
 
+4. 정확한 수량을 지정할 수 있는 수량자
+
+{} (브레이슬릿) 내부에 수량을 지정할 수 있다.
+
+ex 1)
+모든 문자열 가운데 5개를 선택하라는 뜻이다.
+
+~~~
+[ Source ]
+One ring to bring them all and in the darkness bind them
+
+[ Regular Expression ]
+.{5}
+
+[ First match ]
+`One r`ing to bring them all and in the darkness bind them
+
+[ All matches ]
+`One ring to bring them all and in the darkness bind the`m
+~~~
+
+ex 2)
+e나 s, l 중에 한 글자가 앞에 오고, 그것이 하나 이상 3 이하 매칭이 됐을 때 해당된다는 뜻이다.
+
+~~~
+[ Source ]
+One ring to bring them all and in the darkness bind them
+
+[ Regular Expression ]
+[els]{1,3}
+
+[ First match ]
+On`e` ring to bring them all and in the darkness bind them
+
+[ All matches ]
+On`e` ring to bring th`e`m a`ll` and in th`e` darkne`ss` bind th`e`m
+~~~
+
+ex 3)
+알파벳 소문자 가운데 3 이상인 문자열이 있다면 매칭된다.
+
+~~~
+[ Source ]
+One ring to bring them all and in the darkness bind them
+
+[ Regular Expression ]
+[a-z]{3,}
+
+[ First match ]
+One `ring` to bring them all and in the darkness bind them
+
+[ All matches ]
+One `ring` to `bring` `them` `all` `and` in `the` `darkness` `bind` `them`
+~~~
+
