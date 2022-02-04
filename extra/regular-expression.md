@@ -789,3 +789,44 @@ One `ring` to bring them all and in the darkness bind them
 One `ring` to `bring` `them` `all` `and` in `the` `darkness` `bind` `them`
 ~~~
 
+5. *, +, ? 수량자를 {}로 대체해서 표현
+
+5-1. * 와 {0,}
+
+*는 {0,} 과 일치한다.
+0 개 ~ 여러 개를 의미한다.
+
+ex 1)
+앞 뒤로 A가 있고 B는 0개 이상 존재할 수 있다.
+
+~~~
+[ Source ]
+AA ABA ABBA ABBBA
+
+[ Regular Expression ]
+AB*A
+
+[ First match ]
+`AA` ABA ABBA ABBBA
+
+[ All matches ]
+`AA` `ABA` `ABBA` `ABBBA`
+~~~
+
+ex 2)
+*의 표현과 동일하다.
+
+~~~
+[ Source ]
+AA ABA ABBA ABBBA
+
+[ Regular Expression ]
+AB{0,}A
+
+[ First match ]
+`AA` ABA ABBA ABBBA
+
+[ All matches ]
+`AA` `ABA` `ABBA` `ABBBA`
+~~~
+
