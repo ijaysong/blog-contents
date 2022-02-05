@@ -830,3 +830,42 @@ AB{0,}A
 `AA` `ABA` `ABBA` `ABBBA`
 ~~~
 
+5-2. + 와 {1,}
+
++는 {1,} 과 일치한다.
+1 개 ~ 여러 개를 의미한다.
+
+ex 1)
+앞 뒤로 A가 있고 B는 1개 이상 존재할 수 있다.
+
+~~~
+[ Source ]
+AA ABA ABBA ABBBA
+
+[ Regular Expression ]
+AB+A
+
+[ First match ]
+AA `ABA` ABBA ABBBA
+
+[ All matches ]
+AA `ABA` `ABBA` `ABBBA`
+~~~
+
+ex 2)
++의 표현과 동일하다.
+
+~~~
+[ Source ]
+AA ABA ABBA ABBBA
+
+[ Regular Expression ]
+AB{1,}A
+
+[ First match ]
+AA `ABA` ABBA ABBBA
+
+[ All matches ]
+AA `ABA` `ABBA` `ABBBA`
+~~~
+
