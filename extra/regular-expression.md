@@ -869,3 +869,42 @@ AA `ABA` ABBA ABBBA
 AA `ABA` `ABBA` `ABBBA`
 ~~~
 
+5-3. ? 와 {0,1}
+
+?는 {0,1} 과 일치한다.
+0 개 ~ 1 개를 의미한다.
+
+ex 1)
+앞 뒤로 A가 있고 B는 없거나 1 개 존재할 수 있다.
+
+~~~
+[ Source ]
+AA ABA ABBA ABBBA
+
+[ Regular Expression ]
+AB?A
+
+[ First match ]
+`AA` ABA ABBA ABBBA
+
+[ All matches ]
+`AA` `ABA` ABBA ABBBA
+~~~
+
+ex 2)
+?의 표현과 동일하다.
+
+~~~
+[ Source ]
+AA ABA ABBA ABBBA
+
+[ Regular Expression ]
+AB{0,1}A
+
+[ First match ]
+`AA` ABA ABBA ABBBA
+
+[ All matches ]
+`AA` `ABA` ABBA ABBBA
+~~~
+
