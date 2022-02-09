@@ -984,3 +984,41 @@ One `ri`ng to bring them all and in the darkness bind them
 One `ri`ng to b`ri`ng them all and in the da`rk`ness bind them
 ~~~
 
+8. ? 수량자와의 조합 
+
+ex 1)
+맨 앞에 r이 위치해야 하고, r 뒤에 문자가 없거나 하나 있어야 한다. 
+
+~~~
+[ Source ]
+One ring to bring them all and in the darkness bind them
+
+[ Regular Expression ]
+r.?
+
+[ First match ]
+One `ri`ng to bring them all and in the darkness bind them
+
+[ All matches ]
+One `ri`ng to b`ri`ng them all and in the da`rk`ness bind them
+~~~
+
+ex 2)
+?수량자 뒤에 ?가 오면 그 의미가 달라진다.
+?수량자의 의미는 0 ~ 1 개를 의미한다.
+하지만 수량자 기호 뒤에 ?가 오면, ?수량자 기호의 가장 작은 값 0개를 의미한다.
+
+~~~
+[ Source ]
+One ring to bring them all and in the darkness bind them
+
+[ Regular Expression ]
+r.+?
+
+[ First match ]
+One `r`ing to bring them all and in the darkness bind them
+
+[ All matches ]
+One `r`ing to b`r`ing them all and in the da`r`kness bind them
+~~~
+
