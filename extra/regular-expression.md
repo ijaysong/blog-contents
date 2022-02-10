@@ -1022,3 +1022,79 @@ One `r`ing to bring them all and in the darkness bind them
 One `r`ing to b`r`ing them all and in the da`r`kness bind them
 ~~~
 
+### 경계
+
+1. \w
+
+\w는 word를 뜻한다.
+word는 알파벳, 숫자, _를 뜻한다.
+[A-z0-9_]와 의미가 같다.
+
+ex 1)
+
+~~~
+[ Source ]
+A1 B2 c3 d_4 e:5 ffGG77--__--
+
+[ Regular Expression ]
+\w
+
+[ First match ]
+`A`1 B2 c3 d_4 e:5 ffGG77--__--
+
+[ All matches ]
+`A1` `B2` `c3` `d_4` `e`:`5` `ffGG77`--`__`--
+~~~
+
+ex 2)
+알파벳, 숫자, _ 중 0개 ~ 여러 개 존재할 수 있다.
+
+~~~
+[ Source ]
+A1 B2 c3 d_4 e:5 ffGG77--__--
+
+[ Regular Expression ]
+\w*
+
+[ First match ]
+`A1` B2 c3 d_4 e:5 ffGG77--__--
+
+[ All matches ]
+`A1` `B2` `c3` `d_4` `e`:`5` `ffGG77`--`__`--
+~~~
+
+ex 3)
+알파벳 소문자가 맨 앞에 와야하고,
+두번째 자리부터는 알파벳, 숫자, _ 중 0개 ~ 여러 개 존재할 수 있다.
+
+~~~
+[ Source ]
+A1 B2 c3 d_4 e:5 ffGG77--__--
+
+[ Regular Expression ]
+[a-z]\w*
+
+[ First match ]
+A1 B2 `c3` d_4 e:5 ffGG77--__--
+
+[ All matches ]
+A1 B2 `c3` `d_4` `e`:5 `ffGG77`--__--
+~~~
+
+ex 4)
+알파벳, 숫자, _ 중 5 개 존재할 수 있다.
+
+~~~
+[ Source ]
+A1 B2 c3 d_4 e:5 ffGG77--__--
+
+[ Regular Expression ]
+\w{5}
+
+[ First match ]
+A1 B2 c3 d_4 e:5 `ffGG7`7--__--
+
+[ All matches ]
+A1 B2 c3 d_4 e:5 `ffGG7`7--__--
+~~~
+
