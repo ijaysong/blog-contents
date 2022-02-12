@@ -1121,3 +1121,23 @@ AS` `_34:AS11.23 @#$ %12^*
 AS` `_34`:`AS11`.`23` @#$ %`12`^*`
 ~~~
 
+3. \d
+digit 0~9 까지의 숫자에 해당되는 것이 매칭된다.
+[0-9]와 의미가 같다.
+
+ex 1)
+
+~~~
+[ Source ]
+Page 123; published: 1234 id=12#24@112
+
+[ Regular Expression ]
+\d
+
+[ First match ]
+Page `1`23; published: 1234 id=12#24@112
+
+[ All matches ]
+Page `123`; published: `1234` id=`12`#`24`@`112`
+~~~
+
