@@ -1141,3 +1141,23 @@ Page `1`23; published: 1234 id=12#24@112
 Page `123`; published: `1234` id=`12`#`24`@`112`
 ~~~
 
+4. \D
+\d와 반대의미를 가진다.
+digit 0~9 까지의 숫자에 해당되지 않는 것이 매칭된다.
+
+ex 1)
+
+~~~
+[ Source ]
+Page 123; published: 1234 id=12#24@112
+
+[ Regular Expression ]
+\D
+
+[ First match ]
+`P`age 123; published: 1234 id=12#24@112
+
+[ All matches ]
+`Page` 123`; published: `1234` id=`12`#`24`@`112
+~~~
+
