@@ -1170,3 +1170,34 @@ Page 123; published: 1234 id=12#24@112
 - \d\w\d : 워드 앞뒤로 바운더리를 붙이면, 문자열이 하나짜리 단어가 매칭된다.
 - \d\w+\d : 워드 앞뒤로 바운더리를 붙이고 워드에 *를 붙여주면, 문자열이 하나 이상짜리 단어가 매칭된다.
 
+6. \B.
+
+\b의 반대 의미를 갖는다.
+\b로 매칭되지 않는 단어가 선택된다.
+
+ex 1)
+
+~~~
+[ Source ]
+cat concat
+
+[ Regular Expression ]
+\B.
+
+[ All matches ]
+c`at` c`oncat`
+~~~
+
+ex 2)
+
+~~~
+[ Source ]
+cat concat
+
+[ Regular Expression ]
+\b.
+
+[ All matches ]
+`c`at` `concat
+~~~
+
