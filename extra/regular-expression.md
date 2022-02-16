@@ -1201,3 +1201,45 @@ cat concat
 `c`at` `concat
 ~~~
 
+7. 행의 시작과 끝
+\A : 행의 시작을 의미한다.
+\Z : 행의 끝을 의미한다.
+
+ex 1)
+행의 시작에 위치하는 문자가 매칭된다.
+\A는 행의 시작에 위치한 경계를 의미한다.
+
+~~~
+[ Source ]
+Roses are red.
+Some Roses are pink.
+Some Roses are blue.
+
+[ Regular Expression ]
+\ASome
+
+[ All matches ]
+Roses are red.
+`Some` Roses are pink.
+Some Roses are blue.
+~~~
+
+ex 2)
+행의 끝에 위치하는 모든 문자 3개가 매칭된다.
+\Z는 행의 시작에 위치한 경계를 의미한다.
+
+~~~
+[ Source ]
+Roses are red.
+Some Roses are pink.
+Some Roses are blue.
+
+[ Regular Expression ]
+.\Z
+
+[ All matches ]
+Roses are red.
+Some Roses are pink.
+Some Roses are blue`.`
+~~~
+
