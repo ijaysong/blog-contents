@@ -1243,3 +1243,45 @@ Some Roses are pink.
 Some Roses are blue`.`
 ~~~
 
+8. 행의 시작과 끝 - multi line
+^ (캐럿) : 행의 시작을 의미한다. 여러 행에 걸쳐 매칭되는 것을 찾는다.
+$ (달러) : 행의 끝을 의미한다. 여러 행에 걸쳐 매칭되는 것을 찾는다.
+
+ex 1)
+\A와 동일하게 행의 시작에 위치하는 문자가 매칭된다.
+하지만 여러 행에 걸쳐 매칭되는 것을 찾는다.
+
+~~~
+[ Source ]
+Roses are red.
+Some Roses are pink.
+Some Roses are blue.
+
+[ Regular Expression ]
+^Some
+
+[ All matches ]
+Roses are red.
+`Some` Roses are pink.
+`Some` Roses are blue.
+~~~
+
+ex 2)
+행의 끝에 위치하는 모든 문자 3개가 매칭된다.
+\Z는 행의 시작에 위치한 경계를 의미한다.
+
+~~~
+[ Source ]
+Roses are red.
+Some Roses are pink.
+Some Roses are blue.
+
+[ Regular Expression ]
+.$
+
+[ All matches ]
+Roses are red`.`
+Some Roses are pink`.`
+Some Roses are blue`.`
+~~~
+
